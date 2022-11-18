@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "photo", indices = [Index(value = ["photoId"])])
+@Entity(tableName = "photo", indices = [Index(value = ["photo_id"])])
 data class PhotoEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "photo_id") val photoId: Int = 0,
     @ColumnInfo(name = "photo_path") val photoPath: String,
