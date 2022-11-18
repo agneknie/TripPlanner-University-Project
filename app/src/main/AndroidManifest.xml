@@ -10,7 +10,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Com4510TripPlanner">
         <activity
-                android:name="com.example.tripplanner.MainActivity"
+                android:name="com.example.tripplanner.activities.MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
