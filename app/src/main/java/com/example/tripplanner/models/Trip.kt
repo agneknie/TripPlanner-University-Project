@@ -1,9 +1,11 @@
 package com.example.tripplanner.models
 
+import java.time.LocalDateTime
+
 data class Trip(
     val tripId: Int = 0,
-    val startDateTime: String,
-    var endDateTime: String? = null,
+    val startDateTime: LocalDateTime,
+    var endDateTime: LocalDateTime? = null,
     val title: String,
     var tagId: Int? = null
 ) {

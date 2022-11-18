@@ -1,12 +1,14 @@
 package com.example.tripplanner.models
 
+import java.time.LocalDateTime
+
 data class Location(
     val locationId: Int = 0,
     val xCoordinate: Double,
     val yCoordinate: Double,
     val temperature: Int,
     val pressure: Int,
-    val dateTime: String,
+    val dateTime: LocalDateTime,
     val tripId: Int){
 
     override fun equals(other: Any?): Boolean {
