@@ -7,6 +7,9 @@ import com.example.tripplanner.data.access.repositories.PhotoRepository
 import com.example.tripplanner.data.access.repositories.TagRepository
 import com.example.tripplanner.data.access.repositories.TripRepository
 
+/**
+ * Initialises the database and repositories of the application.
+ */
 class TripPlannerApplication: Application() {
 
     // Initialising database
