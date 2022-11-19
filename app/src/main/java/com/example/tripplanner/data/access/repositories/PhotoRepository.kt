@@ -27,52 +27,52 @@ class PhotoRepository(private val photoDao: PhotoDao) {
     }
 
     // TODO Add other necessary functions based on Dao
-
-    //region Object Mapping
-    /**
-     * Maps PhotoEntity to Photo.
-     */
-    private fun PhotoEntity.asDomainModel(): Photo{
-        return Photo(
-            photoId = photoId,
-            photoPath = Uri.parse(photoPath),
-            locationId = locationId,
-            title = title,
-            description = description)
-        // TODO photo.getOrMakeThumbnail(context) and then add context: Context
-    }
-
-    /**
-     * Maps List of PhotoEntity to List of Photo.
-     */
-    private fun List<PhotoEntity>.asDomainModels(): List<Photo>{
-        return map{
-            it.asDomainModel()
-        }
-    }
-
-    /**
-     * Maps Photo to PhotoEntity.
-     */
-    private fun Photo.asDatabaseEntity(): PhotoEntity{
-        return PhotoEntity(
-            photoId = photoId,
-            photoPath = photoPath.toString(),
-            locationId = locationId,
-            title = title,
-            description = description,
-            tagId = tagId
-        )
-    }
-
-    /**
-     * Maps List of Photo to List of PhotoEntity.
-     */
-    private fun List<Photo>.asDatabaseEntities(): List<PhotoEntity>{
-        return map{
-            it.asDatabaseEntity()
-        }
-    }
-
-    //endregion
 }
+
+//region Object Mapping
+/**
+ * Maps PhotoEntity to Photo.
+ */
+fun PhotoEntity.asDomainModel(): Photo{
+    return Photo(
+        photoId = photoId,
+        photoPath = Uri.parse(photoPath),
+        locationId = locationId,
+        title = title,
+        description = description)
+    // TODO photo.getOrMakeThumbnail(context) and then add context: Context
+}
+
+/**
+ * Maps List of PhotoEntity to List of Photo.
+ */
+fun List<PhotoEntity>.asDomainModels(): List<Photo>{
+    return map{
+        it.asDomainModel()
+    }
+}
+
+/**
+ * Maps Photo to PhotoEntity.
+ */
+fun Photo.asDatabaseEntity(): PhotoEntity{
+    return PhotoEntity(
+        photoId = photoId,
+        photoPath = photoPath.toString(),
+        locationId = locationId,
+        title = title,
+        description = description,
+        tagId = tagId
+    )
+}
+
+/**
+ * Maps List of Photo to List of PhotoEntity.
+ */
+fun List<Photo>.asDatabaseEntities(): List<PhotoEntity>{
+    return map{
+        it.asDatabaseEntity()
+    }
+}
+
+//endregion

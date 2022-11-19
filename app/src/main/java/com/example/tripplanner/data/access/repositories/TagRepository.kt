@@ -19,44 +19,44 @@ class TagRepository(private val tagDao: TagDao) {
     }
 
     // TODO Add other necessary functions based on Dao
-
-    //region Object Mapping
-    /**
-     * Maps TagEntity to Tag.
-     */
-    private fun TagEntity.asDomainModel(): Tag{
-        return Tag(
-            tagId = tagId,
-            tagName = tagName
-        )
-    }
-
-    /**
-     * Maps List of TagEntity to Tag.
-     */
-    private fun List<TagEntity>.asDomainModel(): List<Tag>{
-        return map{
-            it.asDomainModel()
-        }
-    }
-
-    /**
-     * Maps Tag to TagEntity.
-     */
-    private fun Tag.asDatabaseEntity(): TagEntity{
-        return TagEntity(
-            tagId = tagId,
-            tagName = tagName
-        )
-    }
-
-    /**
-     * Maps List of Tag to List of TagEntity.
-     */
-    private fun List<Tag>.asDatabaseEntities(): List<TagEntity>{
-        return map{
-            it.asDatabaseEntity()
-        }
-    }
-    //endregion
 }
+
+//region Object Mapping
+/**
+ * Maps TagEntity to Tag.
+ */
+fun TagEntity.asDomainModel(): Tag{
+    return Tag(
+        tagId = tagId,
+        tagName = tagName
+    )
+}
+
+/**
+ * Maps List of TagEntity to Tag.
+ */
+fun List<TagEntity>.asDomainModel(): List<Tag>{
+    return map{
+        it.asDomainModel()
+    }
+}
+
+/**
+ * Maps Tag to TagEntity.
+ */
+fun Tag.asDatabaseEntity(): TagEntity{
+    return TagEntity(
+        tagId = tagId,
+        tagName = tagName
+    )
+}
+
+/**
+ * Maps List of Tag to List of TagEntity.
+ */
+fun List<Tag>.asDatabaseEntities(): List<TagEntity>{
+    return map{
+        it.asDatabaseEntity()
+    }
+}
+//endregion

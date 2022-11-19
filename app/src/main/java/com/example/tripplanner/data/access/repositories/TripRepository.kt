@@ -27,50 +27,49 @@ class TripRepository(private val tripDao: TripDao) {
     }
 
     // TODO Add other necessary functions based on Dao
-
-    //region Object Mapping
-    /**
-     * Maps TripEntity to Trip.
-     */
-    private fun TripEntity.asDomainModel(): Trip{
-        return Trip(
-            tripId = tripId,
-            startDateTime = LocalDateTime.parse(startDateTime),
-            endDateTime = LocalDateTime.parse(endDateTime),
-            title = title,
-            tagId = tagId
-        )
-    }
-
-    /**
-     * Maps List of TripEntity to List of Trip.
-     */
-    private fun List<TripEntity>.asDomainModels(): List<Trip>{
-        return map{
-            it.asDomainModel()
-        }
-    }
-
-    /**
-     * Maps Trip to TripEntity.
-     */
-    private fun Trip.asDatabaseEntity(): TripEntity{
-        return TripEntity(
-            tripId = tripId,
-            startDateTime = startDateTime.toString(),
-            endDateTime = endDateTime.toString(),
-            title = title,
-            tagId = tagId
-        )
-    }
-
-    /**
-     * Maps List of Trip to List of TripEntity.
-     */
-    private fun List<Trip>.asDatabaseEntitites(): List<TripEntity>{
-        return map{
-            it.asDatabaseEntity()
-        }
-    }
-    //endregion
 }
+//region Object Mapping
+/**
+ * Maps TripEntity to Trip.
+ */
+fun TripEntity.asDomainModel(): Trip{
+    return Trip(
+        tripId = tripId,
+        startDateTime = LocalDateTime.parse(startDateTime),
+        endDateTime = LocalDateTime.parse(endDateTime),
+        title = title,
+        tagId = tagId
+    )
+}
+
+/**
+ * Maps List of TripEntity to List of Trip.
+ */
+fun List<TripEntity>.asDomainModels(): List<Trip>{
+    return map{
+        it.asDomainModel()
+    }
+}
+
+/**
+ * Maps Trip to TripEntity.
+ */
+fun Trip.asDatabaseEntity(): TripEntity{
+    return TripEntity(
+        tripId = tripId,
+        startDateTime = startDateTime.toString(),
+        endDateTime = endDateTime.toString(),
+        title = title,
+        tagId = tagId
+    )
+}
+
+/**
+ * Maps List of Trip to List of TripEntity.
+ */
+fun List<Trip>.asDatabaseEntitites(): List<TripEntity>{
+    return map{
+        it.asDatabaseEntity()
+    }
+}
+//endregion
