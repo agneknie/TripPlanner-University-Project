@@ -15,7 +15,4 @@ interface TagDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTag(tagEntity: TagEntity)
-
-    @Update
-    suspend fun updateTag(tagEntity: TagEntity)
 }

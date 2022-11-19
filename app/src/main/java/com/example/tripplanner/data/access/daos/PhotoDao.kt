@@ -26,5 +26,5 @@ interface PhotoDao {
     suspend fun insertPhoto(photoEntity: PhotoEntity)
 
     @Update
-    suspend fun update(photoEntity: PhotoEntity)
+    suspend fun updatePhoto(photoEntity: PhotoEntity)
 }
