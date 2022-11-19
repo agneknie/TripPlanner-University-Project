@@ -1,4 +1,6 @@
 package com.example.tripplanner.views
 
-class TripGalleryActivity {
+import com.example.tripplanner.TripPlannerAppCompatActivity
+
+class TripGalleryActivity: TripPlannerAppCompatActivity()  {
 }
