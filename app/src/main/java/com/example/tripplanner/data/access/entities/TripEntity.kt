@@ -11,4 +11,4 @@ data class TripEntity (
     @ColumnInfo(name = "start_date_time") val startDateTime: String,
     @ColumnInfo(name = "end_date_time") var endDateTime: String,
     @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "tag_id") var tagId: Int)
+    @ColumnInfo(name = "tag_id") var tagId: Int?)
