@@ -18,6 +18,22 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".views.PhotoDetailsActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.PhotoDisplayActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.PhotoGalleryActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.PhotoMapActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.TripCreationActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.TripGalleryActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.TripPhotoActivity"
+                  android:exported="false"/>
+        <activity android:name=".views.TripTripActivity"
+                  android:exported="false"/>
     </application>
 
 </manifest>
