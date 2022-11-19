@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.tripplanner.data.access.daos.TripDao
 import com.example.tripplanner.data.access.entities.TripEntity
+import com.example.tripplanner.models.Tag
 import com.example.tripplanner.models.Trip
 import java.time.LocalDateTime
 
@@ -11,6 +12,16 @@ class TripRepository(private val tripDao: TripDao) {
 
     // Observable for all trips
     val trips: LiveData<List<TripEntity>> = tripDao.getAllTrips().asLiveData()
+
+    /**
+     * Get Trip by its tripId.
+     */
+    fun getTrip(tripId: Int) = tripDao.getTrip(tripId).asLiveData()
+
+    /**
+     * Get a List of Trips by Tag.
+     */
+    fun getTripsByTag(tag: Tag) = tripDao.getTripsByTag(tag.tagId).asLiveData()
 
     /**
      * Insert a Trip in the database.
@@ -25,8 +36,6 @@ class TripRepository(private val tripDao: TripDao) {
     suspend fun updateTrip(trip: Trip){
         tripDao.updateTrip(trip.asDatabaseEntity())
     }
-
-    // TODO Add other necessary functions based on Dao
 }
 //region Object Mapping
 /**

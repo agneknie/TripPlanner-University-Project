@@ -5,12 +5,25 @@ import androidx.lifecycle.asLiveData
 import com.example.tripplanner.data.access.daos.LocationDao
 import com.example.tripplanner.data.access.entities.LocationEntity
 import com.example.tripplanner.models.Location
+import com.example.tripplanner.models.Trip
 import java.time.LocalDateTime
 
 class LocationRepository(private val locationDao: LocationDao) {
 
-    // Observable for all locations
-    val locations: LiveData<List<LocationEntity>> = locationDao.getAllLocations().asLiveData();
+    // All locations
+    val allLocations: LiveData<List<LocationEntity>> = locationDao.getAllLocations().asLiveData()
+
+    // All locations with photos
+    val photoLocations: LiveData<List<LocationEntity>> = locationDao.getLocationsContainingPhotos().asLiveData()
+
+    // Last tracked/inserted in database location
+    val lastLocationId: LiveData<Int> = locationDao.getLastLocationId().asLiveData()
+
+    /**
+     * Get all locations belonging to a trip.
+     */
+    fun getLocationsByTrip(trip: Trip) =
+        locationDao.getLocationsByTrip(trip.tripId).asLiveData()
 
     /**
      * Insert Location in the database.
@@ -19,7 +32,6 @@ class LocationRepository(private val locationDao: LocationDao) {
         locationDao.insertLocation(location.asDatabaseEntity())
     }
 
-    // TODO Add other necessary functions based on Dao
 }
 //region Object Mapping
 /**

@@ -5,12 +5,29 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.tripplanner.data.access.daos.PhotoDao
 import com.example.tripplanner.data.access.entities.PhotoEntity
+import com.example.tripplanner.models.Location
 import com.example.tripplanner.models.Photo
+import com.example.tripplanner.models.Tag
 
 class PhotoRepository(private val photoDao: PhotoDao) {
 
     // Observable for all photos
-    val photos: LiveData<List<PhotoEntity>> = photoDao.getAllPhotos().asLiveData()
+    val allPhotos: LiveData<List<PhotoEntity>> = photoDao.getAllPhotos().asLiveData()
+
+    /**
+     * Get Photo by its photoId.
+     */
+    fun getPhoto(photoId: Int) = photoDao.getPhoto(photoId).asLiveData()
+
+    /**
+     * Get Photo by its Location.
+     */
+    fun getPhotoByLocation(location: Location) = photoDao.getPhotoByLocation(location.locationId).asLiveData()
+
+    /**
+     * Get List of Photos by Tag.
+     */
+    fun getPhotosByTag(tag: Tag) = photoDao.getPhotosByTag(tag.tagId).asLiveData()
 
     /**
      * Insert a Photo in the database.
@@ -25,8 +42,6 @@ class PhotoRepository(private val photoDao: PhotoDao) {
     suspend fun updatePhoto(photo: Photo){
         photoDao.updatePhoto(photo.asDatabaseEntity())
     }
-
-    // TODO Add other necessary functions based on Dao
 }
 
 //region Object Mapping

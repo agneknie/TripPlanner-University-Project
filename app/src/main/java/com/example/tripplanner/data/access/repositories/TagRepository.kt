@@ -17,8 +17,6 @@ class TagRepository(private val tagDao: TagDao) {
     suspend fun insertTag(tag: Tag){
         tagDao.insertTag(tag.asDatabaseEntity())
     }
-
-    // TODO Add other necessary functions based on Dao
 }
 
 //region Object Mapping
