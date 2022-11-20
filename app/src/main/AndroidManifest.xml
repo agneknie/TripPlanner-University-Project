@@ -8,7 +8,8 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/Theme.Com4510TripPlanner">
+            android:theme="@style/Theme.Com4510TripPlanner"
+            android:name=".TripPlannerApplication">
         <activity
                 android:name="com.example.tripplanner.views.MainActivity"
                 android:exported="true">

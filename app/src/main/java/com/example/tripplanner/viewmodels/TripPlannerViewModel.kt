@@ -3,6 +3,8 @@ package com.example.tripplanner.viewmodels
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.tripplanner.data.access.repositories.*
+import com.example.tripplanner.models.Tag
+import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
 class TripPlannerViewModel (
@@ -11,6 +13,13 @@ class TripPlannerViewModel (
     private val photoRepository: PhotoRepository,
     private val tagRepository: TagRepository,
     private val applicationContext: Application): AndroidViewModel(applicationContext){
+
+    /**
+     * Insert given Tag into the database.
+     */
+    fun insertTag(tag: Tag) = viewModelScope.launch {
+        tagRepository.insertTag(tag)
+    }
 }
 
 /**
