@@ -14,6 +14,11 @@ class TripPlannerViewModel (
     private val tagRepository: TagRepository,
     private val applicationContext: Application): AndroidViewModel(applicationContext){
 
+    // All tags in the repository
+    val allTags: LiveData<List<Tag>> = Transformations.map(tagRepository.tags){
+        it.asDomainModel()
+    } as MutableLiveData<List<Tag>>
+
     /**
      * Insert given Tag into the database.
      */

@@ -88,7 +88,7 @@
                 android:textAllCaps="false"
                 android:fontFamily="@font/roboto_bold"
                 android:layout_width="170dp"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="50dp"
                 app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_rv_tag_list"
                 android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

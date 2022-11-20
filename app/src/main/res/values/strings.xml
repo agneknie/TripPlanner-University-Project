@@ -23,6 +23,7 @@
 
     <!-- Titles -->
     <string name="new_trip_title">New Trip:</string>
+    <string name="tag_default_name">Default Tag Name</string>
 
     <!-- Snackbar Messages -->
     <string name="trip_finished_successfully_snackbar">Your Trip was saved!</string>
