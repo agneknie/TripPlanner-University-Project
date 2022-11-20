@@ -38,48 +38,17 @@
                 android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/white"
                 android:theme="@style/input_field_style"/>
-        <TextView
-                android:text="@string/tags_field_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="@color/white" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="50dp"
-                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_et_title"
-                android:id="@+id/activity_trip_creation_l_tags"
-                android:fontFamily="@font/roboto_bold" android:layout_marginTop="50dp"/>
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:inputType="text"
-                android:ems="10"
-                android:id="@+id/activity_trip_creation_et_tags"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="50dp"
-                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_l_tags"
-                android:fontFamily="@font/roboto_bold"
-                android:textColor="@color/white"
-                android:theme="@style/input_field_style" android:minHeight="48dp"/>
-        <Button
-                android:text="@string/add_new_tag_button"
-                android:layout_height="50dp" android:id="@+id/activity_trip_creation_btn_add_tag"
-                android:textColor="@color/main_light_blue"
-                android:textSize="16sp"
-                android:textAllCaps="false"
-                android:fontFamily="@font/roboto_bold"
-                android:layout_width="150dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_et_tags"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="50dp"/>
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/activity_trip_creation_rv_tag_list"
+
+        <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_btn_add_tag"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="10dp">
-        </androidx.recyclerview.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_et_title"
+                android:layout_marginTop="50dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="50dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="50dp" android:id="@+id/activity_trip_creation_ll_tags_panel">
+            <include layout="@layout/tags_panel"/>
+        </LinearLayout>
         <Button
                 android:text="@string/start_trip_button"
                 android:layout_height="60dp" android:id="@+id/activity_trip_creation_btn_start_trip"
@@ -88,8 +57,7 @@
                 android:textAllCaps="false"
                 android:fontFamily="@font/roboto_bold"
                 android:layout_width="170dp"
-                android:layout_marginTop="50dp"
-                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_rv_tag_list"
-                android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_ll_tags_panel" android:layout_marginTop="50dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
