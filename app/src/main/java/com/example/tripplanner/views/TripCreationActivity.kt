@@ -17,9 +17,6 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
         setContentView(binding.root)
 
         // Tag Panel configuration
-        tagsPanel = TagsPanel(
-            this,
-            binding,
-            tripPlannerViewModel)
+        tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
     }
 }

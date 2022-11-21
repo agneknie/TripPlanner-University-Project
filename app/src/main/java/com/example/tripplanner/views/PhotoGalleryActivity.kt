@@ -1,12 +1,15 @@
 package com.example.tripplanner.views
 
 import android.os.Bundle
-import com.example.tripplanner.R
 import com.example.tripplanner.TripPlannerAppCompatActivity
+import com.example.tripplanner.databinding.ActivityPhotoGalleryBinding
 
 class PhotoGalleryActivity: TripPlannerAppCompatActivity() {
+    private lateinit var binding: ActivityPhotoGalleryBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_gallery)
+        binding = ActivityPhotoGalleryBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }
