@@ -66,10 +66,12 @@ class TagsPanel(
      * displays in the RecyclerView.
      */
     private fun setupTagRecyclerView(){
+        val NUMBER_OF_COLUMNS = 3
+
         tagRecyclerView = invokingActivity.findViewById(R.id.tags_panel_creation_rv_tag_list)
         tagAdapter = TagAdapter(this)
         tagRecyclerView.adapter = tagAdapter
-        tagRecyclerView.layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
+        tagRecyclerView.layoutManager = StaggeredGridLayoutManager(NUMBER_OF_COLUMNS, StaggeredGridLayoutManager.VERTICAL)
 
         tripPlannerViewModel.allTags.observe(invokingActivity){
             it?.let{
