@@ -12,5 +12,6 @@ data class PhotoEntity(
     @ColumnInfo(name = "location_id") val locationId: Int,
     @ColumnInfo(name = "title") var title: String?,
     @ColumnInfo(name = "description") var description: String?,
-    @ColumnInfo(name = "tag_id") var tagId: Int?
+    @ColumnInfo(name = "tag_id") var tagId: Int?,
+    @ColumnInfo(name = "thumbnail_path") var thumbnailPath: String?
 )

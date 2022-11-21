@@ -3,13 +3,13 @@ package com.example.tripplanner.models
 import android.net.Uri
 
 data class Photo (
-    // TODO Add a property thumbnailPath
     val photoId: Int = 0,
     val photoPath: Uri,
     val locationId: Int,
     var title: String? = null,
     var description: String? = null,
-    var tagId: Int? = null){
+    var tagId: Int? = null,
+    var thumbnailPath: Uri? = null){
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -23,6 +23,7 @@ data class Photo (
         if (title != other.title) return false
         if (description != other.description) return false
         if (tagId != other.tagId) return false
+        if(thumbnailPath!= other.thumbnailPath) return false
 
         return true
     }
