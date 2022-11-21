@@ -3,6 +3,7 @@ package com.example.tripplanner.models
 import android.net.Uri
 
 data class Photo (
+    // TODO Add a property thumbnailPath
     val photoId: Int = 0,
     val photoPath: Uri,
     val locationId: Int,
