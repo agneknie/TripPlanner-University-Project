@@ -1,3 +1,31 @@
 <resources>
-    <string name="app_name">TripPlanner</string>
+    <string name="app_name">Trip Planner</string>
+
+    <!-- Buttons -->
+    <string name="new_trip_button">New Trip</string>
+    <string name="photo_gallery_button">Photo Gallery</string>
+    <string name="photo_map_button">Photo Map</string>
+    <string name="past_trips_button">Past Trips</string>
+    <string name="add_new_tag_button">Add New Tag</string>
+    <string name="start_trip_button">Start Trip</string>
+    <string name="finish_trip_button">Finish Trip</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="add_to_trip_button">Add to Trip</string>
+
+    <!-- EditText & etc. Field Labels -->
+    <string name="title_field_label">Title:</string>
+    <string name="tags_field_label">Tags:</string>
+    <string name="description_field_label">Description:</string>
+    <string name="sort_field_label">Sort by:</string>
+    <string name="search_field_label">Search:</string>
+    <string name="temperature_field_label">Temperature:</string>
+    <string name="pressure_field_label">Pressure:</string>
+
+    <!-- Titles -->
+    <string name="new_trip_title">New Trip:</string>
+    <string name="tag_default_name">Default Tag Name</string>
+
+    <!-- Snackbar Messages -->
+    <string name="trip_finished_successfully_snackbar">Your Trip was saved!</string>
+    <string name="trip_finished_unsuccessfully_snackbar">Uh oh. Your Trip did not finish correctly.</string>
 </resources>
