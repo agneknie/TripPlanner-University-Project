@@ -11,5 +11,7 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // TODO Insert map into activity_photo_details_ll_map_holder. Amend height as necessary
     }
 }
