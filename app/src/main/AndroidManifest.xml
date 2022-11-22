@@ -4,9 +4,9 @@
 
     <application
             android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
+            android:icon="@mipmap/trip_planner_icon"
             android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:roundIcon="@mipmap/trip_planner_icon_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Com4510TripPlanner"
             android:name=".TripPlannerApplication">

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main Application Colours -->
-    <color name="main_colour">#FFE6DC83</color>
+    <color name="main_colour">#FFF5F095</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="main_background_black">#FF1B1B1B</color>
