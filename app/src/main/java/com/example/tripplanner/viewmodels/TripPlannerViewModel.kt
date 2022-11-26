@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.tripplanner.data.access.repositories.*
 import com.example.tripplanner.models.Tag
+import com.example.tripplanner.models.Trip
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
@@ -24,6 +25,13 @@ class TripPlannerViewModel (
      */
     fun insertTag(tag: Tag) = viewModelScope.launch {
         tagRepository.insertTag(tag)
+    }
+
+    /**
+     * Insert given Trip in the database.
+     */
+    fun insertTrip(trip: Trip) = viewModelScope.launch {
+        tripRepository.insertTrip(trip)
     }
 }
 
