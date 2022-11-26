@@ -27,6 +27,7 @@
 
     <!-- Snackbar Messages -->
     <string name="trip_cannot_start_snackbar">Trip needs to have a title.</string>
+    <string name="finish_trip_before_exiting_snackbar">Finish Your Trip before exiting.</string>
     <string name="trip_finished_successfully_snackbar">Your Trip was saved!</string>
     <string name="trip_finished_unsuccessfully_snackbar">Uh oh. Your Trip did not finish correctly.</string>
 </resources>
