@@ -38,8 +38,10 @@ class Permissions {
          * Returns true, if camera can be used.
          */
         fun canUseCamera(activity: Activity): Boolean{
-            return PackageManager.PERMISSION_GRANTED ==
-                    activity.checkSelfPermission(Manifest.permission.CAMERA)
+            return if(activity.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)){
+                PackageManager.PERMISSION_GRANTED ==
+                        activity.checkSelfPermission(Manifest.permission.CAMERA)
+            } else false
         }
 
         /**
@@ -81,10 +83,10 @@ class Permissions {
             requestCode: Int){
             if(requestCode == REQUEST_CODE_PERMISSIONS){
                 if(allPermissionsGranted(activity)){
-                    activity.displaySnackbar(rootView, R.string.permissions_granted, Snackbar.LENGTH_LONG)
+                    activity.displaySnackbar(rootView, R.string.permissions_granted_snackbar, Snackbar.LENGTH_LONG)
                 }
                 else{
-                    activity.displaySnackbar(rootView, R.string.permissions_not_granted, Snackbar.LENGTH_LONG)
+                    activity.displaySnackbar(rootView, R.string.permissions_not_granted_snackbar, Snackbar.LENGTH_LONG)
                 }
             }
         }
