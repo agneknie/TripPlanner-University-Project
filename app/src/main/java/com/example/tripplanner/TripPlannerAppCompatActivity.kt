@@ -25,7 +25,7 @@ open class TripPlannerAppCompatActivity: AppCompatActivity() {
     /**
      * Convenience method for displaying a Snackbar.
      */
-    protected fun displaySnackbar(view: View, messageStringId: Int, displayLength: Int){
+    fun displaySnackbar(view: View, messageStringId: Int, displayLength: Int){
         val snackbar = Snackbar.make(view, messageStringId, displayLength)
 
         snackbar.setBackgroundTint(this.getColor(R.color.main_colour))

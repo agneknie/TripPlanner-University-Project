@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.example.tripplanner.TripPlannerAppCompatActivity
 import com.example.tripplanner.databinding.ActivityMainBinding
+import com.example.tripplanner.utilities.Permissions
 
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -15,6 +16,14 @@ class MainActivity : TripPlannerAppCompatActivity() {
 
         // Initialises button click listeners
         initialiseClickListeners()
+
+        // Checks & requests permissions
+        Permissions.checkAndRequestPermissions(this)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Permissions.onRequestPermissionsCallback(this, binding.root, requestCode)
     }
 
     /**

@@ -14,7 +14,7 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         binding = ActivityTripTripBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match parent.
+        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match_parent.
     }
 
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
