@@ -20,6 +20,16 @@ class TripPlannerViewModel (
         it.asDomainModel()
     } as MutableLiveData<List<Tag>>
 
+    // Get current Trip id from the database.
+    val currentTripId: LiveData<Int> = tripRepository.getCurrentTripId()
+
+    /**
+     * Get Trip from the database.
+     */
+    fun getTrip(tripId: Int): LiveData<Trip> = Transformations.map(tripRepository.getTrip(tripId)){
+        it.asDomainModel()
+    }
+
     /**
      * Insert given Tag into the database.
      */
@@ -32,6 +42,13 @@ class TripPlannerViewModel (
      */
     fun insertTrip(trip: Trip) = viewModelScope.launch {
         tripRepository.insertTrip(trip)
+    }
+
+    /**
+     * Update given Trip in the database.
+     */
+    fun updateTrip(trip: Trip) = viewModelScope.launch {
+        tripRepository.updateTrip(trip)
     }
 }
 

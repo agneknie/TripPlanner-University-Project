@@ -25,9 +25,30 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
         tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
 
         // Listener for 'Start Trip' button
+        configureStartTripButton()
+    }
+
+    /**
+     * Configures "Start Trip" button behaviour. When trip is started, saves it in
+     * the database, starts TripTripActivity and finishes this activity.
+     */
+    private fun configureStartTripButton(){
         binding.activityTripCreationBtnStartTrip.setOnClickListener{
+
+            // Checks if trip title is present & saves it in database if so
             if(checkIfValidAndSaveTrip()){
-                startActivity(Intent(this, TripTripActivity::class.java))
+                tripPlannerViewModel.currentTripId.observe(this){
+                    it?.let{
+                        // Saves current trip's id in the intent forwarded to TripTripActivity
+                        val currentTripId = it
+                        val intent = Intent(this, TripTripActivity::class.java)
+                        intent.putExtra("currentTripId", currentTripId)
+
+                        // Starts TripTripActivity and finishes this one, so you cannot come back to it
+                        startActivity(intent)
+                        this.finish()
+                    }
+                }
             }
         }
     }

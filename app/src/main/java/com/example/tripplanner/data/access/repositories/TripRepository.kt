@@ -14,6 +14,11 @@ class TripRepository(private val tripDao: TripDao) {
     val trips: LiveData<List<TripEntity>> = tripDao.getAllTrips().asLiveData()
 
     /**
+     * Get current tripId from the database.
+     */
+    fun getCurrentTripId() = tripDao.getCurrentTripId().asLiveData()
+
+    /**
      * Get Trip by its tripId.
      */
     fun getTrip(tripId: Int) = tripDao.getTrip(tripId).asLiveData()
@@ -45,7 +50,7 @@ fun TripEntity.asDomainModel(): Trip{
     return Trip(
         tripId = tripId,
         startDateTime = LocalDateTime.parse(startDateTime),
-        endDateTime = LocalDateTime.parse(endDateTime),
+        endDateTime = if(endDateTime == "null") null else LocalDateTime.parse(endDateTime),
         title = title,
         tagId = tagId
     )

@@ -2,12 +2,20 @@ package com.example.tripplanner.views
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import com.example.tripplanner.R
 import com.example.tripplanner.TripPlannerAppCompatActivity
 import com.example.tripplanner.databinding.ActivityMainBinding
 import com.example.tripplanner.utilities.Permissions
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    // Displays snackbar, if trip has finished in TripTripActivity
+    private val tripTripActivityResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        this.displaySnackbar(binding.root, R.string.trip_finished_successfully_snackbar, Snackbar.LENGTH_LONG)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,6 +27,7 @@ class MainActivity : TripPlannerAppCompatActivity() {
 
         // Checks & requests permissions
         Permissions.checkAndRequestPermissions(this)
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -33,7 +42,7 @@ class MainActivity : TripPlannerAppCompatActivity() {
     private fun initialiseClickListeners(){
         // New Trip Button
        binding.activityMainBtnNewTrip.setOnClickListener {
-            startActivity(Intent(this, TripCreationActivity::class.java))
+            tripTripActivityResultContract.launch(Intent(this, TripCreationActivity::class.java))
         }
 
         // Photo Gallery Button
