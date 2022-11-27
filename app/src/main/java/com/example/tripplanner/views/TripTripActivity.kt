@@ -3,15 +3,30 @@ package com.example.tripplanner.views
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.tripplanner.R
 import com.example.tripplanner.TripPlannerAppCompatActivity
 import com.example.tripplanner.databinding.ActivityTripTripBinding
+import com.example.tripplanner.utilities.IntentKeys
 import com.example.tripplanner.utilities.Permissions
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDateTime
 
 class TripTripActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityTripTripBinding
+
+    val photoPickerActivityResultContract = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
+        it?.let {
+            val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            this.contentResolver.takePersistableUriPermission(it, flag)
+
+            // Launch TripPhotoActivity
+            val intent = Intent(this, TripPhotoActivity::class.java)
+            intent.putExtra(IntentKeys.PHOTO_URI, it.toString())
+            startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,9 +39,13 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         // Listener for "Finish Trip" button
         configureFinishTripButton()
 
-        // TODO Listener for "Camera" button
+        // Listener for "Gallery" button
+        binding.activityTripTripFabGallery.setOnClickListener{
+            photoPickerActivityResultContract.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
 
-        // TODO Listener for "Gallery" button
+        // TODO Listener for "Camera" button
 
         // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match_parent.
     }
@@ -63,10 +82,10 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
      */
     private fun configureFinishTripButton(){
         binding.activityTripTripBtnFinishTrip.setOnClickListener{
-            val bundle: Bundle? = intent.extras
+            val bundle = intent.extras
             if(bundle != null){
                 // Gets current trip's id
-                val tripId = bundle.getInt("currentTripId")
+                val tripId = bundle.getInt(IntentKeys.CURRENT_TRIP_ID)
 
                 // Gets current trip from the database
                 tripPlannerViewModel.getTrip(tripId).observe(this){

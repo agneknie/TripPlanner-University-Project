@@ -7,6 +7,7 @@ import com.example.tripplanner.TripPlannerAppCompatActivity
 import com.example.tripplanner.components.TagsPanel
 import com.example.tripplanner.databinding.ActivityTripCreationBinding
 import com.example.tripplanner.models.Trip
+import com.example.tripplanner.utilities.IntentKeys
 import com.google.android.material.snackbar.Snackbar
 import java.time.LocalDateTime
 
@@ -42,7 +43,7 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
                         // Saves current trip's id in the intent forwarded to TripTripActivity
                         val currentTripId = it
                         val intent = Intent(this, TripTripActivity::class.java)
-                        intent.putExtra("currentTripId", currentTripId)
+                        intent.putExtra(IntentKeys.CURRENT_TRIP_ID, currentTripId)
 
                         // Starts TripTripActivity and finishes this one, so you cannot come back to it
                         startActivity(intent)
