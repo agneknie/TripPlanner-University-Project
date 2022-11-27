@@ -16,7 +16,8 @@ import java.time.LocalDateTime
 class TripTripActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityTripTripBinding
 
-    val photoPickerActivityResultContract = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
+    // When user has picked out a photo, forwards them to TripPhotoActivity with picked photo's uri
+    private val photoPickerActivityResultContract = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
         it?.let {
             val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
             this.contentResolver.takePersistableUriPermission(it, flag)
@@ -40,10 +41,7 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         configureFinishTripButton()
 
         // Listener for "Gallery" button
-        binding.activityTripTripFabGallery.setOnClickListener{
-            photoPickerActivityResultContract.launch(
-                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
+        configureGalleryButton()
 
         // TODO Listener for "Camera" button
 
@@ -101,6 +99,16 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * If Gallery FAB is clicked, opens gallery view.
+     */
+    private fun configureGalleryButton(){
+        binding.activityTripTripFabGallery.setOnClickListener{
+            photoPickerActivityResultContract.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 }

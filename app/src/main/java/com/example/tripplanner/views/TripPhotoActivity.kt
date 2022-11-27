@@ -20,7 +20,7 @@ class TripPhotoActivity: TripPlannerAppCompatActivity() {
             // Gets picked photo's uri
             val photoUri = bundle.getString(IntentKeys.PHOTO_URI)
 
-            // Populates photo view
+            // TODO Populates photo view
 
         }
     }
