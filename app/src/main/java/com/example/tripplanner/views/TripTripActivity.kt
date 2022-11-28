@@ -22,11 +22,15 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
             val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
             this.contentResolver.takePersistableUriPermission(it, flag)
 
-            // Launch TripPhotoActivity
-            val intent = Intent(this, TripPhotoActivity::class.java)
-            intent.putExtra(IntentKeys.PHOTO_URI, it.toString())
-            startActivity(intent)
+            launchTripPhotoActivity(it.toString())
         }
+    }
+
+    // When user took a picture, forwards them to TripPhotoActivity with picked photo's uri
+    private val cameraActivityResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        val photoUri = it.data?.extras?.getString(IntentKeys.PHOTO_URI)
+
+        launchTripPhotoActivity(photoUri)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,16 +47,18 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         // Listener for "Gallery" button
         configureGalleryButton()
 
-        // TODO Listener for "Camera" button
+        // Listener for "Camera" button
+        configureCameraButton()
 
         // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match_parent.
     }
 
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
-        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar, Snackbar.LENGTH_LONG)
+        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
     }
 
+    //region Button Configurations & Listeners
     /**
      * Configures camera & gallery button visibility based on
      * whether permissions are granted and if user has access to required
@@ -64,13 +70,13 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         // Hide gallery button if gallery not accessible
         if(!Permissions.canModifyStorage(this)){
             binding.activityTripTripFabGallery.visibility = View.INVISIBLE
-            this.displaySnackbar(binding.root, R.string.storage_missing_snackbar, Snackbar.LENGTH_LONG)
+            this.displaySnackbar(binding.root, R.string.storage_missing_snackbar)
         }
 
         // Hide camera button if camera not accessible
         if(!Permissions.canUseCamera(this)){
             binding.activityTripTripFabCamera.visibility = View.INVISIBLE
-            this.displaySnackbar(binding.root, R.string.camera_missing_snackbar, Snackbar.LENGTH_LONG)
+            this.displaySnackbar(binding.root, R.string.camera_missing_snackbar)
         }
     }
 
@@ -110,5 +116,27 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
             photoPickerActivityResultContract.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+    }
+
+    /**
+     * If Camera FAB is clicked, opens camera view.
+     */
+    private fun configureCameraButton(){
+        binding.activityTripTripFabCamera.setOnClickListener {
+            cameraActivityResultContract.launch(Intent(this, CameraActivity::class.java))
+        }
+    }
+
+    //endregion
+
+    /**
+     * Launches TripPhotoActivity, creating an intent, which contains uri of
+     * a photo, which was either picked from the gallery or took with the camera.
+     */
+    private fun launchTripPhotoActivity(photoUriString: String?){
+        // Launch TripPhotoActivity
+        val intent = Intent(this, TripPhotoActivity::class.java)
+        intent.putExtra(IntentKeys.PHOTO_URI, photoUriString)
+        startActivity(intent)
     }
 }

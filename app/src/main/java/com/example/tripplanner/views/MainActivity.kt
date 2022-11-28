@@ -14,7 +14,7 @@ class MainActivity : TripPlannerAppCompatActivity() {
 
     // Displays snackbar, if trip has finished in TripTripActivity
     private val tripTripActivityResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        this.displaySnackbar(binding.root, R.string.trip_finished_successfully_snackbar, Snackbar.LENGTH_LONG)
+        this.displaySnackbar(binding.root, R.string.trip_finished_successfully_snackbar)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

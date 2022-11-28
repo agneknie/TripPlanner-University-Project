@@ -83,10 +83,10 @@ class Permissions {
             requestCode: Int){
             if(requestCode == REQUEST_CODE_PERMISSIONS){
                 if(allPermissionsGranted(activity)){
-                    activity.displaySnackbar(rootView, R.string.permissions_granted_snackbar, Snackbar.LENGTH_LONG)
+                    activity.displaySnackbar(rootView, R.string.permissions_granted_snackbar)
                 }
                 else{
-                    activity.displaySnackbar(rootView, R.string.permissions_not_granted_snackbar, Snackbar.LENGTH_LONG)
+                    activity.displaySnackbar(rootView, R.string.permissions_not_granted_snackbar)
                 }
             }
         }

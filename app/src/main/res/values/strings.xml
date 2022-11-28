@@ -26,6 +26,8 @@
     <string name="tag_default_name">Default Tag Name</string>
 
     <!-- Snackbar Messages -->
+    <string name="photo_capture_failed_snackbar">Photo Capture Failed.</string>
+    <string name="camera_initialisation_failed_snackbar">Camera initialisation failed.</string>
     <string name="permissions_granted_snackbar">Permissions granted successfully!</string>
     <string name="permissions_not_granted_snackbar">Please give required permissions to enable all functionality.</string>
     <string name="camera_missing_snackbar">Camera missing or permission not granted.</string>

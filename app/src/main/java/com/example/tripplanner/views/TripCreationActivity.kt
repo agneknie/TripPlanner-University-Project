@@ -67,7 +67,7 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
 
         // Display error message
         else
-           this.displaySnackbar(binding.root, R.string.trip_cannot_start_snackbar, Snackbar.LENGTH_LONG)
+           this.displaySnackbar(binding.root, R.string.trip_cannot_start_snackbar)
 
         return tripCanStart
     }

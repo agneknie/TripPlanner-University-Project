@@ -40,6 +40,8 @@
                   android:exported="false"/>
         <activity android:name=".views.TripTripActivity"
                   android:exported="false"/>
+        <activity android:name=".views.CameraActivity"
+                  android:exported="false"/>
     </application>
 
 </manifest>
