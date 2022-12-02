@@ -3,6 +3,7 @@ package com.example.tripplanner.viewmodels
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.tripplanner.data.access.repositories.*
+import com.example.tripplanner.models.Location
 import com.example.tripplanner.models.Tag
 import com.example.tripplanner.models.Trip
 import kotlinx.coroutines.launch
@@ -42,6 +43,13 @@ class TripPlannerViewModel (
      */
     fun insertTrip(trip: Trip) = viewModelScope.launch {
         tripRepository.insertTrip(trip)
+    }
+
+    /**
+     * Insert given Location in the database.
+     */
+    fun insertLocation(location: Location) = viewModelScope.launch {
+        locationRepository.insertLocation(location)
     }
 
     /**
