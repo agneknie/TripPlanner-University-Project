@@ -9,6 +9,7 @@ import uk.ac.shef.oak.com4510.components.TagsPanel
 import uk.ac.shef.oak.com4510.databinding.ActivityTripPhotoBinding
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
+import uk.ac.shef.oak.com4510.utilities.PhotoUtilities
 
 class TripPhotoActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityTripPhotoBinding
@@ -36,37 +37,22 @@ class TripPhotoActivity: TripPlannerAppCompatActivity() {
             configureCancelButton()
             configureAddToTripButton()
 
-            // TODO Creates thumbnail and saves its path
+            // Creates thumbnail and saves its path
+            thumbnailPath = PhotoUtilities.getOrMakeThumbNail(this, photoPath)
 
-            // TODO Populates photo view
+            //TODO Populates photo view
         }
         // If something unexpected happened, closes the activity and returns to trip screen
         else finish()
     }
 
-    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
-    override fun onBackPressed() {
-        photoAdditionCancelled()
-    }
-
     /**
-     * Discards the taken or selected photo with its information
-     * and comes back to the trip screen.
+     * Quits the activity without saving the photo and comes back to the trip screen.
      */
     private fun configureCancelButton(){
         binding.activityTripPhotoBtnCancel.setOnClickListener {
-            photoAdditionCancelled()
+            finish()
         }
-    }
-
-    /**
-     * Discards created thumbnail and quits the activity.
-     */
-    private fun photoAdditionCancelled(){
-        // TODO Deletes created thumbnail
-
-        // Finishes the activity
-        finish()
     }
 
     /**
