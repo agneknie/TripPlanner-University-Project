@@ -6,6 +6,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.viewbinding.ViewBinding
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.databinding.ActivityTripCreationBinding
 import uk.ac.shef.oak.com4510.models.Tag
@@ -23,7 +24,7 @@ import kotlinx.android.synthetic.main.tags_panel.view.*
  */
 class TagsPanel(
     private val invokingActivity: uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity,
-    private val binding: ActivityTripCreationBinding,
+    private val binding: ViewBinding,
     private val tripPlannerViewModel: TripPlannerViewModel,
     private var selectedTag: Tag? = null,
     private var selectedTagView: View? = null)
@@ -50,12 +51,12 @@ class TagsPanel(
      * tag in the database.
      */
     private fun setupNewTagClickListener(){
-        binding.activityTripCreationLlTagsPanel.tags_panel_btn_add_tag.setOnClickListener{
-            val tagNameString = binding.activityTripCreationLlTagsPanel.tags_panel_creation_et_tags.text.toString()
+        binding.root.tags_panel_btn_add_tag.setOnClickListener{
+            val tagNameString = binding.root.tags_panel_creation_et_tags.text.toString()
             if(tagNameString.isNotEmpty()){
                 val newTag = Tag(0,tagNameString)
                 tripPlannerViewModel.insertTag(newTag)
-                binding.activityTripCreationLlTagsPanel.tags_panel_creation_et_tags.text.clear()
+                binding.root.tags_panel_creation_et_tags.text.clear()
             }
         }
     }
