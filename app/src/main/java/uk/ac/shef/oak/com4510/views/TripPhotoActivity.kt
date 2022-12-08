@@ -93,8 +93,13 @@ class TripPhotoActivity: TripPlannerAppCompatActivity() {
      */
     private fun insertPhotoInDatabase(){
         tripPlannerViewModel.lastLocationId.observe(this){
+            var lastLocationId: Int
+
+            // If location has not been tracked yet, assigns to the first location
+            if(it == null) lastLocationId = 1
+
             it?.let{
-                val lastLocationId = it
+                lastLocationId = it
                 val photoTitle = binding.root.photo_details_panel_ed_title.text.toString()
                 val photoDescription = binding.root.photo_details_panel_ed_description.text.toString()
                 val tagId = tagsPanel.getSelectedTag()?.tagId
