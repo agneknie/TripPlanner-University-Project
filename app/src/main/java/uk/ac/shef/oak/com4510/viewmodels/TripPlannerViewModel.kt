@@ -7,6 +7,7 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.models.Trip
 import kotlinx.coroutines.launch
+import uk.ac.shef.oak.com4510.models.Photo
 import java.lang.IllegalArgumentException
 
 class TripPlannerViewModel (
@@ -23,6 +24,9 @@ class TripPlannerViewModel (
 
     // Get current Trip id from the database.
     val currentTripId: LiveData<Int> = tripRepository.getCurrentTripId()
+
+    // Get current Location id from the database.
+    val lastLocationId: LiveData<Int> = locationRepository.lastLocationId
 
     /**
      * Get Trip from the database.
@@ -43,6 +47,13 @@ class TripPlannerViewModel (
      */
     fun insertTrip(trip: Trip) = viewModelScope.launch {
         tripRepository.insertTrip(trip)
+    }
+
+    /**
+     * Insert given Photo in the database.
+     */
+    fun insertPhoto(photo: Photo) = viewModelScope.launch {
+        photoRepository.insertPhoto(photo)
     }
 
     /**

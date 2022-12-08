@@ -26,6 +26,7 @@
     <string name="tag_default_name">Default Tag Name</string>
 
     <!-- Snackbar Messages -->
+    <string name="photo_needs_title_and_description">Photo needs to have a title and a description.</string>
     <string name="photo_capture_failed_snackbar">Photo Capture Failed.</string>
     <string name="camera_initialisation_failed_snackbar">Camera initialisation failed.</string>
     <string name="permissions_granted_snackbar">Permissions granted successfully!</string>
