@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.com4510tripplanner"
+        applicationId "uk.ac.shef.oak.com4510"
         minSdk 30
         targetSdk 33
         versionCode 1

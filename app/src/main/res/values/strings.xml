@@ -26,6 +26,15 @@
     <string name="tag_default_name">Default Tag Name</string>
 
     <!-- Snackbar Messages -->
+    <string name="photo_needs_title_and_description">Photo needs to have a title and a description.</string>
+    <string name="photo_capture_failed_snackbar">Photo Capture Failed.</string>
+    <string name="camera_initialisation_failed_snackbar">Camera initialisation failed.</string>
+    <string name="permissions_granted_snackbar">Permissions granted successfully!</string>
+    <string name="permissions_not_granted_snackbar">Please give required permissions to enable all functionality.</string>
+    <string name="camera_missing_snackbar">Camera missing or permission not granted.</string>
+    <string name="storage_missing_snackbar">Storage missing or permission not granted.</string>
+    <string name="trip_cannot_start_snackbar">Trip needs to have a title.</string>
+    <string name="finish_trip_before_exiting_snackbar">Finish Your Trip before exiting.</string>
     <string name="trip_finished_successfully_snackbar">Your Trip was saved!</string>
     <string name="trip_finished_unsuccessfully_snackbar">Uh oh. Your Trip did not finish correctly.</string>
 </resources>

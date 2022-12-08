@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".views.MainActivity">
+            tools:context=".oak.com4510.views.MainActivity">
         <TextView
                 android:text="@string/sort_field_label"
                 android:layout_width="0dp"

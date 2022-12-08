@@ -5,7 +5,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".views.MainActivity">
+        tools:context="uk.ac.shef.oak.com4510.views.MainActivity">
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="70dp"
             android:layout_height="70dp"

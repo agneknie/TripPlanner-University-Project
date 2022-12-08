@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.tripplanner">
+          package="uk.ac.shef.oak.com4510">
+
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
             android:allowBackup="true"
@@ -9,9 +14,9 @@
             android:roundIcon="@mipmap/trip_planner_icon_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Com4510TripPlanner"
-            android:name=".TripPlannerApplication">
+            android:name="uk.ac.shef.oak.com4510.TripPlannerApplication">
         <activity
-                android:name="com.example.tripplanner.views.MainActivity"
+                android:name="uk.ac.shef.oak.com4510.views.MainActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -19,21 +24,23 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".views.PhotoDetailsActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.PhotoDetailsActivity"
                   android:exported="false"/>
-        <activity android:name=".views.PhotoDisplayActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.PhotoDisplayActivity"
                   android:exported="false"/>
-        <activity android:name=".views.PhotoGalleryActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.PhotoGalleryActivity"
                   android:exported="false"/>
-        <activity android:name=".views.PhotoMapActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.PhotoMapActivity"
                   android:exported="false"/>
-        <activity android:name=".views.TripCreationActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.TripCreationActivity"
                   android:exported="false"/>
-        <activity android:name=".views.TripGalleryActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.TripGalleryActivity"
                   android:exported="false"/>
-        <activity android:name=".views.TripPhotoActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.TripPhotoActivity"
                   android:exported="false"/>
-        <activity android:name=".views.TripTripActivity"
+        <activity android:name="uk.ac.shef.oak.com4510.views.TripTripActivity"
+                  android:exported="false"/>
+        <activity android:name="uk.ac.shef.oak.com4510.views.CameraActivity"
                   android:exported="false"/>
     </application>
 

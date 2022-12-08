@@ -19,11 +19,10 @@
             android:ems="10"
             android:id="@+id/tags_panel_creation_et_tags"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tags_panel_creation_l_tags"
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/white"
-            android:theme="@style/input_field_style" android:minHeight="48dp" tools:layout_editor_absoluteY="27dp"
-            tools:layout_editor_absoluteX="0dp"/>
+            android:theme="@style/input_field_style" android:minHeight="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/tags_panel_creation_rv_tag_list" android:layout_marginTop="10dp"/>
     <Button
             android:text="@string/add_new_tag_button"
             android:layout_height="50dp" android:id="@+id/tags_panel_btn_add_tag"
@@ -40,9 +39,8 @@
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tags_panel_btn_add_tag"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="77dp" tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintTop_toBottomOf="@+id/tags_panel_creation_l_tags" android:layout_marginTop="10dp">
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
