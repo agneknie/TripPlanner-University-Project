@@ -28,6 +28,13 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
         configureStartTripButton()
     }
 
+    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        setResult(RESULT_CANCELED, intent)
+        finish()
+    }
+
     /**
      * Configures "Start Trip" button behaviour. When trip is started, saves it in
      * the database, starts TripTripActivity and finishes this activity.
@@ -46,7 +53,9 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
 
                         // Starts TripTripActivity and finishes this one, so you cannot come back to it
                         startActivity(intent)
-                        this.finish()
+                        val intentToMain = Intent(this, MainActivity::class.java)
+                        setResult(RESULT_OK, intentToMain)
+                        finish()
                     }
                 }
             }
