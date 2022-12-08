@@ -40,7 +40,8 @@ class TripPhotoActivity: TripPlannerAppCompatActivity() {
             // Creates thumbnail and saves its path
             thumbnailPath = PhotoUtilities.getOrMakeThumbNail(this, photoPath)
 
-            //TODO Populates photo view
+            // Populates photo view
+            populatePhotoView()
         }
         // If something unexpected happened, closes the activity and returns to trip screen
         else finish()
@@ -69,6 +70,13 @@ class TripPhotoActivity: TripPlannerAppCompatActivity() {
             else
                 displaySnackbar(binding.root, R.string.photo_needs_title_and_description)
         }
+    }
+
+    /**
+     * Adds the thumbnail of a photo to the photo ImageView.
+     */
+    private fun populatePhotoView(){
+        binding.root.photo_details_panel_iv_photo.setImageURI(Uri.parse(thumbnailPath))
     }
 
     /**

@@ -18,9 +18,9 @@ import java.io.FileOutputStream
  */
 class PhotoUtilities {
     companion object{
-        private const val THUMBNAIL_WIDTH = 250
-        private const val THUMBNAIL_HEIGHT = 250
-        private const val BITMAP_QUALITY = 0    // Range from 0 to 100
+        private const val THUMBNAIL_WIDTH = 500
+        private const val THUMBNAIL_HEIGHT = 500
+        private const val BITMAP_QUALITY = 80    // Range from 0 to 100
 
         private const val THUMBNAIL_PREFIX = "TripPlanner_"
         private const val THUMBNAIL_SUFFIX = ".jpg"
