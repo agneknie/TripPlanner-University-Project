@@ -1,6 +1,9 @@
 package uk.ac.shef.oak.com4510.views
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.view.View
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
@@ -8,6 +11,7 @@ import uk.ac.shef.oak.com4510.databinding.ActivityPhotoDetailsBinding
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
+
 
 class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityPhotoDetailsBinding
@@ -53,6 +57,9 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
         // Initialises 'Go Back' & 'Update Details' buttons
         configureGoBackButton()
         configureUpdateDetailsButton()
+
+        // Enables clicking on a photo to view it
+        configurePhotoClick()
     }
 
     /**
@@ -83,9 +90,20 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
                 else it.tagId = null
 
                 tripPlannerViewModel.updatePhoto(it)
-
                 finish()
             }
+        }
+    }
+
+    /**
+     * Implements photo clicking functionality. When a photo is clicked,
+     * new activity starts, which displays the full photo.
+     */
+    private fun configurePhotoClick(){
+        binding.root.photo_details_panel_iv_photo.setOnClickListener {
+            val intent = Intent(this, PhotoDisplayActivity::class.java)
+            intent.putExtra(IntentKeys.SELECTED_PHOTO_ID, photoId)
+            startActivity(intent)
         }
     }
 
