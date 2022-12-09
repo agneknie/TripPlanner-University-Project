@@ -8,6 +8,11 @@ import androidx.room.Update
 import uk.ac.shef.oak.com4510.data.access.entities.TripEntity
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface TripDao.
+ *
+ * Provides Trip database query structure.
+ */
 @Dao
 interface TripDao {
     @Query("SELECT * FROM trip ORDER BY trip_id ASC")

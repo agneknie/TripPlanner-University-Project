@@ -10,6 +10,12 @@ import kotlinx.coroutines.launch
 import uk.ac.shef.oak.com4510.models.Photo
 import java.lang.IllegalArgumentException
 
+/**
+ * Class TripPlannerViewModel.
+ *
+ * ViewModel of the application. Handles database querying through room.
+ * Accesses TripRepository, LocationRepository, PhotoRepository & TagRepository.
+ */
 class TripPlannerViewModel (
     private val tripRepository: TripRepository,
     private val locationRepository: LocationRepository,
@@ -81,6 +87,9 @@ class TripPlannerViewModelFactory(
     private val tagRepository: TagRepository,
     private val applicationContext: Application): ViewModelProvider.Factory{
 
+    /**
+     * Creates the TripPlannerViewModel class.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(TripPlannerViewModel::class.java)){
             return TripPlannerViewModel(

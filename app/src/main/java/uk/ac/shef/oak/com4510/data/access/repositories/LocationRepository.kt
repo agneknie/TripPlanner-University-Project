@@ -8,6 +8,12 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Trip
 import java.time.LocalDateTime
 
+/**
+ * Class LocationRepository.
+ *
+ * Implements the repository for the Location model, matching the queries in
+ * the LocationDao.
+ */
 class LocationRepository(private val locationDao: LocationDao) {
 
     // All locations

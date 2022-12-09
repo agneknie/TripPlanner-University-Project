@@ -14,7 +14,7 @@ import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityCameraBinding
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
-import uk.ac.shef.oak.com4510.utilities.PhotoCaptureUtility
+import uk.ac.shef.oak.com4510.utilities.PhotoUtilities
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,14 +51,14 @@ class CameraActivity: TripPlannerAppCompatActivity() {
         val photoCapture = photoCapture?: return
 
         // Create name for captured photo
-        val photoName = SimpleDateFormat(PhotoCaptureUtility.FILENAME_FORMAT, Locale.getDefault())
+        val photoName = SimpleDateFormat(PhotoUtilities.FILENAME_FORMAT, Locale.getDefault())
             .format(System.currentTimeMillis())
 
         // Set media content values
         val mediaContentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, photoName)
-            put(MediaStore.MediaColumns.MIME_TYPE, PhotoCaptureUtility.PHOTO_FORMAT)
-            put(MediaStore.Images.Media.RELATIVE_PATH, PhotoCaptureUtility.PHOTO_RELATIVE_PATH)
+            put(MediaStore.MediaColumns.MIME_TYPE, PhotoUtilities.PHOTO_FORMAT)
+            put(MediaStore.Images.Media.RELATIVE_PATH, PhotoUtilities.PHOTO_RELATIVE_PATH)
         }
 
         // Create output options

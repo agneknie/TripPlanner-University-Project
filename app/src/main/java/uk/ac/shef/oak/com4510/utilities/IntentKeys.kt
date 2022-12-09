@@ -1,6 +1,8 @@
 package uk.ac.shef.oak.com4510.utilities
 
 /**
+ * Class IntentKeys.
+ *
  * Stores strings, which correspond to keys, used in intent bundles.
  */
 class IntentKeys {

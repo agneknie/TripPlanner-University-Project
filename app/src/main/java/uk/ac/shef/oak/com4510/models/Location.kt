@@ -2,6 +2,11 @@ package uk.ac.shef.oak.com4510.models
 
 import java.time.LocalDateTime
 
+/**
+ * Class Location.
+ *
+ * Defines the Location model.
+ */
 data class Location(
     val locationId: Int = 0,
     val xCoordinate: Double,

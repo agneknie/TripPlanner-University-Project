@@ -5,6 +5,11 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
+/**
+ * Class TagEntity.
+ *
+ * Defines Tag model as a database entity.
+ */
 @Entity(tableName = "tag", indices = [Index(value = ["tag_id"])])
 data class TagEntity (
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "tag_id") val tagId: Int = 0,

@@ -8,6 +8,11 @@ import androidx.room.Update
 import uk.ac.shef.oak.com4510.data.access.entities.PhotoEntity
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface PhotoDao.
+ *
+ * Provides Photo database query structure.
+ */
 @Dao
 interface PhotoDao {
     @Query("SELECT * FROM photo ORDER BY photo_id ASC")

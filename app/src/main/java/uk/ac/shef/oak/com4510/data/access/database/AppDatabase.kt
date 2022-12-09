@@ -13,6 +13,11 @@ import uk.ac.shef.oak.com4510.data.access.entities.PhotoEntity
 import uk.ac.shef.oak.com4510.data.access.entities.TagEntity
 import uk.ac.shef.oak.com4510.data.access.entities.TripEntity
 
+/**
+ * Class AppDatabase.
+ *
+ * Defines Room database implementation for the application.
+ */
 @Database(
     entities = [LocationEntity::class, PhotoEntity::class, TagEntity::class, TripEntity::class],
     version = 1,

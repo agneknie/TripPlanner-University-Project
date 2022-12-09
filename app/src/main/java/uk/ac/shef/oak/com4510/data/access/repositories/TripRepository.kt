@@ -8,6 +8,12 @@ import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.models.Trip
 import java.time.LocalDateTime
 
+/**
+ * Class TripRepository.
+ *
+ * Implements the repository for the Trip model, matching the queries in
+ * the TripDao.
+ */
 class TripRepository(private val tripDao: TripDao) {
 
     // Observable for all trips

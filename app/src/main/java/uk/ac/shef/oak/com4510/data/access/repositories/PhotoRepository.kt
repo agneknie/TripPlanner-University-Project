@@ -9,6 +9,12 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.models.Tag
 
+/**
+ * Class PhotoRepository.
+ *
+ * Implements the repository for the Photo model, matching the queries in
+ * the PhotoDao.
+ */
 class PhotoRepository(private val photoDao: PhotoDao) {
 
     // Observable for all photos

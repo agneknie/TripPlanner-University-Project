@@ -7,6 +7,11 @@ import androidx.room.Query
 import uk.ac.shef.oak.com4510.data.access.entities.LocationEntity
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface LocationDao.
+ *
+ * Provides Location database query structure.
+ */
 @Dao
 interface LocationDao {
     @Query("SELECT * FROM location ORDER BY location_id ASC")

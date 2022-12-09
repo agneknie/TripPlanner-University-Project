@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewbinding.ViewBinding
 import uk.ac.shef.oak.com4510.R
-import uk.ac.shef.oak.com4510.databinding.ActivityTripCreationBinding
 import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 import kotlinx.android.synthetic.main.tags_panel.view.*
 
 /**
+ * Class TagsPanel.
+ *
  * Handles initialisation and behaviour of the tags addition and
  * display panel.
  *
@@ -96,6 +97,11 @@ class TagsPanel(
         (tagView as TextView).setTextColor(ContextCompat.getColor(invokingActivity, R.color.main_colour))
     }
 
+    /**
+     * Handles behaviour, which happens when a tag is clicked.
+     * Either selects a tag, deselects currently selected tag and selects a new one
+     * or deselects a tag.
+     */
     override fun onTagItemClick(tag: Tag, tagView: View) {
         // If already selected tag was clicked
         if(tag.equals(selectedTag)){

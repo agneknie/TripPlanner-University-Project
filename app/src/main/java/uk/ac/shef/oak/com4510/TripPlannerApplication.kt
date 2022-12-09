@@ -8,7 +8,10 @@ import uk.ac.shef.oak.com4510.data.access.repositories.TagRepository
 import uk.ac.shef.oak.com4510.data.access.repositories.TripRepository
 
 /**
- * Initialises the database and repositories of the application.
+ * Class TripPlannerApplication.
+ *
+ * Initialises the application via initialising
+ * the database and repositories of the application.
  */
 class TripPlannerApplication: Application() {
 
