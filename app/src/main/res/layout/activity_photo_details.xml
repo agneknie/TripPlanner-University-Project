@@ -9,6 +9,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:context=".oak.com4510.views.MainActivity">
+        <Button
+                android:text="@string/go_back_button"
+                android:layout_height="60dp" android:id="@+id/activity_photo_details_btn_go_back"
+                android:textColor="@color/main_light_blue"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/roboto_bold"
+                android:layout_width="150dp"
+                app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_ll_map_holder"
+                android:layout_marginTop="50dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="30dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="30dp"/>
+        <Button
+                android:text="@string/update_details_button"
+                android:layout_height="60dp" android:id="@+id/activity_photo_details_btn_update_photo"
+                android:textColor="@color/main_light_blue"
+                android:textSize="18sp"
+                android:textAllCaps="false"
+                android:fontFamily="@font/roboto_bold"
+                android:layout_width="150dp"
+                app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_ll_map_holder"
+                android:layout_marginTop="50dp" android:layout_marginEnd="30dp"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="30dp"/>
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -40,20 +64,22 @@
                 android:layout_height="50dp"
                 android:inputType="text"
                 android:ems="10"
-                android:id="@+id/activity_photo_details_ed_temperature2"
+                android:id="@+id/activity_photo_details_ed_temperature"
                 app:layout_constraintStart_toStartOf="parent"
                 android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/white"
-                android:theme="@style/input_field_style" android:minHeight="48dp"
+                android:minHeight="48dp"
                 app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_l_temperature"
-                android:layout_marginStart="30dp"/>
+                android:layout_marginStart="30dp"
+                android:focusable="false"
+                android:cursorVisible="false"/>
         <TextView
                 android:text="@string/pressure_field_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_ed_temperature2"
+                app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_ed_temperature"
                 android:id="@+id/activity_photo_details_l_pressure"
                 android:fontFamily="@font/roboto_bold"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="50dp"
@@ -67,8 +93,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/white"
-                android:theme="@style/input_field_style" android:minHeight="48dp"
+                android:minHeight="48dp"
                 app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_l_pressure"
-                android:layout_marginStart="30dp"/>
+                android:layout_marginStart="30dp"
+                android:focusable="false"
+                android:cursorVisible="false"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

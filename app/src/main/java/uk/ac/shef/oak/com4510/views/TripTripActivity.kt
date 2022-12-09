@@ -12,6 +12,12 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.utilities.Permissions
 import java.time.LocalDateTime
 
+/**
+ * Class TripTripActivity.
+ *
+ * Main Trip activity, where trip location tracking and photo selection or
+ * taking happens.
+ */
 class TripTripActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityTripTripBinding
 
@@ -40,6 +46,22 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         // Configures camera & gallery button visibility based on permissions granted
         configureButtonVisibility()
 
+        // Adds and configures all button listeners
+        addAndConfigureButtonListeners()
+
+        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width accordingly if necessary.
+    }
+
+    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+    override fun onBackPressed() {
+        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
+    }
+
+    /**
+     * Adds and configures listeners for 'Finish Trip', 'Gallery' &
+     * 'Camera' buttons.
+     */
+    private fun addAndConfigureButtonListeners(){
         // Listener for "Finish Trip" button
         configureFinishTripButton()
 
@@ -48,13 +70,6 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
 
         // Listener for "Camera" button
         configureCameraButton()
-
-        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match_parent.
-    }
-
-    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
-    override fun onBackPressed() {
-        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
     }
 
     //region Button Configurations & Listeners
@@ -104,6 +119,8 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
                     }
                 }
             }
+            // If something went wrong, finishes the activity
+            else finish()
         }
     }
 

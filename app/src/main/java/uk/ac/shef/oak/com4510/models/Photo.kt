@@ -2,6 +2,11 @@ package uk.ac.shef.oak.com4510.models
 
 import android.net.Uri
 
+/**
+ * Class Photo.
+ *
+ * Defines the Photo model.
+ */
 data class Photo (
     val photoId: Int = 0,
     val photoPath: Uri,

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Size
 import androidx.core.net.toUri
+import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.models.Photo
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -13,11 +14,19 @@ import java.io.FileOutputStream
 /**
  * PhotoUtilities Class.
  *
+ * Class for all utilities related with photo capturing.
+ *
  * Handles photo thumbnail creation and/or retrieval and saves it to cache if
  * not already saved.
  */
 class PhotoUtilities {
     companion object{
+        private const val PHOTO_TAG = R.string.app_name.toString()
+
+        const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        const val PHOTO_FORMAT = "image/jpeg"
+        const val PHOTO_RELATIVE_PATH = "Pictures/$PHOTO_TAG"
+
         private const val THUMBNAIL_WIDTH = 500
         private const val THUMBNAIL_HEIGHT = 500
         private const val BITMAP_QUALITY = 80    // Range from 0 to 100

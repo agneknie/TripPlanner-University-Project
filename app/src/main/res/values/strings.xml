@@ -11,6 +11,8 @@
     <string name="finish_trip_button">Finish Trip</string>
     <string name="cancel_button">Cancel</string>
     <string name="add_to_trip_button">Add to Trip</string>
+    <string name="update_details_button">Update Details</string>
+    <string name="go_back_button">Go Back</string>
 
     <!-- EditText & etc. Field Labels -->
     <string name="title_field_label">Title:</string>

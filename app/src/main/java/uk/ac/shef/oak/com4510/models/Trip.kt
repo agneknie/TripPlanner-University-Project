@@ -2,6 +2,11 @@ package uk.ac.shef.oak.com4510.models
 
 import java.time.LocalDateTime
 
+/**
+ * Class Trip.
+ *
+ * Defines the Trip model.
+ */
 data class Trip(
     val tripId: Int = 0,
     val startDateTime: LocalDateTime,

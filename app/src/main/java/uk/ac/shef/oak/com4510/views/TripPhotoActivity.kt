@@ -11,6 +11,13 @@ import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.utilities.PhotoUtilities
 
+/**
+ * Class TripPhotoActivity.
+ *
+ * Allows user to provide details for a taken or selected Photo,
+ * so it can be saved in the database and associated with the current
+ * Trip.
+ */
 class TripPhotoActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityTripPhotoBinding
     private lateinit var tagsPanel: TagsPanel
