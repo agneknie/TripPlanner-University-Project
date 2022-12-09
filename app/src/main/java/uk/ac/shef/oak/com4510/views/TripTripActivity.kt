@@ -12,6 +12,12 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.utilities.Permissions
 import java.time.LocalDateTime
 
+/**
+ * Class TripTripActivity.
+ *
+ * Main Trip activity, where trip location tracking and photo selection or
+ * taking happens.
+ */
 class TripTripActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityTripTripBinding
 

@@ -10,7 +10,13 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 
-
+/**
+ * Class PhotoDetailsActivity.
+ *
+ * Displays photo thumbnail, photo's details and associated Location details.
+ * Also, plots a map of the trip the photo belongs to.
+ * Implements photo details updating in the database.
+ */
 class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityPhotoDetailsBinding
 

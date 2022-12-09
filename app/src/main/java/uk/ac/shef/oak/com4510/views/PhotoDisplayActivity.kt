@@ -5,6 +5,11 @@ import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityPhotoDisplayBinding
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 
+/**
+ * Class PhotoDisplayActivity.
+ *
+ * Displays a selected photo as the full photo.
+ */
 class PhotoDisplayActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityPhotoDisplayBinding
 

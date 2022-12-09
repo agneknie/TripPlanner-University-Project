@@ -6,6 +6,11 @@ import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityPhotoGalleryBinding
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 
+/**
+ * Class PhotoGalleryActivity.
+ *
+ * Implements all photo browsing and sorting in a gallery of photos.
+ */
 class PhotoGalleryActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityPhotoGalleryBinding
 

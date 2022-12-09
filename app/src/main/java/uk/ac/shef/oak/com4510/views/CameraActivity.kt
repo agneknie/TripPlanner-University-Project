@@ -19,6 +19,11 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Class CameraActivity.
+ *
+ * Corresponds to the Camera view. Starts the camera for a user to take a photo.
+ */
 class CameraActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var photoCapture: ImageCapture? = null

@@ -8,6 +8,13 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import java.time.LocalDateTime
 
+/**
+ * Class PhotoMapActivity.
+ *
+ * Implements all photo viewing as locations on a map. When a
+ * photo location is clicked, forwards to the activity, which displays
+ * photo details.
+ */
 class PhotoMapActivity: TripPlannerAppCompatActivity()  {
     private lateinit var binding: ActivityPhotoMapBinding
 

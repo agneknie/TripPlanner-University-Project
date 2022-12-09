@@ -10,6 +10,11 @@ import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import java.time.LocalDateTime
 
+/**
+ * Class TripCreationActivity.
+ *
+ * Enables user to create and start a new Trip.
+ */
 class TripCreationActivity: TripPlannerAppCompatActivity(){
     private lateinit var binding: ActivityTripCreationBinding
 
