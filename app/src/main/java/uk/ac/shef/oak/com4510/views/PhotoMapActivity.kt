@@ -39,6 +39,8 @@ class PhotoMapActivity: TripPlannerAppCompatActivity()  {
      * displays its details.
      *
      * location: Location object, associated with the clicked location on the map.
+     *
+     * // TODO Use this when a location marker is clicked
      */
     private fun locationClicked(location: Location){
         tripPlannerViewModel.getPhotoByLocation(location).observe(this){
