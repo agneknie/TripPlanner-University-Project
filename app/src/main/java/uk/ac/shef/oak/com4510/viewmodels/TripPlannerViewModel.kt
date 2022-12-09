@@ -34,6 +34,11 @@ class TripPlannerViewModel (
     // Get current Location id from the database.
     val lastLocationId: LiveData<Int> = locationRepository.lastLocationId
 
+    // Get all locations, which have photos associated with them
+    val photoLocations: LiveData<List<Location>> = Transformations.map(locationRepository.photoLocations){
+        it.asDomainModels()
+    } as MutableLiveData<List<Location>>
+
     /**
      * Get Trip from the database.
      */
@@ -45,6 +50,13 @@ class TripPlannerViewModel (
      * Get Photo from the database.
      */
     fun getPhoto(photoId: Int): LiveData<Photo> = Transformations.map(photoRepository.getPhoto(photoId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Get Photo by its Location from the database.
+     */
+    fun getPhotoByLocation(location: Location): LiveData<Photo> = Transformations.map(photoRepository.getPhotoByLocation(location)){
         it.asDomainModel()
     }
 

@@ -1,9 +1,7 @@
 package uk.ac.shef.oak.com4510.views
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel

@@ -43,7 +43,7 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         // Adds and configures all button listeners
         addAndConfigureButtonListeners()
 
-        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match_parent.
+        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width accordingly if necessary.
     }
 
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
