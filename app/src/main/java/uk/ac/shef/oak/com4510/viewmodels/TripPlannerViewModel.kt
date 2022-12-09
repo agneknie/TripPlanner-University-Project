@@ -42,6 +42,36 @@ class TripPlannerViewModel (
     }
 
     /**
+     * Get Photo from the database.
+     */
+    fun getPhoto(photoId: Int): LiveData<Photo> = Transformations.map(photoRepository.getPhoto(photoId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Get Location from the database.
+     */
+    fun getLocation(locationId: Int): LiveData<Location> = Transformations.map(locationRepository.getLocation(locationId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Get Tag from the database.
+     */
+    fun getTag(tagId: Int): LiveData<Tag> = Transformations.map(tagRepository.getTag(tagId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Gets all Locations belonging to a trip in a sorted list, where
+     * the first location is the start location and the last location is the
+     * end location of a Trip.
+     */
+    fun getLocationsByTrip(tripId: Int): LiveData<List<Location>> = Transformations.map(locationRepository.getLocationsByTrip(tripId)){
+        it.asDomainModels()
+    }
+
+    /**
      * Insert given Tag into the database.
      */
     fun insertTag(tag: Tag) = viewModelScope.launch {

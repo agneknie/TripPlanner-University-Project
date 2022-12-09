@@ -61,6 +61,7 @@ fun PhotoEntity.asDomainModel(): Photo {
         locationId = locationId,
         title = title,
         description = description,
+        tagId = tagId,
         thumbnailPath = Uri.parse(thumbnailPath))
     // TODO photo.getOrMakeThumbnail(context) and then add context: Context
 }

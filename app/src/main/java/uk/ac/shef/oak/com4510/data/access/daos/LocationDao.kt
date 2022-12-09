@@ -26,6 +26,9 @@ interface LocationDao {
     @Query("SELECT location_id FROM location ORDER BY location_id DESC LIMIT 1")
     fun getLastLocationId(): Flow<Int>
 
+    @Query("SELECT * FROM location WHERE location_id = :locationId")
+    fun getLocation(locationId: Int): Flow<LocationEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocation(locationEntity: LocationEntity)
 }

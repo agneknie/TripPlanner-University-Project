@@ -23,6 +23,12 @@ class TagRepository(private val tagDao: TagDao) {
     suspend fun insertTag(tag: Tag){
         tagDao.insertTag(tag.asDatabaseEntity())
     }
+
+    /**
+     * Get Tag from the database by its tag_id.
+     */
+    fun getTag(tagId: Int) = tagDao.getTag(tagId).asLiveData()
+
 }
 
 //region Object Mapping

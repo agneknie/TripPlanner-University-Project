@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewbinding.ViewBinding
+import kotlinx.android.synthetic.main.tag_view.view.*
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
@@ -90,11 +91,30 @@ class TagsPanel(
     }
 
     /**
-     * Resets Tag's appearance to default colours.
+     * Sets Tag's appearance to selected colours.
      */
     private fun displayTagAsSelected(tagView: View){
         tagView.background = AppCompatResources.getDrawable(invokingActivity, R.drawable.tag_view_background_selected)
         (tagView as TextView).setTextColor(ContextCompat.getColor(invokingActivity, R.color.main_colour))
+    }
+
+    /**
+     * Sets Tag's appearance to selected colours. Checks if the provided tag
+     * id is not null and applies appearance changes only if it is in the
+     * database.
+     */
+    fun displayTagAsSelected(tagId: Int?){
+        if(tagId != null){
+            tripPlannerViewModel.getTag(tagId).observe(invokingActivity){
+                val tagPosition = tagAdapter.currentList.indexOf(it)
+                val tagView = tagRecyclerView.getChildAt(tagPosition).tag_view_tv_tag_name
+
+                displayTagAsSelected(tagView)
+
+                selectedTag = it
+                selectedTagView = tagView
+            }
+        }
     }
 
     /**

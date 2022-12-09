@@ -113,6 +113,8 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
                     }
                 }
             }
+            // If something went wrong, finishes the activity
+            else finish()
         }
     }
 
