@@ -61,6 +61,13 @@ class TripPlannerViewModel (
     }
 
     /**
+     * Get all Photos associated to a Trip.
+     */
+    fun getPhotosByTripId(tripId: Int): LiveData<List<Photo>> = Transformations.map(photoRepository.getPhotosByTripId(tripId)){
+        it.asDomainModels()
+    }
+
+    /**
      * Get Location from the database.
      */
     fun getLocation(locationId: Int): LiveData<Location> = Transformations.map(locationRepository.getLocation(locationId)){
