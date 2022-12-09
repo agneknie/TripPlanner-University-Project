@@ -31,6 +31,7 @@
     <!-- Titles -->
     <string name="new_trip_title">New Trip:</string>
     <string name="tag_default_name">Default Tag Name</string>
+    <string name="trip_default_name">Default Trip Name</string>
     <string name="trip_details_title">Trip Details:</string>
     <string name="trip_information_title">Trip Information:</string>
 
