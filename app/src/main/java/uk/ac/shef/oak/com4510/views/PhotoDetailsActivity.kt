@@ -13,6 +13,7 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityPhotoDetailsBinding
 
     private lateinit var tagsPanel: TagsPanel
+    private var photoId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +37,7 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
         tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
 
         // Gets selected photo's id
-        val photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
+        photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
 
         // Gets selected photo from the database and populates the activity
         tripPlannerViewModel.getPhoto(photoId).observe(this){
@@ -46,6 +47,44 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
 
                 // Configures location details related fields & map
                 configurePhotoLocationDetailsAndMap(it)
+            }
+        }
+
+        // Initialises 'Go Back' & 'Update Details' buttons
+        configureGoBackButton()
+        configureUpdateDetailsButton()
+    }
+
+    /**
+     * Finishes the activity without updating photo details in
+     * the database.
+     */
+    private fun configureGoBackButton(){
+        binding.activityPhotoDetailsBtnGoBack.setOnClickListener {
+            finish()
+        }
+    }
+
+    /**
+     * Finishes the activity and updates photo details in the
+     * database if they have changed.
+     */
+    private fun configureUpdateDetailsButton(){
+        binding.activityPhotoDetailsBtnUpdatePhoto.setOnClickListener {
+            tripPlannerViewModel.getPhoto(photoId).observe(this){
+                val newTitle = binding.root.photo_details_panel_ed_title.text.toString()
+                val newDescription = binding.root.photo_details_panel_ed_description.text.toString()
+                val newTagId = tagsPanel.getSelectedTag()
+
+                it.title = newTitle
+                it.description = newDescription
+
+                if(newTagId != null) it.tagId = newTagId.tagId
+                else it.tagId = null
+
+                tripPlannerViewModel.updatePhoto(it)
+
+                finish()
             }
         }
     }

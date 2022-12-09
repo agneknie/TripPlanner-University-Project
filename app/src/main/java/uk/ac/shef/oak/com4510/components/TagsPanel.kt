@@ -49,6 +49,14 @@ class TagsPanel(
     }
 
     /**
+     * Returns true if a tag is currently selected & false
+     * if no tag is selected.
+     */
+    fun tagIsSelected(): Boolean{
+        return selectedTag!= null && selectedTagView != null
+    }
+
+    /**
      * Click listener for "Add New Tag" button, which inserts a new
      * tag in the database.
      */
@@ -134,7 +142,7 @@ class TagsPanel(
         // If not selected tag was clicked
         else{
             // Changes previously selected tag to default state
-            if(selectedTag!= null && selectedTagView != null){
+            if(tagIsSelected()){
                 resetTagColour(selectedTagView!!)
             }
 

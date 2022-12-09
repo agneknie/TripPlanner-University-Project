@@ -105,6 +105,13 @@ class TripPlannerViewModel (
     fun updateTrip(trip: Trip) = viewModelScope.launch {
         tripRepository.updateTrip(trip)
     }
+
+    /**
+     * Update given Photo in the database.
+     */
+    fun updatePhoto(photo: Photo) = viewModelScope.launch {
+        photoRepository.updatePhoto(photo)
+    }
 }
 
 /**
