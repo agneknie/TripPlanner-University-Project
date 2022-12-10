@@ -3,6 +3,7 @@ package uk.ac.shef.oak.com4510.views
 import android.content.Intent
 import android.os.Bundle
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
+import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
 import uk.ac.shef.oak.com4510.databinding.ActivityPhotoDetailsBinding
@@ -87,14 +88,21 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
                 val newDescription = binding.root.photo_details_panel_ed_description.text.toString()
                 val newTagId = tagsPanel.getSelectedTag()
 
-                it.title = newTitle
-                it.description = newDescription
+                // Checks if required fields are valid
+                if(newTitle.isBlank() || newDescription.isBlank())
+                    displaySnackbar(binding.root, R.string.photo_needs_title_and_description)
 
-                if(newTagId != null) it.tagId = newTagId.tagId
-                else it.tagId = null
+                // If fields valid, updates photo details
+                else{
+                    it.title = newTitle
+                    it.description = newDescription
 
-                tripPlannerViewModel.updatePhoto(it)
-                finish()
+                    if(newTagId != null) it.tagId = newTagId.tagId
+                    else it.tagId = null
+
+                    tripPlannerViewModel.updatePhoto(it)
+                    finish()
+                }
             }
         }
     }

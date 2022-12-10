@@ -28,6 +28,11 @@ class TripPlannerViewModel (
         it.asDomainModel()
     } as MutableLiveData<List<Tag>>
 
+    // All trips in the repository
+    val allTrips: LiveData<List<Trip>> = Transformations.map(tripRepository.trips){
+        it.asDomainModels()
+    } as MutableLiveData<List<Trip>>
+
     // Get current Trip id from the database.
     val currentTripId: LiveData<Int> = tripRepository.getCurrentTripId()
 
@@ -61,11 +66,28 @@ class TripPlannerViewModel (
     }
 
     /**
+     * Get all Photos associated to a Trip.
+     */
+    fun getPhotosByTripId(tripId: Int): LiveData<List<Photo>> = Transformations.map(photoRepository.getPhotosByTripId(tripId)){
+        it.asDomainModels()
+    }
+
+    /**
+     * Get count of photos in a Trip.
+     */
+    fun getPhotoCountByTrip(tripId: Int): LiveData<Int> = photoRepository.getPhotoCountByTrip(tripId)
+
+    /**
      * Get Location from the database.
      */
     fun getLocation(locationId: Int): LiveData<Location> = Transformations.map(locationRepository.getLocation(locationId)){
         it.asDomainModel()
     }
+
+    /**
+     * Get count of Locations in a Trip.
+     */
+    fun getLocationCountByTrip(tripId: Int): LiveData<Int> = locationRepository.getLocationCountByTrip(tripId)
 
     /**
      * Get Tag from the database.

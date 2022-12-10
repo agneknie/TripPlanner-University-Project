@@ -10,5 +10,6 @@ class IntentKeys {
         const val PHOTO_URI = "photoUri"
         const val CURRENT_TRIP_ID = "currentTripId"
         const val SELECTED_PHOTO_ID = "selectedPhotoId"
+        const val SELECTED_TRIP_ID = "selectedTripId"
     }
 }

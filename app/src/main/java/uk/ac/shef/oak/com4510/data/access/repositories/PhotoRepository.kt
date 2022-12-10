@@ -36,6 +36,16 @@ class PhotoRepository(private val photoDao: PhotoDao) {
     fun getPhotosByTag(tag: Tag) = photoDao.getPhotosByTag(tag.tagId).asLiveData()
 
     /**
+     * Get List of Photos belonging to a Trip.
+     */
+    fun getPhotosByTripId(tripId: Int) = photoDao.getPhotosByTripId(tripId).asLiveData()
+
+    /**
+     * Get number of Photos associated with a Trip.
+     */
+    fun getPhotoCountByTrip(tripId: Int) = photoDao.getPhotoCountByTripId(tripId).asLiveData()
+
+    /**
      * Insert a Photo in the database.
      */
     suspend fun insertPhoto(photo: Photo){

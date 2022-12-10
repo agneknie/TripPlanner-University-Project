@@ -2,6 +2,7 @@ package uk.ac.shef.oak.com4510.views
 
 import android.os.Bundle
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
+import uk.ac.shef.oak.com4510.components.TripGallery
 import uk.ac.shef.oak.com4510.databinding.ActivityTripGalleryBinding
 
 /**
@@ -17,5 +18,8 @@ class TripGalleryActivity: TripPlannerAppCompatActivity()  {
         super.onCreate(savedInstanceState)
         binding = ActivityTripGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Populate activity with user's trips
+        TripGallery(this, tripPlannerViewModel)
     }
 }

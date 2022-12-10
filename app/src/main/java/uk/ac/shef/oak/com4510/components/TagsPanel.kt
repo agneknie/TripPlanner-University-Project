@@ -12,6 +12,7 @@ import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 import kotlinx.android.synthetic.main.tags_panel.view.*
+import uk.ac.shef.oak.com4510.components.adapters.TagAdapter
 
 /**
  * Class TagsPanel.

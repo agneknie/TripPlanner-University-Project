@@ -15,7 +15,7 @@
             android:src="@drawable/ic_gallery"
             android:id="@+id/activity_trip_trip_fab_gallery"
             android:foregroundGravity="top" app:fabCustomSize="70dp"
-            app:layout_constraintBottom_toBottomOf="@+id/activity_photo_map_ll_map_holder"
+            app:layout_constraintBottom_toBottomOf="@+id/activity_trip_trip_ll_map_holder"
             android:layout_marginBottom="20dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="20dp"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -28,13 +28,13 @@
             android:id="@+id/activity_trip_trip_fab_camera"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="20dp"
             android:foregroundGravity="top" app:fabCustomSize="70dp"
-            app:layout_constraintBottom_toBottomOf="@+id/activity_photo_map_ll_map_holder"
+            app:layout_constraintBottom_toBottomOf="@+id/activity_trip_trip_ll_map_holder"
             android:layout_marginBottom="20dp"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:id="@+id/activity_photo_map_ll_map_holder" app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/activity_trip_trip_ll_map_holder" app:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toTopOf="@+id/activity_trip_trip_btn_finish_trip"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"

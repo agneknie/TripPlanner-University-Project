@@ -20,6 +20,9 @@ interface LocationDao {
     @Query("SELECT * FROM location WHERE trip_id = :tripId ORDER BY location_id ASC")
     fun getLocationsByTrip(tripId: Int): Flow<List<LocationEntity>>
 
+    @Query("SELECT COUNT(location_id) FROM location WHERE trip_id = :tripId")
+    fun getLocationCountByTrip(tripId: Int): Flow<Int>
+
     @Query("SELECT * FROM location WHERE location_id IN (SELECT location_id FROM photo)")
     fun getLocationsContainingPhotos(): Flow<List<LocationEntity>>
 

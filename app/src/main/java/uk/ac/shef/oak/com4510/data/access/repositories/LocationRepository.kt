@@ -31,6 +31,12 @@ class LocationRepository(private val locationDao: LocationDao) {
         locationDao.getLocationsByTrip(tripId).asLiveData()
 
     /**
+     * Get number of locations recorded in a trip.
+     */
+    fun getLocationCountByTrip(tripId: Int) =
+        locationDao.getLocationCountByTrip(tripId).asLiveData()
+
+    /**
      * Get location by its location id.
      */
     fun getLocation(locationId: Int) =
@@ -55,7 +61,7 @@ fun LocationEntity.asDomainModel(): Location {
         yCoordinate = yCoordinate,
         temperature = temperature,
         pressure = pressure,
-        dateTime = LocalDateTime.parse(dateTime),
+        dateTime = LocalDateTime.parse(LocalDateTime.now().toString()),
         tripId = tripId
     )
 }

@@ -22,10 +22,18 @@
     <string name="search_field_label">Search:</string>
     <string name="temperature_field_label">Temperature:</string>
     <string name="pressure_field_label">Pressure:</string>
+    <string name="start_time_field_label">Start Time:</string>
+    <string name="end_time_field_label">End Time:</string>
+    <string name="trip_length_field_label">Trip Length:</string>
+    <string name="photos_taken_field_label">Photos Taken:</string>
+    <string name="locations_visited_field_label">Locations Visited:</string>
 
     <!-- Titles -->
-    <string name="new_trip_title">New Trip:</string>
+    <string name="new_trip_title">New Trip</string>
     <string name="tag_default_name">Default Tag Name</string>
+    <string name="trip_default_name">Default Trip Name</string>
+    <string name="trip_details_title">Trip Details</string>
+    <string name="trip_information_title">Trip Information</string>
 
     <!-- Snackbar Messages -->
     <string name="photo_needs_title_and_description">Photo needs to have a title and a description.</string>
