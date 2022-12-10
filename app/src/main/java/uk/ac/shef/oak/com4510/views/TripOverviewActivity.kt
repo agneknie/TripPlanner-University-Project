@@ -1,6 +1,7 @@
 package uk.ac.shef.oak.com4510.views
 
 import android.os.Bundle
+import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
 import uk.ac.shef.oak.com4510.databinding.ActivityTripOverviewBinding
@@ -77,7 +78,27 @@ class TripOverviewActivity: TripPlannerAppCompatActivity() {
      * database if they have changed.
      */
     private fun configureUpdateDetailsButton(){
-        // TODO configureUpdateDetailsButton
+        binding.activityTripOverviewBtnUpdateTrip.setOnClickListener {
+            tripPlannerViewModel.getTrip(tripId).observe(this){
+                val newTitle = binding.activityTripOverviewEtTripTitle.text.toString()
+                val newTagId = tagsPanel.getSelectedTag()
+
+                // Checks if title is not empty as it cannot be
+                if(newTitle.isBlank())
+                    displaySnackbar(binding.root, R.string.trip_cannot_start_snackbar)
+
+                // If title is present, trip can be updated
+                else{
+                    it.title = newTitle
+
+                    if(newTagId != null) it.tagId = newTagId.tagId
+                    else it.tagId = null
+
+                    tripPlannerViewModel.updateTrip(it)
+                    finish()
+                }
+            }
+        }
     }
 
     /**

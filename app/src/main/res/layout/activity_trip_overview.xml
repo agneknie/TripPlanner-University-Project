@@ -23,7 +23,7 @@
                 app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="30dp"/>
         <Button
                 android:text="@string/update_details_button"
-                android:layout_height="60dp" android:id="@+id/activity_trip_overview_btn_update_photo"
+                android:layout_height="60dp" android:id="@+id/activity_trip_overview_btn_update_trip"
                 android:textColor="@color/main_light_blue"
                 android:textSize="18sp"
                 android:textAllCaps="false"

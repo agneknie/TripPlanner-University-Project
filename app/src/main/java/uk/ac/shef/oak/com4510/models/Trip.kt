@@ -13,7 +13,7 @@ data class Trip(
     val tripId: Int = 0,
     val startDateTime: LocalDateTime,
     var endDateTime: LocalDateTime? = null,
-    val title: String,
+    var title: String,
     var tagId: Int? = null
 ) {
     override fun equals(other: Any?): Boolean {
