@@ -1,4 +1,4 @@
-package uk.ac.shef.oak.com4510.components
+package uk.ac.shef.oak.com4510.components.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -17,14 +17,14 @@ import uk.ac.shef.oak.com4510.models.Trip
  * Provides adapter(ListAdapter) functionality to the Trips RecyclerView
  */
 class TripAdapter (
-    val tripItemClickListener:TripItemClickListener): ListAdapter<Trip, TripAdapter.TripViewHolder>(
+    val tripItemClickListener: TripItemClickListener): ListAdapter<Trip, TripAdapter.TripViewHolder>(
     TripComparator())
 {
     lateinit var context: Context
 
     /**
      * Click listener, which when implemented, allows access to the
-     * clicked tag in the implementing activity.
+     * clicked trip in the implementing activity.
      */
     interface TripItemClickListener{
         /**
@@ -69,7 +69,7 @@ class TripAdapter (
     /**
      * Creates the tripView.
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripAdapter.TripViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripViewHolder {
         context = parent.context
         val view: View = LayoutInflater.from(parent.context).inflate(
             R.layout.trip_view,
@@ -82,7 +82,7 @@ class TripAdapter (
     /**
      * Replaces contents of the tripView.
      */
-    override fun onBindViewHolder(holder: TripAdapter.TripViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TripViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }

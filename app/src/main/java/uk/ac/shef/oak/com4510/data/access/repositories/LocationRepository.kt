@@ -61,7 +61,7 @@ fun LocationEntity.asDomainModel(): Location {
         yCoordinate = yCoordinate,
         temperature = temperature,
         pressure = pressure,
-        dateTime = LocalDateTime.parse(dateTime),
+        dateTime = LocalDateTime.parse(LocalDateTime.now().toString()),
         tripId = tripId
     )
 }

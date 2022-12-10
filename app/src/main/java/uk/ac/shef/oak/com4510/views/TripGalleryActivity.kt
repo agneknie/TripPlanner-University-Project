@@ -14,13 +14,12 @@ import uk.ac.shef.oak.com4510.databinding.ActivityTripGalleryBinding
 class TripGalleryActivity: TripPlannerAppCompatActivity()  {
     private lateinit var binding: ActivityTripGalleryBinding
 
-    private lateinit var tripGallery: TripGallery
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        tripGallery = TripGallery(this, tripPlannerViewModel)
+        // Populate activity with user's trips
+        TripGallery(this, tripPlannerViewModel)
     }
 }

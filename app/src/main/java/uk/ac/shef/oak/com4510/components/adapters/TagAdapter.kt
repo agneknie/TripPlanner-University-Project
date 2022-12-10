@@ -1,4 +1,4 @@
-package uk.ac.shef.oak.com4510.components
+package uk.ac.shef.oak.com4510.components.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -16,8 +16,10 @@ import uk.ac.shef.oak.com4510.models.Tag
  * Provides adapter(ListAdapter) functionality to the Tags RecyclerView.
  */
 class TagAdapter(
-    val tagItemClickListener: TagItemClickListener): ListAdapter<Tag, TagAdapter.TagViewHolder>(
-    TagComparator())
+    val tagItemClickListener: TagItemClickListener
+): ListAdapter<Tag, TagAdapter.TagViewHolder>(
+    TagComparator()
+)
 {
     lateinit var context: Context
 
@@ -68,7 +70,7 @@ class TagAdapter(
     /**
      * Creates the tagView.
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagAdapter.TagViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
         context = parent.context
         val view: View = LayoutInflater.from(parent.context).inflate(
             R.layout.tag_view,
@@ -81,7 +83,7 @@ class TagAdapter(
     /**
      * Replaces contents of the tagView.
      */
-    override fun onBindViewHolder(holder: TagAdapter.TagViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
+import uk.ac.shef.oak.com4510.components.TripPhotoGallery
 import uk.ac.shef.oak.com4510.databinding.ActivityTripOverviewBinding
 import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
@@ -128,10 +129,10 @@ class TripOverviewActivity: TripPlannerAppCompatActivity() {
     }
 
     /**
-     * Populates trip photo view with photos, which belong to the trip
+     * Populates trip photo view with photos, which belong to the trip.
      */
     private fun configureTripPhotoGallery(trip: Trip){
-        // TODO configureTripPhotoGallery
+        TripPhotoGallery(this, tripPlannerViewModel, trip.tripId)
     }
 
     /**

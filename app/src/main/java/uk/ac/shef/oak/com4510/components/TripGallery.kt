@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import uk.ac.shef.oak.com4510.R
+import uk.ac.shef.oak.com4510.components.adapters.TripAdapter
 import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
