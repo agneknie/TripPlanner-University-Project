@@ -2,6 +2,7 @@ package uk.ac.shef.oak.com4510.views
 
 import android.os.Bundle
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
+import uk.ac.shef.oak.com4510.components.TripGallery
 import uk.ac.shef.oak.com4510.databinding.ActivityTripGalleryBinding
 
 /**
@@ -13,9 +14,13 @@ import uk.ac.shef.oak.com4510.databinding.ActivityTripGalleryBinding
 class TripGalleryActivity: TripPlannerAppCompatActivity()  {
     private lateinit var binding: ActivityTripGalleryBinding
 
+    private lateinit var tripGallery: TripGallery
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        tripGallery = TripGallery(this, tripPlannerViewModel)
     }
 }

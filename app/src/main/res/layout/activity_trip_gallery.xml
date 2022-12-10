@@ -8,5 +8,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".oak.com4510.views.MainActivity"/>
+            tools:context=".oak.com4510.views.MainActivity">
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/activity_trip_gallery_rv_trip_list"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="30dp"
+                android:layout_marginStart="30dp" android:layout_marginEnd="30dp">
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

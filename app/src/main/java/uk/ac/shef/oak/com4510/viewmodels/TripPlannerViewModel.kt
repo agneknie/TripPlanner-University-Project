@@ -28,6 +28,11 @@ class TripPlannerViewModel (
         it.asDomainModel()
     } as MutableLiveData<List<Tag>>
 
+    // All trips in the repository
+    val allTrips: LiveData<List<Trip>> = Transformations.map(tripRepository.trips){
+        it.asDomainModels()
+    } as MutableLiveData<List<Trip>>
+
     // Get current Trip id from the database.
     val currentTripId: LiveData<Int> = tripRepository.getCurrentTripId()
 
