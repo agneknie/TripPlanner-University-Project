@@ -28,7 +28,7 @@ class TripGallery(
      * displays in the RecyclerView.
      */
     private fun setupTripRecyclerView(){
-        val NUMBER_OF_COLUMNS = 3
+        val NUMBER_OF_COLUMNS = 1
 
         tripRecyclerView = invokingActivity.findViewById(R.id.activity_trip_gallery_rv_trip_list)
         tripAdapter = TripAdapter(this)

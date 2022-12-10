@@ -17,7 +17,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="30dp"
-                android:layout_marginStart="30dp" android:layout_marginEnd="30dp">
+                android:layout_marginStart="30dp" android:layout_marginEnd="30dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="30dp">
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
