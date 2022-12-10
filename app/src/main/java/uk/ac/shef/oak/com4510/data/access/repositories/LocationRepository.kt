@@ -31,6 +31,12 @@ class LocationRepository(private val locationDao: LocationDao) {
         locationDao.getLocationsByTrip(tripId).asLiveData()
 
     /**
+     * Get number of locations recorded in a trip.
+     */
+    fun getLocationCountByTrip(tripId: Int) =
+        locationDao.getLocationCountByTrip(tripId).asLiveData()
+
+    /**
      * Get location by its location id.
      */
     fun getLocation(locationId: Int) =

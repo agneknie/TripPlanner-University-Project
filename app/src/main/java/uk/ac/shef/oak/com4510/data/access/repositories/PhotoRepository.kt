@@ -41,6 +41,11 @@ class PhotoRepository(private val photoDao: PhotoDao) {
     fun getPhotosByTripId(tripId: Int) = photoDao.getPhotosByTripId(tripId).asLiveData()
 
     /**
+     * Get number of Photos associated with a Trip.
+     */
+    fun getPhotoCountByTrip(tripId: Int) = photoDao.getPhotoCountByTripId(tripId).asLiveData()
+
+    /**
      * Insert a Photo in the database.
      */
     suspend fun insertPhoto(photo: Photo){

@@ -30,6 +30,9 @@ interface PhotoDao {
     @Query("SELECT * FROM photo WHERE location_id IN (SELECT location_id FROM location WHERE trip_id = :tripId)")
     fun getPhotosByTripId(tripId: Int): Flow<List<PhotoEntity>>
 
+    @Query("SELECT COUNT(photo_id) FROM photo WHERE location_id IN (SELECT location_id FROM location WHERE trip_id = :tripId)")
+    fun getPhotoCountByTripId(tripId: Int): Flow<Int>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPhoto(photoEntity: PhotoEntity)
 

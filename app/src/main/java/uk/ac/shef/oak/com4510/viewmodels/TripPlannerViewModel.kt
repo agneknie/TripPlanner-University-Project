@@ -73,11 +73,21 @@ class TripPlannerViewModel (
     }
 
     /**
+     * Get count of photos in a Trip.
+     */
+    fun getPhotoCountByTrip(tripId: Int): LiveData<Int> = photoRepository.getPhotoCountByTrip(tripId)
+
+    /**
      * Get Location from the database.
      */
     fun getLocation(locationId: Int): LiveData<Location> = Transformations.map(locationRepository.getLocation(locationId)){
         it.asDomainModel()
     }
+
+    /**
+     * Get count of Locations in a Trip.
+     */
+    fun getLocationCountByTrip(tripId: Int): LiveData<Int> = locationRepository.getLocationCountByTrip(tripId)
 
     /**
      * Get Tag from the database.
