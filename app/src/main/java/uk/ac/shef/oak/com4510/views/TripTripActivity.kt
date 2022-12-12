@@ -1,10 +1,21 @@
 package uk.ac.shef.oak.com4510.views
 
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityTripTripBinding
@@ -12,8 +23,36 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.utilities.Permissions
 import java.time.LocalDateTime
 
-class TripTripActivity: TripPlannerAppCompatActivity() {
+import android.Manifest
+import android.content.pm.PackageManager
+import android.util.Log
+import android.widget.Button
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.*
+import uk.ac.shef.oak.com4510.services.LocationService
+
+class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityTripTripBinding
+
+    // Necessary parameters for the location request
+    private var interval : Long = 20000
+    private lateinit var mContext: Context
+    private val mapView: MapView? = null
+
+    // The location request
+    private lateinit var mLocationRequest: LocationRequest
+
+    // The location provider
+    private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
+
+    // The intent with which the service is called
+    private lateinit var mLocationPendingIntent: PendingIntent
+
+
 
     // When user has picked out a photo, forwards them to TripPhotoActivity with picked photo's uri
     private val photoPickerActivityResultContract = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
@@ -37,6 +76,20 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         binding = ActivityTripTripBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //
+        setActivity(this)
+        setContext(this)
+
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        mLocationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY, interval
+        ).build()
+
         // Configures camera & gallery button visibility based on permissions granted
         configureButtonVisibility()
 
@@ -51,6 +104,53 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
 
         // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width to match_parent.
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_LOCATION_GPS)
+
+            return
+        }
+        startLocationUpdates()
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera.
+        // For the assignment, make this get the last recorder location from the trips database
+        // and initialise a marker on the map.
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    }
+
+
 
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
@@ -85,6 +185,9 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
      */
     private fun configureFinishTripButton(){
         binding.activityTripTripBtnFinishTrip.setOnClickListener{
+            // Stopping location updates
+            stopLocationUpdates()
+
             val bundle = intent.extras
             if(bundle != null){
                 // Gets current trip's id
@@ -137,5 +240,101 @@ class TripTripActivity: TripPlannerAppCompatActivity() {
         val intent = Intent(this, TripPhotoActivity::class.java)
         intent.putExtra(IntentKeys.PHOTO_URI, photoUriString)
         startActivity(intent)
+    }
+
+    /**
+     * A helper function to set the activity's context.
+     * This is needed for the location service to properly
+     * plot the markers on the map.
+     */
+    private fun setContext(context: Context) {
+        mContext = context
+    }
+
+    /**
+     * A function that initiates the location intent, checks if necessary permissions
+     * have been granted and if so starts the location service.
+     */
+    private fun startLocationUpdates() {
+        Log.e("LOCATION:", "Starting service...")
+
+        val locationIntent = Intent(mContext, LocationService::class.java)
+        mLocationPendingIntent =
+            PendingIntent.getService(mContext,
+                1,
+                locationIntent,
+                PendingIntent.FLAG_MUTABLE
+            )
+
+        Log.e("IntentService", "Getting...")
+
+
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_LOCATION_GPS)
+
+            return
+        }
+
+        val locationTask = mFusedLocationProviderClient.requestLocationUpdates(
+            mLocationRequest,
+            mLocationPendingIntent
+        )
+        locationTask.addOnFailureListener { e ->
+            if (e is ApiException) {
+                e.message?.let { Log.w("MapsActivity", it) }
+            } else {
+                Log.w("MapsActivity", e.message!!)
+            }
+        }
+        locationTask.addOnCompleteListener{
+            Log.d(
+                "MapsActivity",
+                "Successful GPS Start-Up!"
+            )
+        }
+    }
+
+    /**
+     * A function that terminates location updates.
+     */
+    private fun stopLocationUpdates() {
+        Log.e("LOC:", "Stopping Updates...")
+        mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
+    }
+
+    /**
+     * A companion object which contains necessary methods and parameters
+     * needed for the location service.
+     */
+    companion object {
+        val PERMISSION_LOCATION_GPS:Int = 1
+
+        private var activity: AppCompatActivity? = null
+        private lateinit var mMap: GoogleMap
+        //private const val ACCESS_FINE_LOCATION = 123
+
+        fun getActivity(): AppCompatActivity? {
+            return activity
+        }
+
+        fun setActivity(newActivity: AppCompatActivity) {
+            activity = newActivity
+        }
+
+        fun getMap(): GoogleMap {
+            return mMap
+        }
+
     }
 }

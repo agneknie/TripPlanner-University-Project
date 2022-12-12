@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
             android:allowBackup="true"
@@ -15,6 +17,9 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Com4510TripPlanner"
             android:name="uk.ac.shef.oak.com4510.TripPlannerApplication">
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyAQ4ZDGyQlHdzmY28GwFEG_JxtPFQ59sAU" />
         <activity
                 android:name="uk.ac.shef.oak.com4510.views.MainActivity"
                 android:exported="true">
@@ -42,6 +47,10 @@
                   android:exported="false"/>
         <activity android:name="uk.ac.shef.oak.com4510.views.CameraActivity"
                   android:exported="false"/>
+
+        <service
+                android:name=".services.LocationService"
+                android:exported="false"/>
     </application>
 
 </manifest>

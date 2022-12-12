@@ -3,9 +3,19 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\dimit\\Desktop\\UniFolder\\4th Year\\COM4510 - Software Development for Mobile Devices\\Assignment\\Google API Key\\keyStore.jks')
+            storePassword 'com4510iscool'
+            keyAlias 'com4510'
+            keyPassword 'com4510iscool'
+        }
+    }
+    namespace 'uk.ac.shef.oak.com4510'
     compileSdk 33
 
     defaultConfig {
@@ -34,6 +44,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+
 }
 
 dependencies {
@@ -43,6 +54,10 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.activity:activity-compose:1.6.1'
+
+    // Location Tracking Dependency
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
 
     // Kotlin related
     def android_kotlin_version = "1.9.0"
