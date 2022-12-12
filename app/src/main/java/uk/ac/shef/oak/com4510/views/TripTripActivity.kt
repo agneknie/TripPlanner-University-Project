@@ -26,13 +26,11 @@ import java.time.LocalDateTime
 import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
-import android.widget.Button
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import com.google.android.gms.maps.model.*
 import uk.ac.shef.oak.com4510.services.LocationService
 
 class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
@@ -321,7 +319,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         val PERMISSION_LOCATION_GPS:Int = 1
 
         private var activity: AppCompatActivity? = null
-        private lateinit var mMap: GoogleMap
+        lateinit var mMap: GoogleMap
         //private const val ACCESS_FINE_LOCATION = 123
 
         fun getActivity(): AppCompatActivity? {

@@ -1,7 +1,6 @@
 package uk.ac.shef.oak.com4510.services
 
 import android.annotation.SuppressLint
-import android.app.IntentService
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -13,9 +12,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-import android.os.Handler
 import android.os.IBinder
-import android.os.PowerManager
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
