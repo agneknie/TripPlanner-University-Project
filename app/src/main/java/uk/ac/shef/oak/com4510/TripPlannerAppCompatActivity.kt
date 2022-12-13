@@ -8,7 +8,10 @@ import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModelFactory
 
 /**
+ * Class TripPlannerAppCompatActivity.
+ *
  * Instantiates ViewModels of the application.
+ * Contains convenience methods, to be used by all inheriting activities
  */
 open class TripPlannerAppCompatActivity: AppCompatActivity() {
 

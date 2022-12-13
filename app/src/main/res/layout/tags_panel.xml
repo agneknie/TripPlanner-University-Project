@@ -8,10 +8,9 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/activity_trip_creation_et_title"
             android:id="@+id/tags_panel_creation_l_tags"
             android:fontFamily="@font/roboto_bold"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"/>
     <EditText
             android:layout_width="wrap_content"
             android:layout_height="50dp"

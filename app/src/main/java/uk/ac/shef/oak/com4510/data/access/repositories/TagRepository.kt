@@ -6,6 +6,12 @@ import uk.ac.shef.oak.com4510.data.access.daos.TagDao
 import uk.ac.shef.oak.com4510.data.access.entities.TagEntity
 import uk.ac.shef.oak.com4510.models.Tag
 
+/**
+ * Class TagRepository.
+ *
+ * Implements the repository for the Tag model, matching the queries in
+ * the TagDao.
+ */
 class TagRepository(private val tagDao: TagDao) {
 
     // Observable for all tags
@@ -17,6 +23,12 @@ class TagRepository(private val tagDao: TagDao) {
     suspend fun insertTag(tag: Tag){
         tagDao.insertTag(tag.asDatabaseEntity())
     }
+
+    /**
+     * Get Tag from the database by its tag_id.
+     */
+    fun getTag(tagId: Int) = tagDao.getTag(tagId).asLiveData()
+
 }
 
 //region Object Mapping

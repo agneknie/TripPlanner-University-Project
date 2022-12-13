@@ -5,9 +5,14 @@ import androidx.lifecycle.asLiveData
 import uk.ac.shef.oak.com4510.data.access.daos.LocationDao
 import uk.ac.shef.oak.com4510.data.access.entities.LocationEntity
 import uk.ac.shef.oak.com4510.models.Location
-import uk.ac.shef.oak.com4510.models.Trip
 import java.time.LocalDateTime
 
+/**
+ * Class LocationRepository.
+ *
+ * Implements the repository for the Location model, matching the queries in
+ * the LocationDao.
+ */
 class LocationRepository(private val locationDao: LocationDao) {
 
     // All locations
@@ -22,8 +27,20 @@ class LocationRepository(private val locationDao: LocationDao) {
     /**
      * Get all locations belonging to a trip.
      */
-    fun getLocationsByTrip(trip: Trip) =
-        locationDao.getLocationsByTrip(trip.tripId).asLiveData()
+    fun getLocationsByTrip(tripId: Int) =
+        locationDao.getLocationsByTrip(tripId).asLiveData()
+
+    /**
+     * Get number of locations recorded in a trip.
+     */
+    fun getLocationCountByTrip(tripId: Int) =
+        locationDao.getLocationCountByTrip(tripId).asLiveData()
+
+    /**
+     * Get location by its location id.
+     */
+    fun getLocation(locationId: Int) =
+        locationDao.getLocation(locationId).asLiveData()
 
     /**
      * Insert Location in the database.
@@ -44,7 +61,7 @@ fun LocationEntity.asDomainModel(): Location {
         yCoordinate = yCoordinate,
         temperature = temperature,
         pressure = pressure,
-        dateTime = LocalDateTime.parse(dateTime),
+        dateTime = LocalDateTime.parse(LocalDateTime.now().toString()),
         tripId = tripId
     )
 }

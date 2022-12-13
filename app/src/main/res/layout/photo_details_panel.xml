@@ -5,9 +5,10 @@
                                                    android:layout_height="match_parent">
 
     <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/photo_details_panel_iv_photo"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
             android:text="@string/title_field_label"
             android:layout_width="wrap_content"

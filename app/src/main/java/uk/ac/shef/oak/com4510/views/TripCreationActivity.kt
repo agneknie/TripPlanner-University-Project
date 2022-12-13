@@ -10,6 +10,11 @@ import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import java.time.LocalDateTime
 
+/**
+ * Class TripCreationActivity.
+ *
+ * Enables user to create and start a new Trip.
+ */
 class TripCreationActivity: TripPlannerAppCompatActivity(){
     private lateinit var binding: ActivityTripCreationBinding
 
@@ -26,6 +31,13 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
 
         // Listener for 'Start Trip' button
         configureStartTripButton()
+    }
+
+    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        setResult(RESULT_CANCELED, intent)
+        finish()
     }
 
     /**
@@ -46,7 +58,9 @@ class TripCreationActivity: TripPlannerAppCompatActivity(){
 
                         // Starts TripTripActivity and finishes this one, so you cannot come back to it
                         startActivity(intent)
-                        this.finish()
+                        val intentToMain = Intent(this, MainActivity::class.java)
+                        setResult(RESULT_OK, intentToMain)
+                        finish()
                     }
                 }
             }

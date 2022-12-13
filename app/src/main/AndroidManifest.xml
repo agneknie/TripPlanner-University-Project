@@ -47,7 +47,8 @@
                   android:exported="false"/>
         <activity android:name="uk.ac.shef.oak.com4510.views.CameraActivity"
                   android:exported="false"/>
-
+        <activity android:name="uk.ac.shef.oak.com4510.views.TripOverviewActivity"
+                  android:exported="false"/>
         <service
                 android:name=".services.LocationService"
                 android:exported="false"/>

@@ -1,12 +1,14 @@
 package uk.ac.shef.oak.com4510.views
 
+import android.content.Intent
 import android.os.Bundle
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityPhotoMapBinding
+import uk.ac.shef.oak.com4510.models.Location
+import uk.ac.shef.oak.com4510.utilities.IntentKeys
 
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -24,6 +26,13 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import uk.ac.shef.oak.com4510.services.LocationService
 
+/**
+ * Class PhotoMapActivity.
+ *
+ * Implements all photo viewing as locations on a map. When a
+ * photo location is clicked, forwards to the activity, which displays
+ * photo details.
+ */
 class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityPhotoMapBinding
     private var locationFABState: Boolean = false
@@ -57,6 +66,40 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         ).build()
 
         configureLocationButton()
+
+        // Gets all locations
+        tripPlannerViewModel.photoLocations.observe(this){
+            for (photoLocation in it){
+                // Puts a location marker on the map
+                putLocationMarkerOnMap(photoLocation)
+            }
+        }
+    }
+
+    /**
+     * Implements location click functionality. When a location marker is clicked,
+     * retrieves associated photo from the database and starts activity, which
+     * displays its details.
+     *
+     * location: Location object, associated with the clicked location on the map.
+     *
+     * // TODO Use this when a location marker is clicked
+     */
+    private fun locationClicked(location: Location){
+        tripPlannerViewModel.getPhotoByLocation(location).observe(this){
+            val intent = Intent(this, PhotoDetailsActivity::class.java)
+            intent.putExtra(IntentKeys.SELECTED_PHOTO_ID, it.photoId)
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * Given a Location object, puts a marker with that location on the map.
+     */
+    private fun putLocationMarkerOnMap(location: Location){
+        // TODO Puts location marker on the map
+
+        // TODO Calls locationClicked when location marker is clicked, passing the location
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

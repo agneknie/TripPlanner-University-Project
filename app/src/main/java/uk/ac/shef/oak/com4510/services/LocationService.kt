@@ -61,7 +61,7 @@ class LocationService : Service {
 
     override fun onCreate() {
         super.onCreate()
-        Log.e("Location Service", "onCreate finished")
+        Log.i("Location Service", "onCreate finished")
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mPressureSensor = sensorManager.getDefaultSensor(TYPE_PRESSURE)
@@ -71,7 +71,7 @@ class LocationService : Service {
             // Functions for when sensor value changes
             override fun onSensorChanged(event: SensorEvent) {
                 pressure = event.values[0].toString()
-                Log.e(TAG,"Current Pressure: $pressure")
+                Log.i(TAG,"Current Pressure: $pressure")
 //                val ls_min_delay = lightSensor?.minDelay.toString()
 //                Log.i(TAG, "Minimum Light Sensor Delay: $ls_min_delay")
             }
@@ -96,20 +96,20 @@ class LocationService : Service {
         }
 
         if (mTemperatureSensor != null) {
-            Log.e(TAG, "Successfully registered temperature listener...")
+            Log.i(TAG, "Successfully registered temperature listener...")
             sensorManager.registerListener(mTemperatureListener, mTemperatureSensor,
                 SensorManager.SENSOR_DELAY_NORMAL)
         } else {
-            Log.e(TAG, "This phone doesn't have a temperature sensor...")
+            Log.i(TAG, "This phone doesn't have a temperature sensor...")
             temperature = "UNAVAILABLE"
         }
 
         if (mPressureSensor != null) {
-            Log.e(TAG, "Successfully registered barometer listener...")
+            Log.i(TAG, "Successfully registered barometer listener...")
             sensorManager.registerListener(mPressureListener, mPressureSensor,
                 SensorManager.SENSOR_DELAY_NORMAL)
         } else {
-            Log.e(TAG, "This phone doesn't have a pressure sensor...")
+            Log.i(TAG, "This phone doesn't have a pressure sensor...")
             pressure = "UNAVAILABLE"
         }
 
@@ -198,7 +198,7 @@ class LocationService : Service {
                                 // to show the toast
                                 toast.show();
                             } catch (e: java.lang.Exception) {
-                                Log.e(TAG, "Error, cannot write on map " + e.message)
+                                Log.i(TAG, "Error, cannot write on map " + e.message)
                             }
                         })
                 }
@@ -223,7 +223,7 @@ class LocationService : Service {
         super.onDestroy()
         sensorManager.unregisterListener(mPressureListener)
         sensorManager.unregisterListener(mTemperatureListener)
-        Log.e("Service", "Ending Service...")
+        Log.i("Service", "Ending Service...")
     }
 
 }

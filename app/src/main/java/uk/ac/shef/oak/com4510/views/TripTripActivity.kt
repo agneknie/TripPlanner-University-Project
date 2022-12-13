@@ -33,7 +33,13 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import uk.ac.shef.oak.com4510.services.LocationService
 
-class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
+/**
+ * Class TripTripActivity.
+ *
+ * Main Trip activity, where trip location tracking and photo selection or
+ * taking happens.
+ */
+class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private lateinit var binding: ActivityTripTripBinding
 
     // Necessary parameters for the location request
@@ -65,8 +71,8 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     // When user took a picture, forwards them to TripPhotoActivity with picked photo's uri
     private val cameraActivityResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         val photoUri = it.data?.extras?.getString(IntentKeys.PHOTO_URI)
-
-        launchTripPhotoActivity(photoUri)
+        if(!photoUri.isNullOrBlank())
+            launchTripPhotoActivity(photoUri)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +97,22 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         // Configures camera & gallery button visibility based on permissions granted
         configureButtonVisibility()
 
+        // Adds and configures all button listeners
+        addAndConfigureButtonListeners()
+
+        // TODO Insert map into activity_trip_trip_ll_map_holder. Set inserted map's height & width accordingly if necessary.
+    }
+
+    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+    override fun onBackPressed() {
+        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
+    }
+
+    /**
+     * Adds and configures listeners for 'Finish Trip', 'Gallery' &
+     * 'Camera' buttons.
+     */
+    private fun addAndConfigureButtonListeners(){
         // Listener for "Finish Trip" button
         configureFinishTripButton()
 
@@ -148,13 +170,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
-
-
-    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
-    override fun onBackPressed() {
-        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
-    }
-
     //region Button Configurations & Listeners
     /**
      * Configures camera & gallery button visibility based on
@@ -205,6 +220,8 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                     }
                 }
             }
+            // If something went wrong, finishes the activity
+            else finish()
         }
     }
 

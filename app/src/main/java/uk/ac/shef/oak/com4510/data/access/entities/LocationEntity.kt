@@ -5,6 +5,11 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
+/**
+ * Class LocationEntity.
+ *
+ * Defines Location model as a database entity.
+ */
 @Entity(tableName = "location", indices = [Index(value = ["location_id"])])
 data class LocationEntity(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "location_id") val locationId: Int = 0,

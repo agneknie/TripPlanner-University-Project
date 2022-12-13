@@ -9,6 +9,12 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.models.Tag
 
+/**
+ * Class PhotoRepository.
+ *
+ * Implements the repository for the Photo model, matching the queries in
+ * the PhotoDao.
+ */
 class PhotoRepository(private val photoDao: PhotoDao) {
 
     // Observable for all photos
@@ -28,6 +34,16 @@ class PhotoRepository(private val photoDao: PhotoDao) {
      * Get List of Photos by Tag.
      */
     fun getPhotosByTag(tag: Tag) = photoDao.getPhotosByTag(tag.tagId).asLiveData()
+
+    /**
+     * Get List of Photos belonging to a Trip.
+     */
+    fun getPhotosByTripId(tripId: Int) = photoDao.getPhotosByTripId(tripId).asLiveData()
+
+    /**
+     * Get number of Photos associated with a Trip.
+     */
+    fun getPhotoCountByTrip(tripId: Int) = photoDao.getPhotoCountByTripId(tripId).asLiveData()
 
     /**
      * Insert a Photo in the database.
@@ -55,8 +71,8 @@ fun PhotoEntity.asDomainModel(): Photo {
         locationId = locationId,
         title = title,
         description = description,
+        tagId = tagId,
         thumbnailPath = Uri.parse(thumbnailPath))
-    // TODO photo.getOrMakeThumbnail(context) and then add context: Context
 }
 
 /**

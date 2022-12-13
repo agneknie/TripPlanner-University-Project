@@ -7,8 +7,15 @@ import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.models.Trip
 import kotlinx.coroutines.launch
+import uk.ac.shef.oak.com4510.models.Photo
 import java.lang.IllegalArgumentException
 
+/**
+ * Class TripPlannerViewModel.
+ *
+ * ViewModel of the application. Handles database querying through room.
+ * Accesses TripRepository, LocationRepository, PhotoRepository & TagRepository.
+ */
 class TripPlannerViewModel (
     private val tripRepository: TripRepository,
     private val locationRepository: LocationRepository,
@@ -21,14 +28,81 @@ class TripPlannerViewModel (
         it.asDomainModel()
     } as MutableLiveData<List<Tag>>
 
+    // All trips in the repository
+    val allTrips: LiveData<List<Trip>> = Transformations.map(tripRepository.trips){
+        it.asDomainModels()
+    } as MutableLiveData<List<Trip>>
+
     // Get current Trip id from the database.
     val currentTripId: LiveData<Int> = tripRepository.getCurrentTripId()
+
+    // Get current Location id from the database.
+    val lastLocationId: LiveData<Int> = locationRepository.lastLocationId
+
+    // Get all locations, which have photos associated with them
+    val photoLocations: LiveData<List<Location>> = Transformations.map(locationRepository.photoLocations){
+        it.asDomainModels()
+    } as MutableLiveData<List<Location>>
 
     /**
      * Get Trip from the database.
      */
     fun getTrip(tripId: Int): LiveData<Trip> = Transformations.map(tripRepository.getTrip(tripId)){
         it.asDomainModel()
+    }
+
+    /**
+     * Get Photo from the database.
+     */
+    fun getPhoto(photoId: Int): LiveData<Photo> = Transformations.map(photoRepository.getPhoto(photoId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Get Photo by its Location from the database.
+     */
+    fun getPhotoByLocation(location: Location): LiveData<Photo> = Transformations.map(photoRepository.getPhotoByLocation(location)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Get all Photos associated to a Trip.
+     */
+    fun getPhotosByTripId(tripId: Int): LiveData<List<Photo>> = Transformations.map(photoRepository.getPhotosByTripId(tripId)){
+        it.asDomainModels()
+    }
+
+    /**
+     * Get count of photos in a Trip.
+     */
+    fun getPhotoCountByTrip(tripId: Int): LiveData<Int> = photoRepository.getPhotoCountByTrip(tripId)
+
+    /**
+     * Get Location from the database.
+     */
+    fun getLocation(locationId: Int): LiveData<Location> = Transformations.map(locationRepository.getLocation(locationId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Get count of Locations in a Trip.
+     */
+    fun getLocationCountByTrip(tripId: Int): LiveData<Int> = locationRepository.getLocationCountByTrip(tripId)
+
+    /**
+     * Get Tag from the database.
+     */
+    fun getTag(tagId: Int): LiveData<Tag> = Transformations.map(tagRepository.getTag(tagId)){
+        it.asDomainModel()
+    }
+
+    /**
+     * Gets all Locations belonging to a trip in a sorted list, where
+     * the first location is the start location and the last location is the
+     * end location of a Trip.
+     */
+    fun getLocationsByTrip(tripId: Int): LiveData<List<Location>> = Transformations.map(locationRepository.getLocationsByTrip(tripId)){
+        it.asDomainModels()
     }
 
     /**
@@ -46,6 +120,13 @@ class TripPlannerViewModel (
     }
 
     /**
+     * Insert given Photo in the database.
+     */
+    fun insertPhoto(photo: Photo) = viewModelScope.launch {
+        photoRepository.insertPhoto(photo)
+    }
+
+    /**
      * Insert given Location in the database.
      */
     fun insertLocation(location: Location) = viewModelScope.launch {
@@ -57,6 +138,13 @@ class TripPlannerViewModel (
      */
     fun updateTrip(trip: Trip) = viewModelScope.launch {
         tripRepository.updateTrip(trip)
+    }
+
+    /**
+     * Update given Photo in the database.
+     */
+    fun updatePhoto(photo: Photo) = viewModelScope.launch {
+        photoRepository.updatePhoto(photo)
     }
 }
 
@@ -70,6 +158,9 @@ class TripPlannerViewModelFactory(
     private val tagRepository: TagRepository,
     private val applicationContext: Application): ViewModelProvider.Factory{
 
+    /**
+     * Creates the TripPlannerViewModel class.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(TripPlannerViewModel::class.java)){
             return TripPlannerViewModel(

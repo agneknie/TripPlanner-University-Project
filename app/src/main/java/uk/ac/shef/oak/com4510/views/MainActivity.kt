@@ -8,12 +8,22 @@ import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityMainBinding
 import uk.ac.shef.oak.com4510.utilities.Permissions
 
+/**
+ * Class MainActivity.
+ *
+ * Starting point of the application, which handles navigation to
+ * the application's features.
+ */
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     // Displays snackbar, if trip has finished in TripTripActivity
     private val tripTripActivityResultContract = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        this.displaySnackbar(binding.root, R.string.trip_finished_successfully_snackbar)
+        it?.let {
+            if (it.resultCode == RESULT_OK){
+                this.displaySnackbar(binding.root, R.string.trip_finished_successfully_snackbar)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
