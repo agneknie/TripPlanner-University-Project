@@ -178,14 +178,6 @@ class PhotoMapLocationService : Service {
                                                 )
                                             )
 
-                                            val polyline1 = PhotoMapActivity.getMap().addPolyline(
-                                                PolylineOptions().clickable(true)
-                                                    .add(LatLng(mLastLocation!!.latitude, mLastLocation!!.longitude), LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude))
-                                                    .width(5F)
-                                                    .color(Color.RED)
-                                                    .geodesic(true) // to make the line curve
-                                            )
-
                                             mLastLocation = mCurrentLocation
                                         } else {
                                             Log.i(TAG, "Location hasn't changed: ${mCurrentLocation}.")

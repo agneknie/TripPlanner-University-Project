@@ -159,7 +159,10 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * Recreates the trip's path from its locations in the map view.
      */
     private fun configureTripMap(trip: Trip){
+        // Variable to store each location in order to be able to
+        // draw a line between it and the next one.
         var lastLoc: Location? = null
+
         // Get associated locations and add them on the map
         tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
             it?.let {
@@ -182,6 +185,7 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                         )
                     )
 
+                    // If locations have been initialised then draw lines between them
                     if (lastLoc != null) {
                         val polyline1 = mMap.addPolyline(
                             PolylineOptions().clickable(true)

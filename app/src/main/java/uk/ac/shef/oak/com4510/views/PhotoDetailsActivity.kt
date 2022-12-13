@@ -44,16 +44,12 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         else finish()
     }
 
+    /**
+     * Callback method to initialise the map before plotting markers for
+     * locations.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera.
-        // For the assignment, make this get the last recorder location from the trips database
-        // and initialise a marker on the map.
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
     }
 
     /**
@@ -200,6 +196,7 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                         )
                     )
                     // If current location is equal to photo location, mark it differently
+                    // Not sure if this is needed...
                     if(photoLocation == tripLocation){
                         // TODO Maps photo location on the map
                     }

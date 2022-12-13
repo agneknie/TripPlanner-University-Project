@@ -106,7 +106,8 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         val markerTitle = location.dateTime.toString()
         markerLocationPairsList.add(Pair(markerTitle, location))
 
-        // TODO Puts location marker on the map
+        // Plot a marker according to the given location
+        // and move the camera to that marker
         val newMarker: Marker? = mMap.addMarker(
             MarkerOptions().position(
                 LatLng(
@@ -124,20 +125,20 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             )
         )
 
-        // TODO Calls locationClicked when location marker is clicked, passing the location
-
     }
 
+    /**
+     * A necessary callback method that initialises the map
+     * and plots every location with a photo to the map.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera.
-        // For the assignment, make this get the last recorder location from the trips database
-        // and initialise a marker on the map.
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
+        // Setting a universal click listener for markers where
+        // depending on the marker that is clicked its location is
+        // retrieved and passed on to the locationClicked method in
+        // order to redirect the user to the details of the photo
+        // corresponding to that location.
         mMap.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
             val location = retrieveLocation(it)
             locationClicked(location!!)
@@ -145,7 +146,11 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun retrieveLocation(marker: Marker): Location? {
+    /**
+     * A helper function that takes as input a marker and depending
+     * on its title returns the location corresponding to that marker.
+     */
+    private fun retrieveLocation(marker: Marker): Location? {
         val title = marker.title
         var location: Location? = null
         for (pair in markerLocationPairsList) {
@@ -228,7 +233,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this,
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION),
-                TripTripActivity.PERMISSION_LOCATION_GPS
+                PERMISSION_LOCATION_GPS
             )
 
             return
