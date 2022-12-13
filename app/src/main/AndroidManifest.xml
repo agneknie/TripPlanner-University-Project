@@ -52,6 +52,9 @@
         <service
                 android:name=".services.LocationService"
                 android:exported="false"/>
+        <service
+                android:name=".services.PhotoMapLocationService"
+                android:exported="false"/>
     </application>
 
 </manifest>

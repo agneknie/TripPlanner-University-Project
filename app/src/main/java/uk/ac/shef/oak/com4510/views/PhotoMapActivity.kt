@@ -23,8 +23,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import uk.ac.shef.oak.com4510.services.LocationService
+import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
 
 /**
  * Class PhotoMapActivity.
@@ -40,7 +42,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private var interval : Long = 20000
     private lateinit var mContext: Context
     private val mapView: MapView? = null
-
+    private var markerLocationPairsList = mutableListOf<Pair<String, Location>>()
     // The location request
     private lateinit var mLocationRequest: LocationRequest
 
@@ -54,6 +56,9 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        setActivity(this)
+        setContext(this)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -85,32 +90,68 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      *
      * // TODO Use this when a location marker is clicked
      */
-    private fun locationClicked(location: Location){
+    private fun locationClicked(location: Location):Boolean{
         tripPlannerViewModel.getPhotoByLocation(location).observe(this){
             val intent = Intent(this, PhotoDetailsActivity::class.java)
             intent.putExtra(IntentKeys.SELECTED_PHOTO_ID, it.photoId)
             startActivity(intent)
         }
+        return false
     }
 
     /**
      * Given a Location object, puts a marker with that location on the map.
      */
     private fun putLocationMarkerOnMap(location: Location){
+        val markerTitle = location.dateTime.toString()
+        markerLocationPairsList.add(Pair(markerTitle, location))
+
         // TODO Puts location marker on the map
+        val newMarker: Marker? = mMap.addMarker(
+            MarkerOptions().position(
+                LatLng(
+                    location.xCoordinate,
+                    location.yCoordinate
+                )
+            ).title("Time: ${location.dateTime}")
+        )
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(
+                    location.xCoordinate,
+                    location.yCoordinate
+                ), 14.0f
+            )
+        )
 
         // TODO Calls locationClicked when location marker is clicked, passing the location
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        TripTripActivity.mMap = googleMap
+        mMap = googleMap
 
         // Add a marker in Sydney and move the camera.
         // For the assignment, make this get the last recorder location from the trips database
         // and initialise a marker on the map.
         val sydney = LatLng(-34.0, 151.0)
-        TripTripActivity.mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        TripTripActivity.mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+        mMap.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
+            val location = retrieveLocation(it)
+            locationClicked(location!!)
+        })
+
+    }
+
+    fun retrieveLocation(marker: Marker): Location? {
+        val title = marker.title
+        var location: Location? = null
+        for (pair in markerLocationPairsList) {
+            if (pair.first == title) location = pair.second
+        }
+        return location
     }
 
     override fun onResume() {
@@ -144,9 +185,11 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             if (!locationFABState){
                 locationFABState = true
                 locFAB.setImageResource(R.drawable.ic_location_on)
+                startLocationUpdates()
             } else {
                 locationFABState = false
                 locFAB.setImageResource(R.drawable.ic_location_off)
+                stopLocationUpdates()
             }
         }
     }
@@ -162,7 +205,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private fun startLocationUpdates() {
         Log.e("LOCATION:", "Starting service...")
 
-        val locationIntent = Intent(mContext, LocationService::class.java)
+        val locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
         mLocationPendingIntent =
             PendingIntent.getService(mContext,
                 1,
