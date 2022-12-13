@@ -2,6 +2,11 @@ package uk.ac.shef.oak.com4510.views
 
 import android.content.Intent
 import android.os.Bundle
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
@@ -18,8 +23,10 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
  * Also, plots a map of the trip the photo belongs to.
  * Implements photo details updating in the database.
  */
-class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
+class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityPhotoDetailsBinding
+
+    private lateinit var mMap: GoogleMap
 
     private lateinit var tagsPanel: TagsPanel
     private var photoId: Int = 0
@@ -35,6 +42,18 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
 
         // If something went wrong, closes the activity
         else finish()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera.
+        // For the assignment, make this get the last recorder location from the trips database
+        // and initialise a marker on the map.
+//        val sydney = LatLng(-34.0, 151.0)
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
     }
 
     /**
@@ -159,13 +178,27 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity() {
      * Configures photo display by populating associated map view.
      */
     private fun configureMapDisplay(photoLocation: Location){
-        // Initialise map display
-        // TODO Insert map into activity_photo_details_ll_map_holder. Amend height as necessary
-
         // Get associated trip's locations and add them on the map
         tripPlannerViewModel.getLocationsByTrip(photoLocation.tripId).observe(this){
             it?.let{
                 for(tripLocation in it){
+
+                    mMap.addMarker(
+                        MarkerOptions().position(
+                            LatLng(
+                                tripLocation.xCoordinate,
+                                tripLocation.yCoordinate
+                            )
+                        ).title(tripLocation.dateTime.toString())
+                    )
+                    mMap.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                tripLocation.xCoordinate,
+                                tripLocation.yCoordinate
+                            ), 14.0f
+                        )
+                    )
                     // If current location is equal to photo location, mark it differently
                     if(photoLocation == tripLocation){
                         // TODO Maps photo location on the map
