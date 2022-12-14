@@ -1,7 +1,6 @@
 package uk.ac.shef.oak.com4510.utilities
 
 import android.graphics.Color
-import uk.ac.shef.oak.com4510.services.LocationService
 
 /**
  * Class ServicesUtilities.
@@ -27,6 +26,5 @@ class ServicesUtilities {
 
         // Default value for sensors
         const val DEFAULT_SENSOR_VALUE = "Unavailable"
-
     }
 }
