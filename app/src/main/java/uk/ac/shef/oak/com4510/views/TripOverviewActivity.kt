@@ -1,6 +1,5 @@
 package uk.ac.shef.oak.com4510.views
 
-import android.graphics.Color
 import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,6 +16,7 @@ import uk.ac.shef.oak.com4510.databinding.ActivityTripOverviewBinding
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class TripOverviewActivity.
@@ -40,6 +40,47 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
+    //region Button Configurations
+    /**
+     * Finishes the activity and updates trip details in the
+     * database if they have changed.
+     */
+    private fun configureUpdateDetailsButton(){
+        binding.activityTripOverviewBtnUpdateTrip.setOnClickListener {
+            tripPlannerViewModel.getTrip(tripId).observe(this){
+                val newTitle = binding.activityTripOverviewEtTripTitle.text.toString()
+                val newTagId = tagsPanel.getSelectedTag()
+
+                // Checks if title is not empty as it cannot be
+                if(newTitle.isBlank())
+                    displaySnackbar(binding.root, R.string.trip_cannot_start_snackbar)
+
+                // If title is present, trip can be updated
+                else{
+                    it.title = newTitle
+
+                    if(newTagId != null) it.tagId = newTagId.tagId
+                    else it.tagId = null
+
+                    tripPlannerViewModel.updateTrip(it)
+                    finish()
+                }
+            }
+        }
+    }
+
+    /**
+     * Finishes the activity without updating trip details in
+     * the database.
+     */
+    private fun configureGoBackButton(){
+        binding.activityTripOverviewBtnGoBack.setOnClickListener {
+            finish()
+        }
+    }
+    //endregion
+
+    //region Map related methods
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -47,6 +88,73 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         configureActivity()
     }
 
+    /**
+     * Recreates the trip's path from its locations in the map view.
+     */
+    private fun configureTripMap(trip: Trip){
+        // Variable to store each location in order to be able to
+        // draw a line between it and the next one.
+        var lastLoc: Location? = null
+
+        // Get associated locations and add them on the map
+        tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
+            it?.let {
+                for (tripLocation in it){
+
+                    // Add location marker for a trip location
+                    addLocationMarker(tripLocation)
+
+                    // Move camera to location
+                    moveCameraToLocation(tripLocation)
+
+                    // If locations have been initialised then draw lines between them
+                    lastLoc?.let { drawLineBetweenLocations(it, tripLocation) }
+
+                    lastLoc = tripLocation
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds location marker for the given location
+     */
+    private fun addLocationMarker(location: Location){
+        mMap.addMarker(
+            MarkerOptions()
+                .position(LatLng(location.xCoordinate, location.yCoordinate))
+                .title(location.getLocationMarkerTitle())
+        )
+    }
+
+    /**
+     * Moves map camera to the provided location.
+     */
+    private fun moveCameraToLocation(tripLocation: Location){
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate),
+                ServicesUtilities.MAP_ZOOM
+            )
+        )
+    }
+
+    /**
+     * Draws a line/path on the map between two given locations.
+     */
+    private fun drawLineBetweenLocations(locationOne: Location, locationTwo: Location){
+        mMap.addPolyline(
+            PolylineOptions()
+                .clickable(true)
+                .add(LatLng(locationOne.xCoordinate, locationOne.yCoordinate), LatLng(locationTwo.xCoordinate, locationTwo.yCoordinate))
+                .width(ServicesUtilities.MAP_LINE_WIDTH)
+                .color(ServicesUtilities.MAP_LINE_COLOUR)
+                .geodesic(true) // to make the line curve
+        )
+    }
+    //endregion
+
+    //region Activity Fields Configuration
     /**
      * Populates the activity with trip details, its associated photos and
      * its associated locations on the map.
@@ -84,44 +192,6 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * Finishes the activity without updating trip details in
-     * the database.
-     */
-    private fun configureGoBackButton(){
-        binding.activityTripOverviewBtnGoBack.setOnClickListener {
-            finish()
-        }
-    }
-
-    /**
-     * Finishes the activity and updates trip details in the
-     * database if they have changed.
-     */
-    private fun configureUpdateDetailsButton(){
-        binding.activityTripOverviewBtnUpdateTrip.setOnClickListener {
-            tripPlannerViewModel.getTrip(tripId).observe(this){
-                val newTitle = binding.activityTripOverviewEtTripTitle.text.toString()
-                val newTagId = tagsPanel.getSelectedTag()
-
-                // Checks if title is not empty as it cannot be
-                if(newTitle.isBlank())
-                    displaySnackbar(binding.root, R.string.trip_cannot_start_snackbar)
-
-                // If title is present, trip can be updated
-                else{
-                    it.title = newTitle
-
-                    if(newTagId != null) it.tagId = newTagId.tagId
-                    else it.tagId = null
-
-                    tripPlannerViewModel.updateTrip(it)
-                    finish()
-                }
-            }
-        }
-    }
-
-    /**
      * Populates trip details fields with trip data.
      */
     private fun configureTripDetails(trip: Trip){
@@ -155,53 +225,6 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * Recreates the trip's path from its locations in the map view.
-     */
-    private fun configureTripMap(trip: Trip){
-        // Variable to store each location in order to be able to
-        // draw a line between it and the next one.
-        var lastLoc: Location? = null
-
-        // Get associated locations and add them on the map
-        tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
-            it?.let {
-                for (tripLocation in it){
-
-                    mMap.addMarker(
-                        MarkerOptions().position(
-                            LatLng(
-                                tripLocation.xCoordinate,
-                                tripLocation.yCoordinate
-                            )
-                        ).title(tripLocation.dateTime.toString())
-                    )
-                    mMap.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                tripLocation.xCoordinate,
-                                tripLocation.yCoordinate
-                            ), 14.0f
-                        )
-                    )
-
-                    // If locations have been initialised then draw lines between them
-                    if (lastLoc != null) {
-                        val polyline1 = mMap.addPolyline(
-                            PolylineOptions().clickable(true)
-                                .add(LatLng(lastLoc!!.xCoordinate, lastLoc!!.yCoordinate), LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate))
-                                .width(5F)
-                                .color(Color.RED)
-                                .geodesic(true) // to make the line curve
-                        )
-                    }
-
-                    lastLoc = tripLocation
-                }
-            }
-        }
-    }
-
-    /**
      * Configures 'Photos Taken' field.
      * Returns true, if there exist photos, taken during provided trip.
      */
@@ -225,4 +248,5 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             binding.activityTripOverviewEtLocationsVisited.setText("${it} ${locationSuffix}")
         }
     }
+    //endregion
 }

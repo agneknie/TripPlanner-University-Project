@@ -36,6 +36,6 @@ data class Location(
 
     fun getLocationMarkerTitle(): String{
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        return dateTime.format(formatter) + locationId.toString()
+        return "Time: " + dateTime.format(formatter)
     }
 }
