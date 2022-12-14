@@ -59,10 +59,9 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         // Tag Panel configuration
         tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
 
-        // Gets the selected photo id and configures activity with its data
-        val bundle = intent.extras!!
+        val bundle = intent.extras
 
-        // Gets selected photo's id
+        // Gets the selected photo id and configures activity with its data
         if (bundle != null) {
             photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
 

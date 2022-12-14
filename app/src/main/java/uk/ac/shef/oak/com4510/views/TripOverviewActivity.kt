@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
@@ -34,50 +35,48 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         binding = ActivityTripOverviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Gets selected trip id and configures activity with its data
-        val bundle = intent.extras
-        if(bundle != null) configureActivity(bundle)
-
-        // If something went wrong, closes the activity
-        else finish()
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera.
-        // For the assignment, make this get the last recorder location from the trips database
-        // and initialise a marker on the map.
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
+        // Gets selected trip id and configures activity with its data
+        configureActivity()
     }
 
     /**
      * Populates the activity with trip details, its associated photos and
      * its associated locations on the map.
      */
-    private fun configureActivity(bundle: Bundle){
+    private fun configureActivity(){
         // Tag Panel configuration
         tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
 
+        val bundle = intent.extras
+
         // Gets selected trip's id
-        tripId = bundle.getInt(IntentKeys.SELECTED_TRIP_ID)
+        if(bundle != null){
+            // Gets selected trip's id
+            tripId = bundle.getInt(IntentKeys.SELECTED_TRIP_ID)
 
-        // Gets selected trip from the database and populates the activity
-        tripPlannerViewModel.getTrip(tripId).observe(this){
-            it?.let{
-                // Configures trip details fields
-                configureTripDetails(it)
+            // Gets selected trip from the database and populates the activity
+            tripPlannerViewModel.getTrip(tripId).observe(this){
+                it?.let{
+                    // Configures trip details fields
+                    configureTripDetails(it)
 
-                // Configures trip photo gallery
-                configureTripPhotoGallery(it)
+                    // Configures trip photo gallery
+                    configureTripPhotoGallery(it)
 
-                // Configures trip location map
-                configureTripMap(it)
+                    // Configures trip location map
+                    configureTripMap(it)
+                }
             }
         }
+        else finish()
 
         // Initialises 'Go Back' & 'Update Details' buttons
         configureGoBackButton()

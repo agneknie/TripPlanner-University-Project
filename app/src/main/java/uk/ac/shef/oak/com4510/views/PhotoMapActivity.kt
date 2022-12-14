@@ -72,6 +72,12 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         configureLocationButton()
     }
 
+    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+    override fun onBackPressed() {
+        stopLocationUpdates()
+        finish()
+    }
+
     /**
      * Implements location click functionality. When a location marker is clicked,
      * retrieves associated photo from the database and starts activity, which
@@ -184,10 +190,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
             return
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     private fun configureLocationButton(){

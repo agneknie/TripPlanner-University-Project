@@ -37,7 +37,6 @@ import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
  */
 class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private lateinit var binding: ActivityTripTripBinding
-
     private var currentTripId: Int = 0
 
     //region Map related variables
@@ -166,9 +165,10 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
                     // Informs main activity, that trip has finished successfully
                     val intent = Intent(this, MainActivity::class.java)
                     setResult(RESULT_OK, intent)
-                    finish()
                 }
             }
+
+            finish()
         }
     }
 
@@ -235,9 +235,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // TODO For the assignment, make this get the last recorder location from the trips database
-        //  and initialise a marker on the map.
 
         // Move the camera to The Diamond if no location is available yet
         val diamond = LatLng(53.38190068158808, -1.4816251464270533)
