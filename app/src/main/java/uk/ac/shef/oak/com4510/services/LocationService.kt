@@ -11,17 +11,15 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.IBinder
-import android.util.Log
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import uk.ac.shef.oak.com4510.R
-import uk.ac.shef.oak.com4510.utilities.LocationAndMapUtilities
-import java.text.DateFormat
-import java.util.*
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 import uk.ac.shef.oak.com4510.views.TripTripActivity
+import java.time.LocalDateTime
 
 /**
  * Class LocationService.
@@ -40,12 +38,12 @@ class LocationService : Service {
     // Pressure sensor variables
     private var mPressureSensor: Sensor? = null
     private var mPressureListener: SensorEventListener? = null
-    private var pressure: String? = null
+    private var pressure: String = ServicesUtilities.DEFAULT_SENSOR_VALUE
 
     // Temperature sensor variables
     private var mTemperatureSensor: Sensor? = null
     private var mTemperatureListener: SensorEventListener? = null
-    private var temperature: String? = null
+    private var temperature: String = ServicesUtilities.DEFAULT_SENSOR_VALUE
 
     // Location sensor variables
     private var mCurrentLocation : Location? = null
@@ -106,7 +104,7 @@ class LocationService : Service {
         }
         else {
             // TODO Make snackbar "Temperature Sensor not Available."
-            temperature = "UNAVAILABLE"
+            temperature = ServicesUtilities.DEFAULT_SENSOR_VALUE
         }
     }
 
@@ -123,7 +121,6 @@ class LocationService : Service {
             // When pressure sensor value changes
             override fun onSensorChanged(event: SensorEvent) {
                 pressure = event.values[0].toString()
-                Log.i(LocationAndMapUtilities.LOCATION_SERVICE_TAG,"Current Pressure: $pressure")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
@@ -138,7 +135,7 @@ class LocationService : Service {
         }
         else {
             // TODO Make snackbar "Pressure Sensor not Available."
-            pressure = "UNAVAILABLE"
+            pressure = ServicesUtilities.DEFAULT_SENSOR_VALUE
         }
     }
     //endregion
@@ -152,7 +149,7 @@ class LocationService : Service {
         // Calculates if the location change is significant
         val distance = mLastLocation!!.distanceTo(mCurrentLocation!!)
 
-        return distance > LocationAndMapUtilities.LOCATION_CHANGE_THRESHOLD
+        return distance > ServicesUtilities.LOCATION_CHANGE_THRESHOLD
     }
 
     /**
@@ -176,7 +173,7 @@ class LocationService : Service {
         TripTripActivity.getMap().moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude),
-                LocationAndMapUtilities.MAP_ZOOM))
+                ServicesUtilities.MAP_ZOOM))
     }
 
     /**
@@ -211,8 +208,8 @@ class LocationService : Service {
                 .add(
                     LatLng(mLastLocation!!.latitude, mLastLocation!!.longitude),
                     LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude))
-                .width(LocationAndMapUtilities.MAP_LINE_WIDTH)
-                .color(LocationAndMapUtilities.MAP_LINE_COLOUR)
+                .width(ServicesUtilities.MAP_LINE_WIDTH)
+                .color(ServicesUtilities.MAP_LINE_COLOUR)
                 // Curved line
                 .geodesic(true))
     }
@@ -233,16 +230,14 @@ class LocationService : Service {
 
                     // Get current location and its time
                     mCurrentLocation = location
-                    mLastUpdateTime = DateFormat.getTimeInstance().format(Date())
-
-                    // Define message to display to user if necessary
-                    var message: String
+                    mLastUpdateTime = LocalDateTime.now().toString()
 
                     // If activity exists and its map is writable performs location plotting & saving
                     if (TripTripActivity.getActivity() != null)
                         TripTripActivity.getActivity()?.runOnUiThread {
                             try {
-                                message = getAndHandleLocation()
+                                // Define message to display to user if necessary
+                                val message = getAndHandleLocation()
                                 // TODO Make a snackbar instead. Toast.makeText(applicationContext, msg, duration)
                             } catch (e: java.lang.Exception) {
                                 // TODO make a snackbar instead. Log.i(MapUtilities.LOCATION_SERVICE_TAG, R.string.cannot_write_map_snackbar + e.message)
@@ -254,6 +249,11 @@ class LocationService : Service {
         return startMode
     }
 
+    /**
+     * Handles the location by deciding whether it's a first location,
+     * new location or a significant change in location. Plots it on the map
+     * and saves it in the service for later access and in the database.
+     */
     private fun getAndHandleLocation(): String{
         val message: String
 
@@ -267,7 +267,6 @@ class LocationService : Service {
             // If location change is significant, proceeds to update current location
             if (locationChangeSignificant())
                 message = handleNewLocation()
-
 
             // If location change is insignificant, informs the user
             else message = getString(R.string.location_has_not_changed_snackbar)
@@ -290,7 +289,7 @@ class LocationService : Service {
         mLastLocation = mCurrentLocation
 
         // Adds the location to the database
-        addLocationToDatabase()
+        saveLocationInDatabase()
 
         return getString(R.string.initialised_location_snackbar)
     }
@@ -303,10 +302,10 @@ class LocationService : Service {
         // Adds new location marker, zooms camera to it and draws line between points
         addLocationMarkerAndZoomCamera(false)
 
-        // Adds the location to the database
-        addLocationToDatabase()
-
         mLastLocation = mCurrentLocation
+
+        // Adds the location to the database
+        saveLocationInDatabase()
 
         return getString(R.string.updated_location_snackbar)
     }
@@ -315,8 +314,17 @@ class LocationService : Service {
      * Adds the location, together with its temperature and pressure
      * to the database.
      */
-    private fun addLocationToDatabase(){
-        // TODO addLocationToDatabase
+    private fun saveLocationInDatabase(){
+        val newLocation = uk.ac.shef.oak.com4510.models.Location(
+            0,
+            mCurrentLocation!!.latitude,
+            mCurrentLocation!!.longitude,
+            temperature,
+            pressure,
+            LocalDateTime.parse(mLastUpdateTime),
+            TripTripActivity.getCurrentTripId())
+
+        TripTripActivity.getViewModel().insertLocation(newLocation)
     }
     //endregion
 

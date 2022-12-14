@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -27,7 +26,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import uk.ac.shef.oak.com4510.services.LocationService
-import uk.ac.shef.oak.com4510.utilities.LocationAndMapUtilities
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
+import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 
 /**
  * Class TripTripActivity.
@@ -37,6 +37,8 @@ import uk.ac.shef.oak.com4510.utilities.LocationAndMapUtilities
  */
 class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private lateinit var binding: ActivityTripTripBinding
+
+    private var currentTripId: Int = 0
 
     //region Map related variables
     // Necessary parameters for the location request
@@ -73,6 +75,9 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         super.onCreate(savedInstanceState)
         binding = ActivityTripTripBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Setups current trip's id
+        setCurrentTripId()
 
         // Configures camera & gallery button visibility based on permissions granted
         configureButtonVisibility()
@@ -151,28 +156,36 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
             // Stopping location updates
             stopLocationUpdates()
 
-            val bundle = intent.extras
-            if(bundle != null){
-                // Gets current trip's id
-                val tripId = bundle.getInt(IntentKeys.CURRENT_TRIP_ID)
+            // Gets current trip from the database
+            tripPlannerViewModel.getTrip(currentTripId).observe(this){
+                it?.let{
+                    // Updates current trip in database with its end time
+                    it.endDateTime = LocalDateTime.now()
+                    tripPlannerViewModel.updateTrip(it)
 
-                // Gets current trip from the database
-                tripPlannerViewModel.getTrip(tripId).observe(this){
-                    it?.let{
-                        // Updates current trip in database with its end time
-                        it.endDateTime = LocalDateTime.now()
-                        tripPlannerViewModel.updateTrip(it)
-
-                        // Informs main activity, that trip has finished successfully
-                        val intent = Intent(this, MainActivity::class.java)
-                        setResult(RESULT_OK, intent)
-                        finish()
-                    }
+                    // Informs main activity, that trip has finished successfully
+                    val intent = Intent(this, MainActivity::class.java)
+                    setResult(RESULT_OK, intent)
+                    finish()
                 }
             }
-            // If something went wrong, finishes the activity
-            else finish()
         }
+    }
+
+    /**
+     * Gets current Trip's id from the bundle passed in
+     * the intent. Finishes the activity if something goes wrong.
+     */
+    private fun setCurrentTripId(){
+        val bundle = intent.extras
+
+        if(bundle != null){
+            // Gets current trip's id
+            currentTripId = bundle.getInt(IntentKeys.CURRENT_TRIP_ID)
+        }
+
+        // If something went wrong, finishes the activity
+        else finish()
     }
 
     /**
@@ -213,7 +226,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         // Configures and starts location & related services
         mapFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         mapLocationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY, LocationAndMapUtilities.TRACKING_INTERVAL
+            Priority.PRIORITY_HIGH_ACCURACY, ServicesUtilities.TRACKING_INTERVAL
         ).build()
     }
 
@@ -267,25 +280,50 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private fun stopLocationUpdates() {
         mapFusedLocationProviderClient.removeLocationUpdates(mapLocationPendingIntent)
     }
+    //endregion
 
+    //region Location Service related
     /**
      * Companion object which containing methods and parameters
      * needed for the location service.
      */
     companion object {
-        private var activity: AppCompatActivity? = null
+        private var activity: TripPlannerAppCompatActivity? = null
         lateinit var mMap: GoogleMap
 
-        fun getActivity(): AppCompatActivity? {
+        /**
+         * Activity access for location service.
+         */
+        fun getActivity(): TripPlannerAppCompatActivity? {
             return activity
         }
 
-        fun setActivity(newActivity: AppCompatActivity) {
+        /**
+         * Activity creation for location service.
+         */
+        fun setActivity(newActivity: TripPlannerAppCompatActivity) {
             activity = newActivity
         }
 
+        /**
+         * Map access for location service.
+         */
         fun getMap(): GoogleMap {
             return mMap
+        }
+
+        /**
+         * ViewModel access for location service.
+         */
+        fun getViewModel(): TripPlannerViewModel{
+            return activity!!.getViewModel()
+        }
+
+        /**
+         * Gets current Trip's id in the dataabase.
+         */
+        fun getCurrentTripId(): Int{
+            return (activity!! as TripTripActivity).currentTripId
         }
 
     }

@@ -4,11 +4,11 @@ import android.graphics.Color
 import uk.ac.shef.oak.com4510.services.LocationService
 
 /**
- * Class LocationAndMapUtilities.
+ * Class ServicesUtilities.
  *
  *  Stores variables, related to location, map and sensor services.
  */
-class LocationAndMapUtilities {
+class ServicesUtilities {
     companion object{
         // Tracks sensor data every 20 secs as per assignment brief
         const val TRACKING_INTERVAL: Long = 20000
@@ -25,8 +25,8 @@ class LocationAndMapUtilities {
         // Map line between points default colour
         const val MAP_LINE_COLOUR = Color.RED
 
-        // Tag for the location service
-        var LOCATION_SERVICE_TAG = LocationService::class.java.simpleName
+        // Default value for sensors
+        const val DEFAULT_SENSOR_VALUE = "Unavailable"
 
     }
 }
