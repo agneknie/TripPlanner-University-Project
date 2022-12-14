@@ -1,6 +1,5 @@
 package uk.ac.shef.oak.com4510.services
 
-import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -18,6 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.utilities.LocationAndMapUtilities
 import java.text.DateFormat
 import java.util.*
@@ -219,7 +219,6 @@ class LocationService : Service {
     //endregion
 
     //region Location Tracking & Handling
-    @SuppressLint("LongLogTag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
@@ -239,35 +238,44 @@ class LocationService : Service {
                     // Define message to display to user if necessary
                     var message: String
 
-                    // If activity exists and its map is writable performs location plotting
+                    // If activity exists and its map is writable performs location plotting & saving
                     if (TripTripActivity.getActivity() != null)
                         TripTripActivity.getActivity()?.runOnUiThread {
                             try {
-                                // Initialises location if it is the first one
-                                if (mLastLocation == null)
-                                    message = handleFirstLocation()
-
-                                // Updates current location with the new location if it isn't the previous one
-                                else if (mCurrentLocation != mLastLocation) {
-
-                                    // If location change is significant, proceeds to update current location
-                                    if (locationChangeSignificant())
-                                        message = handleNewLocation()
-
-
-                                    // If location change is insignificant, informs the user
-                                    else message = "Location has not changed."
-                                }
-
+                                message = getAndHandleLocation()
                                 // TODO Make a snackbar instead. Toast.makeText(applicationContext, msg, duration)
                             } catch (e: java.lang.Exception) {
-                                // TODO make a snackbar instead. Log.i(MapUtilities.LOCATION_SERVICE_TAG, "Error, cannot write on map " + e.message)
+                                // TODO make a snackbar instead. Log.i(MapUtilities.LOCATION_SERVICE_TAG, R.string.cannot_write_map_snackbar + e.message)
                             }
                         }
                 }
             }
         }
         return startMode
+    }
+
+    private fun getAndHandleLocation(): String{
+        val message: String
+
+        // Initialises location if it is the first one
+        if (mLastLocation == null)
+            message = handleFirstLocation()
+
+        // Updates current location with the new location if it isn't the previous one
+        else if (mCurrentLocation != mLastLocation) {
+
+            // If location change is significant, proceeds to update current location
+            if (locationChangeSignificant())
+                message = handleNewLocation()
+
+
+            // If location change is insignificant, informs the user
+            else message = getString(R.string.location_has_not_changed_snackbar)
+        }
+
+        else message = getString(R.string.location_handling_unsuccessful_snackbar)
+
+        return message
     }
 
     /**
@@ -284,7 +292,7 @@ class LocationService : Service {
         // Adds the location to the database
         addLocationToDatabase()
 
-        return "Initialised Location"
+        return getString(R.string.initialised_location_snackbar)
     }
 
     /**
@@ -300,7 +308,7 @@ class LocationService : Service {
 
         mLastLocation = mCurrentLocation
 
-        return "Updated Location"
+        return getString(R.string.updated_location_snackbar)
     }
 
     /**
