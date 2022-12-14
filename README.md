@@ -9,6 +9,28 @@ Utilises Google Maps API functionality.
 Completed as an assessment on the COM4510 'Mobile Software Development' module at the University
 of Sheffield.
 
+# Installation
+
+As per assignment requirements, the application requires > Android 11.0 (API Level 30 and above) to run.
+
+The application should compile and install on both physical and virtual device when the root folder is
+opened as a project in Android Studio or IntelliJ IDEA.
+
+**Important:** Because the application uses the Google Maps API key provided by the module,
+you might get a warning when installing it. If you do, **do not click 'OK', instead expand the
+dialog and select 'Install anyway (unsafe)'** as depicted in the picture bellow:
+
+![Unsafe App Popup](readme_related/Unsafe%20Popup.png)
+
+For full functionality, the device needs to have:
+- GPS Sensor;
+- Barometric Sensor;
+- Temperature Sensor;
+- Permissions for the above and Storage.
+
+Some application functionality might not be (fully) available without the above.
+
+# Features
 ## Trip Tracking
 Application allows the user to create a trip including marking it with custom tags and a description.
 When the trip starts, user's location is tracked every 20 seconds, together with barometric pressure
