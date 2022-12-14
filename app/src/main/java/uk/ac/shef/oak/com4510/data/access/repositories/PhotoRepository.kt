@@ -18,7 +18,10 @@ import uk.ac.shef.oak.com4510.models.Tag
 class PhotoRepository(private val photoDao: PhotoDao) {
 
     // Observable for all photos
-    val allPhotos: LiveData<List<PhotoEntity>> = photoDao.getAllPhotos().asLiveData()
+    val photos: LiveData<List<PhotoEntity>> = photoDao.getAllPhotos().asLiveData()
+
+    val getAllPhotosByTag: LiveData<List<PhotoEntity>> = photoDao.getAllPhotosByTag().asLiveData()
+    val getAllPhotosByLocation: LiveData<List<PhotoEntity>> = photoDao.getAllPhotosByLocation().asLiveData()
 
     /**
      * Get Photo by its photoId.

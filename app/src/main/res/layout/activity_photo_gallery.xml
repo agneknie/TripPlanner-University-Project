@@ -27,23 +27,26 @@
                 android:layout_weight="1"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="20dp"
                 app:layout_constraintStart_toEndOf="@+id/activity_photo_gallery_l_sorting"
-                android:layout_marginStart="16dp"/>
-        <ImageView
+                android:layout_marginStart="16dp"
+                android:entries="@array/filter_spinner"/>
+
+        <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="40dp" app:srcCompat="@drawable/ic_sorting_direction"
-                android:id="@+id/activity_photo_gallery_iv_sorting" android:layout_weight="1"
+                android:id="@+id/activity_photo_gallery_ib_sorting" android:layout_weight="1"
                 android:rotation="90"
+                android:contentDescription="@string/image_button"
                 app:tint="@color/white" app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="25dp"
                 android:layout_marginEnd="20dp" app:layout_constraintEnd_toEndOf="parent"
         />
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:id="@+id/activity_photo_gallery_ll_photos"
+                android:id="@+id/activity_photo_gallery_rv_photos"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/activity_photo_gallery_sp_sorting"
                 android:layout_marginTop="20dp" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
-        </LinearLayout>
+        </androidx.recyclerview.widget.RecyclerView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
