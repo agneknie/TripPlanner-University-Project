@@ -70,14 +70,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         ).build()
 
         configureLocationButton()
-
-        // Gets all locations
-        tripPlannerViewModel.photoLocations.observe(this){
-            for (photoLocation in it){
-                // Puts a location marker on the map
-                putLocationMarkerOnMap(photoLocation)
-            }
-        }
     }
 
     /**
@@ -102,7 +94,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * Given a Location object, puts a marker with that location on the map.
      */
     private fun putLocationMarkerOnMap(location: Location){
-        val markerTitle = location.dateTime.toString()
+        val markerTitle = location.getLocationMarkerTitle()
         markerLocationPairsList.add(Pair(markerTitle, location))
 
         // Plot a marker according to the given location
@@ -113,7 +105,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                     location.xCoordinate,
                     location.yCoordinate
                 )
-            ).title("Time: ${location.dateTime}")
+            ).title(markerTitle)
         )
         mMap.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
@@ -133,6 +125,14 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        // Gets all locations
+        tripPlannerViewModel.photoLocations.observe(this){
+            for (photoLocation in it){
+                // Puts a location marker on the map
+                putLocationMarkerOnMap(photoLocation)
+            }
+        }
+
         // Setting a universal click listener for markers where
         // depending on the marker that is clicked its location is
         // retrieved and passed on to the locationClicked method in
@@ -150,10 +150,18 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * on its title returns the location corresponding to that marker.
      */
     private fun retrieveLocation(marker: Marker): Location? {
-        val title = marker.title
+        val markerTitle = marker.title
         var location: Location? = null
+
+        // For each mapped photo location, searches for the clicked one
         for (pair in markerLocationPairsList) {
-            if (pair.first == title) location = pair.second
+            val locationMarkerTitle = pair.second.getLocationMarkerTitle()
+
+            // If the location is found, returns it
+            if (markerTitle == locationMarkerTitle){
+                location = pair.second
+                break
+            }
         }
         return location
     }
