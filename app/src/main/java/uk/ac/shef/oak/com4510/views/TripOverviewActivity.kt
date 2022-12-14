@@ -226,4 +226,37 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             binding.activityTripOverviewEtLocationsVisited.setText("${it} ${locationSuffix}")
         }
     }
+
+    //region Location Service related
+    /**
+     * Companion object which containing methods and parameters
+     * needed for the location service.
+     */
+    companion object {
+        private var activity: TripPlannerAppCompatActivity? = null
+        lateinit var mMap: GoogleMap
+
+        /**
+         * Activity access for location service.
+         */
+        fun getActivity(): TripPlannerAppCompatActivity? {
+            return activity
+        }
+
+        /**
+         * Activity creation for location service.
+         */
+        fun setActivity(newActivity: TripPlannerAppCompatActivity) {
+            activity = newActivity
+        }
+
+        /**
+         * Map access for location service.
+         */
+        fun getMap(): GoogleMap {
+            return mMap
+        }
+
+    }
+    //endregion
 }

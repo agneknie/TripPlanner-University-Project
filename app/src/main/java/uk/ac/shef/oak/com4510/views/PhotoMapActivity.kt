@@ -25,7 +25,6 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import uk.ac.shef.oak.com4510.services.LocationService
 import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
 
 /**
@@ -173,7 +172,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this,
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION),
-                TripTripActivity.PERMISSION_LOCATION_GPS
+                PERMISSION_LOCATION_GPS
             )
 
             return

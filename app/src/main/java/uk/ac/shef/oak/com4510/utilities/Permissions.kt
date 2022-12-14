@@ -28,7 +28,9 @@ class Permissions {
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
                 Manifest.permission.CAMERA,
-                Manifest.permission.ACCESS_MEDIA_LOCATION
+                Manifest.permission.ACCESS_MEDIA_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
             ).apply {
                 // If newer (33 and over) Android version is used
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -61,6 +63,17 @@ class Permissions {
             }
 
             return permissionGranted && additionalPermissions
+        }
+
+        /**
+         * Returns true, if GPS sensor is available, and it can  be accessed.
+         */
+        fun canAccessLocation(activity: Activity): Boolean {
+            return activity.packageManager.hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS) &&
+                    ((PackageManager.PERMISSION_GRANTED ==
+                        activity.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) ||
+                    (PackageManager.PERMISSION_GRANTED ==
+                        activity.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)))
         }
 
         /**

@@ -26,6 +26,14 @@ open class TripPlannerAppCompatActivity: AppCompatActivity() {
     }
 
     /**
+     * Gets the TripPlannerViewModel.
+     * Intended for service access use.
+     */
+    fun getViewModel(): TripPlannerViewModel{
+        return tripPlannerViewModel
+    }
+
+    /**
      * Convenience method for displaying a Snackbar.
      * Uses resource id to locate a string.
      */

@@ -11,8 +11,8 @@ data class Location(
     val locationId: Int = 0,
     val xCoordinate: Double,
     val yCoordinate: Double,
-    val temperature: Int,
-    val pressure: Int,
+    val temperature: String,
+    val pressure: String,
     val dateTime: LocalDateTime,
     val tripId: Int){
 

@@ -28,7 +28,7 @@ class GalleryPhotoAdapter (
     }
 
     inner class GalleryPhotoViewHolder(view: View): RecyclerView.ViewHolder(view){
-        private val photoView: ImageView = view.findViewById(R.id.activity_photo_gallery_rv_photos)
+        private val photoView: ImageView = view.findViewById(R.id.gallery_photo_view_iv_photo)
 
         /**
          * Initialises photoView and configures its onClickListener.
@@ -47,6 +47,11 @@ class GalleryPhotoAdapter (
         notifyDataSetChanged()
     }
 
+    fun reverse(){
+        photos.reverse()
+        notifyDataSetChanged()
+    }
+
     class GalleryPhotoComparator: DiffUtil.ItemCallback<Photo>(){
         override fun areItemsTheSame(oldPhoto: Photo, newPhoto: Photo): Boolean {
             return oldPhoto.photoId === newPhoto.photoId
@@ -60,7 +65,7 @@ class GalleryPhotoAdapter (
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryPhotoViewHolder {
         context = parent.context
         val view: View = LayoutInflater.from(parent.context).inflate(
-            R.layout.trip_photo_view,
+            R.layout.gallery_photo_view,
             parent,
             false
         )
