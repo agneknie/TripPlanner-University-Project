@@ -42,6 +42,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/activity_photo_details_ed_pressure"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="30dp" android:layout_marginEnd="30dp">
+
+            <androidx.fragment.app.FragmentContainerView xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    android:scrollbars="vertical"
+                    android:layout_margin="10dp"
+                    tools:layout="@layout/activity_photo_map" />
         </LinearLayout>
         <include layout="@layout/photo_details_panel" android:layout_width="match_parent"
                  android:layout_height="wrap_content"

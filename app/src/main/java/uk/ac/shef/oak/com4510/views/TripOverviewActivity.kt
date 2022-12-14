@@ -1,11 +1,19 @@
 package uk.ac.shef.oak.com4510.views
 
+import android.graphics.Color
 import android.os.Bundle
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
 import uk.ac.shef.oak.com4510.components.TripPhotoGallery
 import uk.ac.shef.oak.com4510.databinding.ActivityTripOverviewBinding
+import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 
@@ -15,9 +23,9 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
  * When a Trip is selected from the Trip Gallery, displays the Trip's
  * data and allows further interaction with its elements.
  */
-class TripOverviewActivity: TripPlannerAppCompatActivity() {
+class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityTripOverviewBinding
-
+    private lateinit var mMap:GoogleMap
     private lateinit var tagsPanel: TagsPanel
     private var tripId: Int = 0
 
@@ -32,6 +40,18 @@ class TripOverviewActivity: TripPlannerAppCompatActivity() {
 
         // If something went wrong, closes the activity
         else finish()
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera.
+        // For the assignment, make this get the last recorder location from the trips database
+        // and initialise a marker on the map.
+//        val sydney = LatLng(-34.0, 151.0)
+//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
     }
 
     /**
@@ -139,14 +159,44 @@ class TripOverviewActivity: TripPlannerAppCompatActivity() {
      * Recreates the trip's path from its locations in the map view.
      */
     private fun configureTripMap(trip: Trip){
-        // Initialise map display
-        // TODO Insert map into activity_trip_overview_ll_map_holder. Amend height as necessary
+        // Variable to store each location in order to be able to
+        // draw a line between it and the next one.
+        var lastLoc: Location? = null
 
         // Get associated locations and add them on the map
         tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
             it?.let {
                 for (tripLocation in it){
-                    // TODO Adds location marker on the map
+
+                    mMap.addMarker(
+                        MarkerOptions().position(
+                            LatLng(
+                                tripLocation.xCoordinate,
+                                tripLocation.yCoordinate
+                            )
+                        ).title(tripLocation.dateTime.toString())
+                    )
+                    mMap.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                tripLocation.xCoordinate,
+                                tripLocation.yCoordinate
+                            ), 14.0f
+                        )
+                    )
+
+                    // If locations have been initialised then draw lines between them
+                    if (lastLoc != null) {
+                        val polyline1 = mMap.addPolyline(
+                            PolylineOptions().clickable(true)
+                                .add(LatLng(lastLoc!!.xCoordinate, lastLoc!!.yCoordinate), LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate))
+                                .width(5F)
+                                .color(Color.RED)
+                                .geodesic(true) // to make the line curve
+                        )
+                    }
+
+                    lastLoc = tripLocation
                 }
             }
         }
