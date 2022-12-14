@@ -36,7 +36,6 @@ class MainActivity : TripPlannerAppCompatActivity() {
 
         // Checks & requests permissions
         Permissions.checkAndRequestPermissions(this)
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
@@ -36,12 +37,9 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         binding = ActivityPhotoDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Gets the selected photo id and configures activity with its data
-        val bundle = intent.extras
-        if(bundle != null) configureActivity(bundle)
-
-        // If something went wrong, closes the activity
-        else finish()
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
     /**
@@ -50,36 +48,43 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        configureActivity()
     }
 
     /**
      * Populates the activity with photo details, its associated location details
      * and the map, which highlights the photo in its associated trip.
      */
-    private fun configureActivity(bundle: Bundle){
+    private fun configureActivity(){
         // Tag Panel configuration
         tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
 
+        // Gets the selected photo id and configures activity with its data
+        val bundle = intent.extras!!
+
         // Gets selected photo's id
-        photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
+        if (bundle != null) {
+            photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
 
-        // Gets selected photo from the database and populates the activity
-        tripPlannerViewModel.getPhoto(photoId).observe(this){
-            it?.let{
-                // Configures photo details related fields
-                configurePhotoDisplayAndDetails(it)
+            // Gets selected photo from the database and populates the activity
+            tripPlannerViewModel.getPhoto(photoId).observe(this){
+                it?.let{
+                    // Configures photo details related fields
+                    configurePhotoDisplayAndDetails(it)
 
-                // Configures location details related fields & map
-                configurePhotoLocationDetailsAndMap(it)
+                    // Configures location details related fields & map
+                    configurePhotoLocationDetailsAndMap(it)
+                }
             }
+
+            // Initialises 'Go Back' & 'Update Details' buttons
+            configureGoBackButton()
+            configureUpdateDetailsButton()
+
+            // Enables clicking on a photo to view it
+            configurePhotoClick()
         }
-
-        // Initialises 'Go Back' & 'Update Details' buttons
-        configureGoBackButton()
-        configureUpdateDetailsButton()
-
-        // Enables clicking on a photo to view it
-        configurePhotoClick()
+        else finish()
     }
 
     /**

@@ -142,7 +142,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             val location = retrieveLocation(it)
             locationClicked(location!!)
         })
-
     }
 
     /**
