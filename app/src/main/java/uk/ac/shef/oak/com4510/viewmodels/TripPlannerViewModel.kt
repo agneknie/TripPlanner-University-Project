@@ -33,6 +33,18 @@ class TripPlannerViewModel (
         it.asDomainModels()
     } as MutableLiveData<List<Trip>>
 
+    val allPhotos: LiveData<List<Photo>> = Transformations.map(photoRepository.photos){
+        it.asDomainModels()
+    } as MutableLiveData<List<Photo>>
+
+    val allPhotosByTag: LiveData<List<Photo>> = Transformations.map(photoRepository.getAllPhotosByTag){
+        it.asDomainModels()
+    } as MutableLiveData<List<Photo>>
+
+    val allPhotosByLocation: LiveData<List<Photo>> = Transformations.map(photoRepository.getAllPhotosByLocation){
+        it.asDomainModels()
+    } as MutableLiveData<List<Photo>>
+
     // Get current Trip id from the database.
     val currentTripId: LiveData<Int> = tripRepository.getCurrentTripId()
 

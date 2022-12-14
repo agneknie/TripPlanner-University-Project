@@ -47,4 +47,8 @@
     <string name="finish_trip_before_exiting_snackbar">Finish Your Trip before exiting.</string>
     <string name="trip_finished_successfully_snackbar">Your Trip was saved!</string>
     <string name="trip_finished_unsuccessfully_snackbar">Uh oh. Your Trip did not finish correctly.</string>
+
+    <!-- Photo Gallery  -->
+    <string-array name="filter_spinner"><item>ID</item><item>Location</item><item>Tag</item></string-array>
+    <string name="image_button">Sort button</string>
 </resources>
