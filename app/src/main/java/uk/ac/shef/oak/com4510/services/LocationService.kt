@@ -216,6 +216,9 @@ class LocationService : Service {
     //endregion
 
     //region Location Tracking & Handling
+    /**
+     * Location, pressure and temperature tracking implementation.
+     */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 

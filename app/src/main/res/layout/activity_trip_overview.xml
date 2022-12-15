@@ -36,7 +36,7 @@
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/activity_trip_overview_ll_map_holder"
                 app:layout_constraintTop_toBottomOf="@+id/activity_trip_overview_et_locations_visited"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"

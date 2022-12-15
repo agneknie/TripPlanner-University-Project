@@ -25,6 +25,10 @@ import uk.ac.shef.oak.com4510.views.PhotoMapActivity
 
 class PhotoMapLocationService : Service {
 
+    // TODO Add method comments, class comments and regions as LocationService has
+    // TODO Refactor code as LocationService
+
+
     // Initialise variables for Sensor Access.
     private lateinit var sensorManager: SensorManager
     private var mPressureSensor: Sensor? = null

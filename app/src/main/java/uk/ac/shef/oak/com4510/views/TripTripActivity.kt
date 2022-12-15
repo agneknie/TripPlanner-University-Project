@@ -37,7 +37,6 @@ import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
  */
 class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private lateinit var binding: ActivityTripTripBinding
-
     private var currentTripId: Int = 0
 
     //region Map related variables
@@ -90,6 +89,9 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
 
         // Starts updating the location
         startLocationUpdates()
+
+        // TODO Fix floating button positions
+        // TODO Fix: when second trip is started in the same session, location updates don't work. Seems to launch two multiple activities. Could be related to finishing the activity properly
     }
 
     //region Navigation related methods
@@ -166,9 +168,11 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
                     // Informs main activity, that trip has finished successfully
                     val intent = Intent(this, MainActivity::class.java)
                     setResult(RESULT_OK, intent)
-                    finish()
                 }
             }
+
+            // TODO look into this for multiple trips for same session: onBackPressedDispatcher.onBackPressed()
+            finish()
         }
     }
 
@@ -235,9 +239,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // TODO For the assignment, make this get the last recorder location from the trips database
-        //  and initialise a marker on the map.
 
         // Move the camera to The Diamond if no location is available yet
         val diamond = LatLng(53.38190068158808, -1.4816251464270533)

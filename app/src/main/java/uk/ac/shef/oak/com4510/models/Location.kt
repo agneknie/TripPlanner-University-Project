@@ -1,6 +1,7 @@
 package uk.ac.shef.oak.com4510.models
 
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Class Location.
@@ -31,5 +32,10 @@ data class Location(
         if (tripId != other.tripId) return false
 
         return true
+    }
+
+    fun getLocationMarkerTitle(): String{
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return "Time: " + dateTime.format(formatter)
     }
 }

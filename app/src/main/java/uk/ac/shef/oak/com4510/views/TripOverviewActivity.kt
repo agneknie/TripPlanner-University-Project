@@ -1,18 +1,15 @@
 package uk.ac.shef.oak.com4510.views
 
-import android.graphics.Color
 import android.os.Bundle
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.SupportMapFragment
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
 import uk.ac.shef.oak.com4510.components.TripPhotoGallery
 import uk.ac.shef.oak.com4510.databinding.ActivityTripOverviewBinding
+import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
@@ -34,66 +31,14 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         binding = ActivityTripOverviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Gets selected trip id and configures activity with its data
-        val bundle = intent.extras
-        if(bundle != null) configureActivity(bundle)
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
-        // If something went wrong, closes the activity
-        else finish()
+        // TODO Hides Map if no locations present in trip
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera.
-        // For the assignment, make this get the last recorder location from the trips database
-        // and initialise a marker on the map.
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-    }
-
-    /**
-     * Populates the activity with trip details, its associated photos and
-     * its associated locations on the map.
-     */
-    private fun configureActivity(bundle: Bundle){
-        // Tag Panel configuration
-        tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
-
-        // Gets selected trip's id
-        tripId = bundle.getInt(IntentKeys.SELECTED_TRIP_ID)
-
-        // Gets selected trip from the database and populates the activity
-        tripPlannerViewModel.getTrip(tripId).observe(this){
-            it?.let{
-                // Configures trip details fields
-                configureTripDetails(it)
-
-                // Configures trip photo gallery
-                configureTripPhotoGallery(it)
-
-                // Configures trip location map
-                configureTripMap(it)
-            }
-        }
-
-        // Initialises 'Go Back' & 'Update Details' buttons
-        configureGoBackButton()
-        configureUpdateDetailsButton()
-    }
-
-    /**
-     * Finishes the activity without updating trip details in
-     * the database.
-     */
-    private fun configureGoBackButton(){
-        binding.activityTripOverviewBtnGoBack.setOnClickListener {
-            finish()
-        }
-    }
-
+    //region Button Configurations
     /**
      * Finishes the activity and updates trip details in the
      * database if they have changed.
@@ -120,6 +65,91 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+    }
+
+    /**
+     * Finishes the activity without updating trip details in
+     * the database.
+     */
+    private fun configureGoBackButton(){
+        binding.activityTripOverviewBtnGoBack.setOnClickListener {
+            finish()
+        }
+    }
+    //endregion
+
+    //region Map related methods
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Gets selected trip id and configures activity with its data
+        configureActivity()
+    }
+
+    /**
+     * Recreates the trip's path from its locations in the map view.
+     */
+    private fun configureTripMap(trip: Trip){
+        // Variable to store each location in order to be able to
+        // draw a line between it and the next one.
+        var lastLocation: Location? = null
+
+        // Get associated locations and add them on the map
+        tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
+            it?.let {
+                for (tripLocation in it){
+
+                    // Add location marker for a trip location
+                    MapHelper.addLocationMarker(mMap, tripLocation, true)
+
+                    // Move camera to location
+                    MapHelper.moveCameraToLocation(mMap, tripLocation)
+
+                    // If locations have been initialised then draw lines between them
+                    lastLocation?.let { MapHelper.drawLineBetweenLocations(mMap,it, tripLocation) }
+
+                    lastLocation = tripLocation
+                }
+            }
+        }
+    }
+    //endregion
+
+    //region Activity Fields Configuration
+    /**
+     * Populates the activity with trip details, its associated photos and
+     * its associated locations on the map.
+     */
+    private fun configureActivity(){
+        // Tag Panel configuration
+        tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
+
+        val bundle = intent.extras
+
+        // Gets selected trip's id
+        if(bundle != null){
+            // Gets selected trip's id
+            tripId = bundle.getInt(IntentKeys.SELECTED_TRIP_ID)
+
+            // Gets selected trip from the database and populates the activity
+            tripPlannerViewModel.getTrip(tripId).observe(this){
+                it?.let{
+                    // Configures trip details fields
+                    configureTripDetails(it)
+
+                    // Configures trip photo gallery
+                    configureTripPhotoGallery(it)
+
+                    // Configures trip location map
+                    configureTripMap(it)
+                }
+            }
+        }
+        else finish()
+
+        // Initialises 'Go Back' & 'Update Details' buttons
+        configureGoBackButton()
+        configureUpdateDetailsButton()
     }
 
     /**
@@ -156,53 +186,6 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     }
 
     /**
-     * Recreates the trip's path from its locations in the map view.
-     */
-    private fun configureTripMap(trip: Trip){
-        // Variable to store each location in order to be able to
-        // draw a line between it and the next one.
-        var lastLoc: Location? = null
-
-        // Get associated locations and add them on the map
-        tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
-            it?.let {
-                for (tripLocation in it){
-
-                    mMap.addMarker(
-                        MarkerOptions().position(
-                            LatLng(
-                                tripLocation.xCoordinate,
-                                tripLocation.yCoordinate
-                            )
-                        ).title(tripLocation.dateTime.toString())
-                    )
-                    mMap.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                tripLocation.xCoordinate,
-                                tripLocation.yCoordinate
-                            ), 14.0f
-                        )
-                    )
-
-                    // If locations have been initialised then draw lines between them
-                    if (lastLoc != null) {
-                        val polyline1 = mMap.addPolyline(
-                            PolylineOptions().clickable(true)
-                                .add(LatLng(lastLoc!!.xCoordinate, lastLoc!!.yCoordinate), LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate))
-                                .width(5F)
-                                .color(Color.RED)
-                                .geodesic(true) // to make the line curve
-                        )
-                    }
-
-                    lastLoc = tripLocation
-                }
-            }
-        }
-    }
-
-    /**
      * Configures 'Photos Taken' field.
      * Returns true, if there exist photos, taken during provided trip.
      */
@@ -225,38 +208,6 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
             binding.activityTripOverviewEtLocationsVisited.setText("${it} ${locationSuffix}")
         }
-    }
-
-    //region Location Service related
-    /**
-     * Companion object which containing methods and parameters
-     * needed for the location service.
-     */
-    companion object {
-        private var activity: TripPlannerAppCompatActivity? = null
-        lateinit var mMap: GoogleMap
-
-        /**
-         * Activity access for location service.
-         */
-        fun getActivity(): TripPlannerAppCompatActivity? {
-            return activity
-        }
-
-        /**
-         * Activity creation for location service.
-         */
-        fun setActivity(newActivity: TripPlannerAppCompatActivity) {
-            activity = newActivity
-        }
-
-        /**
-         * Map access for location service.
-         */
-        fun getMap(): GoogleMap {
-            return mMap
-        }
-
     }
     //endregion
 }
