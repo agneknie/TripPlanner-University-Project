@@ -11,6 +11,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.IBinder
+import android.util.Log
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -346,6 +347,7 @@ class LocationService : Service {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.e("LocationService", "Destroying Service...")
         // Releases pressure and temperature listeners
         sensorManager.unregisterListener(mPressureListener)
         sensorManager.unregisterListener(mTemperatureListener)

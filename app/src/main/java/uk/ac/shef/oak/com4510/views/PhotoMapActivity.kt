@@ -44,6 +44,9 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     // The location provider
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
 
+    // The location intent(service)
+    private lateinit var locationIntent: Intent
+
     // The intent with which the service is called
     private lateinit var mLocationPendingIntent: PendingIntent
 
@@ -54,6 +57,9 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
         setActivity(this)
         setContext(this)
+
+        // Setting the location intent to the desired service
+        locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -193,12 +199,11 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private fun startLocationUpdates() {
         Log.e("LOCATION:", "Starting service...")
 
-        val locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
         mLocationPendingIntent =
             PendingIntent.getService(mContext,
                 1,
                 locationIntent,
-                PendingIntent.FLAG_MUTABLE
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
         mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationPendingIntent)
@@ -210,6 +215,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private fun stopLocationUpdates() {
         if(this::mLocationPendingIntent.isInitialized)
             mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
+        stopService(locationIntent)
     }
 
     /**

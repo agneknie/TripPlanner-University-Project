@@ -1,33 +1,30 @@
 package uk.ac.shef.oak.com4510.views
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.databinding.ActivityTripTripBinding
+import uk.ac.shef.oak.com4510.services.LocationService
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.utilities.Permissions
-import java.time.LocalDateTime
-
-import android.annotation.SuppressLint
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import uk.ac.shef.oak.com4510.services.LocationService
 import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
+import java.time.LocalDateTime
 
 /**
  * Class TripTripActivity.
@@ -47,6 +44,10 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private lateinit var mapLocationRequest: LocationRequest
     // The location provider
     private lateinit var mapFusedLocationProviderClient: FusedLocationProviderClient
+
+    // The location intent(service)
+    private lateinit var locationIntent: Intent
+
     // The intent with which the service is called
     private lateinit var mapLocationPendingIntent: PendingIntent
     //endregion
@@ -95,9 +96,14 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     }
 
     //region Navigation related methods
+//    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+//    override fun onBackPressed() {
+//        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
+//    }
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
-        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
+        stopLocationUpdates()
+        finish()
     }
 
     /**
@@ -172,7 +178,11 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
             }
 
             // TODO look into this for multiple trips for same session: onBackPressedDispatcher.onBackPressed()
-            finish()
+            activity?.finish()
+//            val handler = Handler()
+//            handler.postDelayed(Runnable {
+//                finish()
+//            }, 100) // 5000ms delay
         }
     }
 
@@ -222,6 +232,9 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         setActivity(this)
         setContext(this)
 
+        // Setting the location intent to the desired service
+        locationIntent = Intent(mapContext, LocationService::class.java)
+
         // Populates the map view in the activity
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.activity_trip_trip_map) as SupportMapFragment
@@ -240,7 +253,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Move the camera to The Diamond if no location is available yet
+//        // Move the camera to The Diamond if no location is available yet
         val diamond = LatLng(53.38190068158808, -1.4816251464270533)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(diamond))
     }
@@ -262,13 +275,12 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
      */
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-        // Creates the intent
-        val locationIntent = Intent(mapContext, LocationService::class.java)
+
         mapLocationPendingIntent =
             PendingIntent.getService(mapContext,
                 1,
                 locationIntent,
-                PendingIntent.FLAG_MUTABLE
+                PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
         // Starts location updates
@@ -280,6 +292,9 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
      */
     private fun stopLocationUpdates() {
         mapFusedLocationProviderClient.removeLocationUpdates(mapLocationPendingIntent)
+
+        stopService(locationIntent)
+
     }
     //endregion
 
