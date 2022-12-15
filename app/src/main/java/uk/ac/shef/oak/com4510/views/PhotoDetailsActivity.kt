@@ -15,6 +15,7 @@ import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
 import uk.ac.shef.oak.com4510.databinding.ActivityPhotoDetailsBinding
+import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
@@ -197,66 +198,24 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                     // If current location is equal to photo location, mark it differently
                     if(photoLocation == tripLocation){
                         // Add location marker for a trip location
-                        addLocationMarker(tripLocation, true)
+                        MapHelper.addLocationMarker(mMap, tripLocation, true)
                     }
 
                     // If current location is just a location, map it on the map
                     else{
-                        addLocationMarker(tripLocation, false)
+                        MapHelper.addLocationMarker(mMap, tripLocation, false)
 
                         // Move camera to location
-                        moveCameraToLocation(tripLocation)
+                        MapHelper.moveCameraToLocation(mMap, tripLocation)
                     }
 
                     // If locations have been initialised then draw lines between them
-                    lastLocation?.let { drawLineBetweenLocations(it, tripLocation) }
+                    lastLocation?.let { MapHelper.drawLineBetweenLocations(mMap, it, tripLocation) }
 
                     lastLocation = tripLocation
                 }
             }
         }
-    }
-
-    /**
-     * Adds location marker for the given location
-     */
-    private fun addLocationMarker(location: Location, defaultColour: Boolean){
-        var markerOptions = MarkerOptions()
-            .position(LatLng(location.xCoordinate, location.yCoordinate))
-            .title(location.getLocationMarkerTitle())
-
-        if(!defaultColour){
-            markerOptions.icon(
-                (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-            )
-        }
-        mMap.addMarker(markerOptions)
-    }
-
-    /**
-     * Moves map camera to the provided location.
-     */
-    private fun moveCameraToLocation(tripLocation: Location){
-        mMap.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate),
-                ServicesUtilities.MAP_ZOOM
-            )
-        )
-    }
-
-    /**
-     * Draws a line/path on the map between two given locations.
-     */
-    private fun drawLineBetweenLocations(locationOne: Location, locationTwo: Location){
-        mMap.addPolyline(
-            PolylineOptions()
-                .clickable(true)
-                .add(LatLng(locationOne.xCoordinate, locationOne.yCoordinate), LatLng(locationTwo.xCoordinate, locationTwo.yCoordinate))
-                .width(ServicesUtilities.MAP_LINE_WIDTH)
-                .color(ServicesUtilities.MAP_LINE_COLOUR)
-                .geodesic(true) // to make the line curve
-        )
     }
     //endregion
 }

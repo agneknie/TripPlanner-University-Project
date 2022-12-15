@@ -14,18 +14,17 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import uk.ac.shef.oak.com4510.R
 
-import android.Manifest
-import android.content.pm.PackageManager
+import android.annotation.SuppressLint
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class PhotoMapActivity.
@@ -72,10 +71,51 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         configureLocationButton()
     }
 
+    //region Button Configurations
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
         stopLocationUpdates()
         finish()
+    }
+
+    /**
+     * Sets click listener for the current location button.
+     */
+    private fun configureLocationButton(){
+        val locationButton = binding.activityPhotoMapFabLocation
+        locationButton.setOnClickListener{
+            if (!locationFABState){
+                locationFABState = true
+                locationButton.setImageResource(R.drawable.ic_location_on)
+                startLocationUpdates()
+            }
+            else {
+                locationFABState = false
+                locationButton.setImageResource(R.drawable.ic_location_off)
+                stopLocationUpdates()
+            }
+        }
+    }
+    //endregion
+
+    //region Map Related methods
+    /**
+     * A necessary callback method that initialises the map
+     * and plots every location with a photo to the map.
+     */
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Gets all locations
+        tripPlannerViewModel.photoLocations.observe(this){
+            for (photoLocation in it){
+                // Puts a location marker on the map
+                putLocationMarkerOnMap(photoLocation)
+            }
+        }
+
+        // Configuring marker click listener
+        setMarkerClickListener(mMap)
     }
 
     /**
@@ -84,8 +124,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * displays its details.
      *
      * location: Location object, associated with the clicked location on the map.
-     *
-     * // TODO Use this when a location marker is clicked
      */
     private fun locationClicked(location: Location):Boolean{
         tripPlannerViewModel.getPhotoByLocation(location).observe(this){
@@ -104,50 +142,25 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         markerLocationPairsList.add(Pair(markerTitle, location))
 
         // Plot a marker according to the given location
-        // and move the camera to that marker
-        val newMarker: Marker? = mMap.addMarker(
-            MarkerOptions().position(
-                LatLng(
-                    location.xCoordinate,
-                    location.yCoordinate
-                )
-            ).title(markerTitle)
-        )
-        mMap.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                LatLng(
-                    location.xCoordinate,
-                    location.yCoordinate
-                ), 14.0f
-            )
-        )
+        MapHelper.addLocationMarker(mMap, location, true)
+
+        // Move the camera to that marker
+        MapHelper.moveCameraToLocation(mMap, location)
 
     }
 
     /**
-     * A necessary callback method that initialises the map
-     * and plots every location with a photo to the map.
+     * Setting a universal click listener for markers where
+     * depending on the marker that is clicked its location is
+     * retrieved and passed on to the locationClicked method in
+     * order to redirect the user to the details of the photo
+     * corresponding to that location.
      */
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Gets all locations
-        tripPlannerViewModel.photoLocations.observe(this){
-            for (photoLocation in it){
-                // Puts a location marker on the map
-                putLocationMarkerOnMap(photoLocation)
-            }
-        }
-
-        // Setting a universal click listener for markers where
-        // depending on the marker that is clicked its location is
-        // retrieved and passed on to the locationClicked method in
-        // order to redirect the user to the details of the photo
-        // corresponding to that location.
-        mMap.setOnMarkerClickListener(GoogleMap.OnMarkerClickListener {
+    private fun setMarkerClickListener(map: GoogleMap){
+        map.setOnMarkerClickListener {
             val location = retrieveLocation(it)
             locationClicked(location!!)
-        })
+        }
     }
 
     /**
@@ -170,51 +183,14 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         }
         return location
     }
+    //endregion
 
-    override fun onResume() {
-        super.onResume()
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSION_LOCATION_GPS
-            )
-
-            return
-        }
-    }
-
-    private fun configureLocationButton(){
-        val locFAB = binding.activityPhotoMapFabLocation
-        locFAB.setOnClickListener{
-            if (!locationFABState){
-                locationFABState = true
-                locFAB.setImageResource(R.drawable.ic_location_on)
-                startLocationUpdates()
-            } else {
-                locationFABState = false
-                locFAB.setImageResource(R.drawable.ic_location_off)
-                stopLocationUpdates()
-            }
-        }
-    }
-
-    private fun setContext(context: Context) {
-        mContext = context
-    }
-
+    //region Location Service related
     /**
      * A function that initiates the location intent, checks if necessary permissions
      * have been granted and if so starts the location service.
      */
+    @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
         Log.e("LOCATION:", "Starting service...")
 
@@ -226,52 +202,21 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                 PendingIntent.FLAG_MUTABLE
             )
 
-        Log.e("IntentService", "Getting...")
-
-
-
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION),
-                PERMISSION_LOCATION_GPS
-            )
-
-            return
-        }
-
-        val locationTask = mFusedLocationProviderClient.requestLocationUpdates(
-            mLocationRequest,
-            mLocationPendingIntent
-        )
-        locationTask.addOnFailureListener { e ->
-            if (e is ApiException) {
-                e.message?.let { Log.w("MapsActivity", it) }
-            } else {
-                Log.w("MapsActivity", e.message!!)
-            }
-        }
-        locationTask.addOnCompleteListener{
-            Log.d(
-                "MapsActivity",
-                "Successful GPS Start-Up!"
-            )
-        }
+        mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationPendingIntent)
     }
 
     /**
      * A function that terminates location updates.
      */
     private fun stopLocationUpdates() {
-        Log.e("LOC:", "Stopping Updates...")
         mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
+    }
+
+    /**
+     * Sets context for LocationService access.
+     */
+    private fun setContext(context: Context) {
+        mContext = context
     }
 
     /**
@@ -279,24 +224,29 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * needed for the location service.
      */
     companion object {
-        val PERMISSION_LOCATION_GPS:Int = 1
-
         private var activity: AppCompatActivity? = null
         private lateinit var mMap: GoogleMap
-        //private const val ACCESS_FINE_LOCATION = 123
 
+        /**
+         * Activity access for location service.
+         */
         fun getActivity(): AppCompatActivity? {
             return activity
         }
 
+        /**
+         * Activity creation for location service.
+         */
         fun setActivity(newActivity: AppCompatActivity) {
             activity = newActivity
         }
 
+        /**
+         * Map access for location service.
+         */
         fun getMap(): GoogleMap {
             return mMap
         }
-
     }
-
+    //endregion
 }
