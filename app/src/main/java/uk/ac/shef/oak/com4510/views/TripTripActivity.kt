@@ -42,6 +42,8 @@ import uk.ac.shef.oak.com4510.services.LocationService
 class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private lateinit var binding: ActivityTripTripBinding
 
+    private lateinit var locationIntent: Intent
+
     // Necessary parameters for the location request
     private var interval : Long = 20000
     private lateinit var mContext: Context
@@ -55,8 +57,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
 
     // The intent with which the service is called
     private lateinit var mLocationPendingIntent: PendingIntent
-
-
 
     // When user has picked out a photo, forwards them to TripPhotoActivity with picked photo's uri
     private val photoPickerActivityResultContract = registerForActivityResult(ActivityResultContracts.PickVisualMedia()){
@@ -83,6 +83,8 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         //
         setActivity(this)
         setContext(this)
+
+        locationIntent = Intent(mContext, LocationService::class.java)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -273,7 +275,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private fun startLocationUpdates() {
         Log.e("LOCATION:", "Starting service...")
 
-        val locationIntent = Intent(mContext, LocationService::class.java)
         mLocationPendingIntent =
             PendingIntent.getService(mContext,
                 1,
@@ -326,6 +327,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     private fun stopLocationUpdates() {
         Log.e("LOC:", "Stopping Updates...")
         mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
+        stopService(locationIntent)
     }
 
     /**

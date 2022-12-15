@@ -46,6 +46,8 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     // The location request
     private lateinit var mLocationRequest: LocationRequest
 
+    private lateinit var locationIntent: Intent
+
     // The location provider
     private lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
 
@@ -59,6 +61,8 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
         setActivity(this)
         setContext(this)
+
+        locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -210,7 +214,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private fun startLocationUpdates() {
         Log.e("LOCATION:", "Starting service...")
 
-        val locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
         mLocationPendingIntent =
             PendingIntent.getService(mContext,
                 1,
@@ -264,6 +267,13 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private fun stopLocationUpdates() {
         Log.e("LOC:", "Stopping Updates...")
         mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
+        stopService(locationIntent)
+    }
+
+    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
+    override fun onBackPressed() {
+        stopLocationUpdates()
+        finish()
     }
 
     /**

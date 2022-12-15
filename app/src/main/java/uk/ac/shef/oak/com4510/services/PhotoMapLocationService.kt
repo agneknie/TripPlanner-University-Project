@@ -215,6 +215,7 @@ class PhotoMapLocationService : Service {
         super.onDestroy()
         sensorManager.unregisterListener(mPressureListener)
         sensorManager.unregisterListener(mTemperatureListener)
+        lastLocCircle?.remove()
         Log.i("Service", "Ending Service...")
     }
 
