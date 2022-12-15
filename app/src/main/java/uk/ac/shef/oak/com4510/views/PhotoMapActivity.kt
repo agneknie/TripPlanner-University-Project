@@ -19,12 +19,9 @@ import android.util.Log
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
-import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class PhotoMapActivity.
@@ -69,6 +66,8 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         ).build()
 
         configureLocationButton()
+
+        // TODO Fix floating button position
     }
 
     //region Button Configurations
@@ -209,7 +208,8 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * A function that terminates location updates.
      */
     private fun stopLocationUpdates() {
-        mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
+        if(this::mLocationPendingIntent.isInitialized)
+            mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
     }
 
     /**

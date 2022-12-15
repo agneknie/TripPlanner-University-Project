@@ -36,6 +36,9 @@ class MainActivity : TripPlannerAppCompatActivity() {
 
         // Checks & requests permissions
         Permissions.checkAndRequestPermissions(this)
+
+        // TODO Disables buttons to map related activities if no maps found or permissions not given
+        // TODO If database is empty, adds example trip
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

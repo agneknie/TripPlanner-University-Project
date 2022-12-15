@@ -1,13 +1,9 @@
 package uk.ac.shef.oak.com4510.views
 
 import android.os.Bundle
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.components.TagsPanel
@@ -17,7 +13,6 @@ import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
-import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class TripOverviewActivity.
@@ -39,6 +34,8 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // TODO Hides Map if no locations present in trip
     }
 
     //region Button Configurations

@@ -89,6 +89,9 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
 
         // Starts updating the location
         startLocationUpdates()
+
+        // TODO Fix floating button positions
+        // TODO Fix: when second trip is started in the same session, location updates don't work. Seems to launch two multiple activities. Could be related to finishing the activity properly
     }
 
     //region Navigation related methods
@@ -168,6 +171,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
                 }
             }
 
+            // TODO look into this for multiple trips for same session: onBackPressedDispatcher.onBackPressed()
             finish()
         }
     }
