@@ -94,7 +94,7 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private fun configureTripMap(trip: Trip){
         // Variable to store each location in order to be able to
         // draw a line between it and the next one.
-        var lastLoc: Location? = null
+        var lastLocation: Location? = null
 
         // Get associated locations and add them on the map
         tripPlannerViewModel.getLocationsByTrip(trip.tripId).observe(this){
@@ -108,9 +108,9 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                     moveCameraToLocation(tripLocation)
 
                     // If locations have been initialised then draw lines between them
-                    lastLoc?.let { drawLineBetweenLocations(it, tripLocation) }
+                    lastLocation?.let { drawLineBetweenLocations(it, tripLocation) }
 
-                    lastLoc = tripLocation
+                    lastLocation = tripLocation
                 }
             }
         }

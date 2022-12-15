@@ -6,8 +6,10 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
@@ -16,6 +18,7 @@ import uk.ac.shef.oak.com4510.databinding.ActivityPhotoDetailsBinding
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class PhotoDetailsActivity.
@@ -42,50 +45,7 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    /**
-     * Callback method to initialise the map before plotting markers for
-     * locations.
-     */
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        configureActivity()
-    }
-
-    /**
-     * Populates the activity with photo details, its associated location details
-     * and the map, which highlights the photo in its associated trip.
-     */
-    private fun configureActivity(){
-        // Tag Panel configuration
-        tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
-
-        val bundle = intent.extras
-
-        // Gets the selected photo id and configures activity with its data
-        if (bundle != null) {
-            photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
-
-            // Gets selected photo from the database and populates the activity
-            tripPlannerViewModel.getPhoto(photoId).observe(this){
-                it?.let{
-                    // Configures photo details related fields
-                    configurePhotoDisplayAndDetails(it)
-
-                    // Configures location details related fields & map
-                    configurePhotoLocationDetailsAndMap(it)
-                }
-            }
-
-            // Initialises 'Go Back' & 'Update Details' buttons
-            configureGoBackButton()
-            configureUpdateDetailsButton()
-
-            // Enables clicking on a photo to view it
-            configurePhotoClick()
-        }
-        else finish()
-    }
-
+    //region Button Configurations
     /**
      * Finishes the activity without updating photo details in
      * the database.
@@ -124,6 +84,43 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+    }
+    //endregion
+
+    //region Activity Configuration
+    /**
+     * Populates the activity with photo details, its associated location details
+     * and the map, which highlights the photo in its associated trip.
+     */
+    private fun configureActivity(){
+        // Tag Panel configuration
+        tagsPanel = TagsPanel(this, binding, tripPlannerViewModel)
+
+        val bundle = intent.extras
+
+        // Gets the selected photo id and configures activity with its data
+        if (bundle != null) {
+            photoId = bundle.getInt(IntentKeys.SELECTED_PHOTO_ID)
+
+            // Gets selected photo from the database and populates the activity
+            tripPlannerViewModel.getPhoto(photoId).observe(this){
+                it?.let{
+                    // Configures photo details related fields
+                    configurePhotoDisplayAndDetails(it)
+
+                    // Configures location details related fields & map
+                    configurePhotoLocationDetailsAndMap(it)
+                }
+            }
+
+            // Initialises 'Go Back' & 'Update Details' buttons
+            configureGoBackButton()
+            configureUpdateDetailsButton()
+
+            // Enables clicking on a photo to view it
+            configurePhotoClick()
+        }
+        else finish()
     }
 
     /**
@@ -173,44 +170,93 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+    //endregion
+
+    //region Map Related Methods
+    /**
+     * Callback method to initialise the map before plotting markers for
+     * locations.
+     */
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        configureActivity()
+    }
 
     /**
      * Configures photo display by populating associated map view.
      */
     private fun configureMapDisplay(photoLocation: Location){
+        // Variable to store each location in order to be able to
+        // draw a line between it and the next one.
+        var lastLocation: Location? = null
+
         // Get associated trip's locations and add them on the map
         tripPlannerViewModel.getLocationsByTrip(photoLocation.tripId).observe(this){
             it?.let{
                 for(tripLocation in it){
-
-                    mMap.addMarker(
-                        MarkerOptions().position(
-                            LatLng(
-                                tripLocation.xCoordinate,
-                                tripLocation.yCoordinate
-                            )
-                        ).title(tripLocation.dateTime.toString())
-                    )
-                    mMap.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                tripLocation.xCoordinate,
-                                tripLocation.yCoordinate
-                            ), 14.0f
-                        )
-                    )
                     // If current location is equal to photo location, mark it differently
-                    // Not sure if this is needed...
                     if(photoLocation == tripLocation){
-                        // TODO Maps photo location on the map
+                        // Add location marker for a trip location
+                        addLocationMarker(tripLocation, true)
                     }
 
                     // If current location is just a location, map it on the map
                     else{
-                        // TODO Maps trip location on the map
+                        addLocationMarker(tripLocation, false)
+
+                        // Move camera to location
+                        moveCameraToLocation(tripLocation)
                     }
+
+                    // If locations have been initialised then draw lines between them
+                    lastLocation?.let { drawLineBetweenLocations(it, tripLocation) }
+
+                    lastLocation = tripLocation
                 }
             }
         }
     }
+
+    /**
+     * Adds location marker for the given location
+     */
+    private fun addLocationMarker(location: Location, defaultColour: Boolean){
+        var markerOptions = MarkerOptions()
+            .position(LatLng(location.xCoordinate, location.yCoordinate))
+            .title(location.getLocationMarkerTitle())
+
+        if(!defaultColour){
+            markerOptions.icon(
+                (BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+            )
+        }
+        mMap.addMarker(markerOptions)
+    }
+
+    /**
+     * Moves map camera to the provided location.
+     */
+    private fun moveCameraToLocation(tripLocation: Location){
+        mMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate),
+                ServicesUtilities.MAP_ZOOM
+            )
+        )
+    }
+
+    /**
+     * Draws a line/path on the map between two given locations.
+     */
+    private fun drawLineBetweenLocations(locationOne: Location, locationTwo: Location){
+        mMap.addPolyline(
+            PolylineOptions()
+                .clickable(true)
+                .add(LatLng(locationOne.xCoordinate, locationOne.yCoordinate), LatLng(locationTwo.xCoordinate, locationTwo.yCoordinate))
+                .width(ServicesUtilities.MAP_LINE_WIDTH)
+                .color(ServicesUtilities.MAP_LINE_COLOUR)
+                .geodesic(true) // to make the line curve
+        )
+    }
+    //endregion
 }
