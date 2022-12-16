@@ -44,6 +44,7 @@
         <activity android:name="uk.ac.shef.oak.com4510.views.TripPhotoActivity"
                   android:exported="false"/>
         <activity android:name="uk.ac.shef.oak.com4510.views.TripTripActivity"
+                  android:launchMode="singleTask"
                   android:exported="false"/>
         <activity android:name="uk.ac.shef.oak.com4510.views.CameraActivity"
                   android:exported="false"/>
