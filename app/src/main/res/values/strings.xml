@@ -58,7 +58,5 @@
     <string name="no_photos_snackbar">No Photos Available :(</string>
     <string name="no_trips_snackbar">No Trips Available :(</string>
 
-    <!-- Photo Gallery  -->
-    <string-array name="filter_spinner"><item>ID</item><item>Location</item><item>Tag</item></string-array>
     <string name="image_button">Sort button</string>
 </resources>

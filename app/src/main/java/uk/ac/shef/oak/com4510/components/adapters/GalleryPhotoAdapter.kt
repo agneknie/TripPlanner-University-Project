@@ -9,18 +9,52 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.shef.oak.com4510.R
+import uk.ac.shef.oak.com4510.helpers.PhotoSortingOption
 import uk.ac.shef.oak.com4510.models.Photo
+import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 
 class GalleryPhotoAdapter (
-    val galleryPhotoItemSelectedListener: GalleryPhotoItemSelectedListener): ListAdapter<Photo, GalleryPhotoAdapter.GalleryPhotoViewHolder>(
+    val galleryPhotoItemSelectedListener: GalleryPhotoItemSelectedListener,
+    val tripPlannerViewModel: TripPlannerViewModel,
+    val invokingActivity: uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity): ListAdapter<Photo, GalleryPhotoAdapter.GalleryPhotoViewHolder>(
     GalleryPhotoComparator())
 {
-    private val photos = mutableListOf<Photo>()
-    fun updateData(newPhoto: List<Photo>) {
-        photos.clear()
-        photos.addAll(newPhoto)
-        notifyDataSetChanged()
+    fun updateData(photoSortingOption: PhotoSortingOption){
+        when (photoSortingOption) {
+            PhotoSortingOption.DEFAULT -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.photoId }
+                submitList(list)
+            }
+            PhotoSortingOption.LOCATION -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.locationId }
+                submitList(list)
+            }
+            PhotoSortingOption.TAG -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.tagId }
+                submitList(list)
+            }
+            PhotoSortingOption.TITLE -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.title }
+                submitList(list)
+            }
+            PhotoSortingOption.DESCRIPTION -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.description }
+                submitList(list)
+            }
+        }
     }
+
+    fun reverseOrder(){
+        val currentListThis = currentList
+        val list = currentListThis.reversed()
+        submitList(list)
+    }
+
     lateinit var context: Context
 
     interface GalleryPhotoItemSelectedListener{
@@ -40,16 +74,6 @@ class GalleryPhotoAdapter (
                 galleryPhotoItemSelectedListener.onGalleryPhotoItemSelected(photo, photoView)
             }
         }
-    }
-
-    fun clear(){
-        photos.clear()
-        notifyDataSetChanged()
-    }
-
-    fun reverse(){
-        photos.reverse()
-        notifyDataSetChanged()
     }
 
     class GalleryPhotoComparator: DiffUtil.ItemCallback<Photo>(){

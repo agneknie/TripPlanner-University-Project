@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.components.adapters.GalleryPhotoAdapter
+import uk.ac.shef.oak.com4510.helpers.PhotoSortingOption
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
@@ -23,18 +24,19 @@ class PhotoGallery(
         setupGalleryPhotoRecyclerView()
     }
 
-    /**
-     * Reverses the order of the photos in the gallery.
-     */
-    fun reversePhotos(){
-        galleryPhotoAdapter.reverse()
+    fun changePhotos(photoSortingOption: PhotoSortingOption) {
+        galleryPhotoAdapter.updateData(photoSortingOption)
+    }
+
+    fun reversePhotoOrder(){
+        galleryPhotoAdapter.reverseOrder()
     }
 
     private fun setupGalleryPhotoRecyclerView(){
         val NUMBER_OF_COLUMNS = 3
 
         galleryPhotoRecyclerView = invokingActivity.findViewById(R.id.activity_photo_gallery_rv_photos)
-        galleryPhotoAdapter = GalleryPhotoAdapter(this)
+        galleryPhotoAdapter = GalleryPhotoAdapter(this, tripPlannerViewModel, invokingActivity)
         galleryPhotoRecyclerView.adapter = galleryPhotoAdapter
         galleryPhotoRecyclerView.layoutManager = GridLayoutManager(invokingActivity, NUMBER_OF_COLUMNS)
 
