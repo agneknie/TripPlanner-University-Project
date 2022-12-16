@@ -21,5 +21,7 @@ class TripGalleryActivity: TripPlannerAppCompatActivity()  {
 
         // Populate activity with user's trips
         TripGallery(this, tripPlannerViewModel)
+
+        // TODO If no trips exist, display a snackbar
     }
 }

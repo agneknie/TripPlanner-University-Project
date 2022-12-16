@@ -29,6 +29,7 @@ class PhotoGalleryActivity: TripPlannerAppCompatActivity() {
         // TODO Sorting doesn't work
         // TODO Reverse button doesn't work
         // TODO Change reverse button to image
+        // TODO If no photo's exist, display snackbar
     }
 
     private fun initialiseItemSelectListener() {

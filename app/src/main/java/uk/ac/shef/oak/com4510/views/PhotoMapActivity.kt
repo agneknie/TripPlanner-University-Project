@@ -74,6 +74,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         configureLocationButton()
 
         // TODO Fix floating button position
+        // TODO If no photo locations exist, display snackbar
     }
 
     //region Button Configurations
