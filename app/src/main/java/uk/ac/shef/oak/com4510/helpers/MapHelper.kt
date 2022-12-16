@@ -20,6 +20,12 @@ class MapHelper {
         // Default map zoom
         const val MAP_ZOOM = 17.0f
 
+        // Current location colour
+        const val MAP_CURRENT_LOCATION_RADIUS = 10.0
+
+        // Current location radius
+        const val MAP_CURRENT_LOCATION_COLOUR = Color.CYAN
+
         // Map line between points default width
         const val MAP_LINE_WIDTH = 5F
 
@@ -30,7 +36,7 @@ class MapHelper {
          * Adds location marker for the given location
          */
         fun addLocationMarker(map: GoogleMap, location: Location, defaultColour: Boolean){
-            var markerOptions = MarkerOptions()
+            val markerOptions = MarkerOptions()
                 .position(LatLng(location.xCoordinate, location.yCoordinate))
                 .title(location.getLocationMarkerTitle())
 

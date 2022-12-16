@@ -290,6 +290,24 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         fun getMap(): GoogleMap {
             return mMap
         }
+
+        /**
+         * Make a snackbar on the current activity.
+         * Uses string for message.
+         */
+        fun makeSnackbar(messageString :String){
+            val thisActivity = (activity!! as PhotoMapActivity)
+            return thisActivity.displaySnackbar(thisActivity.binding.root, messageString)
+        }
+
+        /**
+         * Make a snackbar on the current activity.
+         * Uses string resource id for message.
+         */
+        fun makeSnackbar(messageResourceId :Int){
+            val thisActivity = (activity!! as PhotoMapActivity)
+            return thisActivity.displaySnackbar(thisActivity.binding.root, messageResourceId)
+        }
     }
     //endregion
 }
