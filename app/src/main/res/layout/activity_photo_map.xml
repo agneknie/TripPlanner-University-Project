@@ -7,44 +7,39 @@
         android:layout_height="match_parent"
         tools:context=".views.PhotoMapActivity">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/activity_photo_map_map_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_editor_absoluteX="0dp"
-            app:layout_editor_absoluteY="-127dp">
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
-        <LinearLayout xmlns:map="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/activity_photo_map_map_holder"
+        <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center"
-                map:layout_constraintTop_toTopOf="parent"
-                map:layout_constraintLeft_toLeftOf="parent"
-                map:layout_constraintRight_toRightOf="parent">
+                android:layout_height="0dp"
+                android:scrollbars="vertical"
+                android:layout_margin="10dp"
+                tools:layout="@layout/activity_photo_map" tools:layout_editor_absoluteX="10dp"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"/>
 
-            <androidx.fragment.app.FragmentContainerView xmlns:map="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/map"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="600dp"
-                    android:scrollbars="vertical"
-                    android:layout_margin="10dp"
-                    tools:layout="@layout/activity_photo_map" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_light_blue"
+                app:backgroundTint="@color/main_background_black"
+                android:tint="@color/main_background_black"
+                android:src="@drawable/ic_location_off"
+                android:id="@+id/activity_photo_map_fab_location"
+                android:foregroundGravity="top" app:fabCustomSize="70dp"
+                app:layout_constraintBottom_toBottomOf="@+id/map"
+                android:layout_margin="10dp"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="30dp"/>
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:backgroundTint="@color/main_light_blue"
-                    app:backgroundTint="@color/main_background_black"
-                    android:tint="@color/main_background_black"
-                    android:src="@drawable/ic_location_off"
-                    android:id="@+id/activity_photo_map_fab_location"
-                    android:foregroundGravity="top" app:fabCustomSize="70dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_margin="10dp"
-                    app:layout_constraintStart_toStartOf="parent"/>
-
-        </LinearLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

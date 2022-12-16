@@ -3,7 +3,6 @@ package uk.ac.shef.oak.com4510.views
 import android.content.Intent
 import android.os.Bundle
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
-import uk.ac.shef.oak.com4510.databinding.ActivityPhotoMapBinding
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
 
@@ -20,6 +19,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.Marker
+import uk.ac.shef.oak.com4510.databinding.ActivityPhotoMapBinding
 import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
 import uk.ac.shef.oak.com4510.utilities.Permissions
@@ -72,8 +72,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
         // Configures current location button
         configureLocationButton()
-
-        // TODO Fix floating button position
     }
 
     //region Button Configurations

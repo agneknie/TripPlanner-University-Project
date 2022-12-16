@@ -91,8 +91,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
 
         // Configures Map & related services
         configureMapAndLocationService()
-
-        // TODO Fix floating button positions
     }
 
     override fun onResume() {
