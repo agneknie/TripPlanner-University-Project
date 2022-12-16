@@ -13,6 +13,7 @@ import uk.ac.shef.oak.com4510.models.Tag
 
 /**
  * Class TagAdapter.
+ *
  * Provides adapter(ListAdapter) functionality to the Tags RecyclerView.
  */
 class TagAdapter(

@@ -13,12 +13,23 @@ import uk.ac.shef.oak.com4510.helpers.PhotoSortingOption
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 
+/**
+ * Class GalleryPhotoAdapter.
+ *
+ * Provides adapter(ListAdapter) functionality to the Photo RecyclerView.
+ */
 class GalleryPhotoAdapter (
     val galleryPhotoItemSelectedListener: GalleryPhotoItemSelectedListener,
-    val tripPlannerViewModel: TripPlannerViewModel,
-    val invokingActivity: uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity): ListAdapter<Photo, GalleryPhotoAdapter.GalleryPhotoViewHolder>(
+    val tripPlannerViewModel: TripPlannerViewModel): ListAdapter<Photo, GalleryPhotoAdapter.GalleryPhotoViewHolder>(
     GalleryPhotoComparator())
 {
+    lateinit var context: Context
+
+    //region Photo List Sorting
+    /**
+     * Updates the photo list in the adapter, sorting it with the
+     * provided sorting option.
+     */
     fun updateData(photoSortingOption: PhotoSortingOption){
         when (photoSortingOption) {
             PhotoSortingOption.DEFAULT -> {
@@ -49,14 +60,17 @@ class GalleryPhotoAdapter (
         }
     }
 
+    /**
+     * Reverses order of the current photo list.
+     */
     fun reverseOrder(){
         val currentListThis = currentList
         val list = currentListThis.reversed()
         submitList(list)
     }
+    //endregion
 
-    lateinit var context: Context
-
+    //region Photo Clicking Implementation
     interface GalleryPhotoItemSelectedListener{
         fun onGalleryPhotoItemSelected(photo: Photo, photoView: View)
     }
@@ -75,7 +89,9 @@ class GalleryPhotoAdapter (
             }
         }
     }
+    //endregion
 
+    //region Comparator Class
     class GalleryPhotoComparator: DiffUtil.ItemCallback<Photo>(){
         override fun areItemsTheSame(oldPhoto: Photo, newPhoto: Photo): Boolean {
             return oldPhoto.photoId === newPhoto.photoId
@@ -99,4 +115,5 @@ class GalleryPhotoAdapter (
     override fun onBindViewHolder(holder: GalleryPhotoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+    //endregion
 }
