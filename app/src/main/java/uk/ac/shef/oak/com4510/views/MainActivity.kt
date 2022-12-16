@@ -37,7 +37,6 @@ class MainActivity : TripPlannerAppCompatActivity() {
         // Checks & requests permissions
         Permissions.checkAndRequestPermissions(this)
 
-        // TODO Disables buttons to map related activities if no maps found or permissions not given
         // TODO If database is empty, adds example trip
     }
 
@@ -53,7 +52,12 @@ class MainActivity : TripPlannerAppCompatActivity() {
     private fun initialiseClickListeners(){
         // New Trip Button
        binding.activityMainBtnNewTrip.setOnClickListener {
-            tripTripActivityResultContract.launch(Intent(this, TripCreationActivity::class.java))
+           if(!Permissions.canAccessLocation(this)){
+               // Informs the user
+               displaySnackbar(binding.root, R.string.location_missing_snackbar)
+           }
+           else
+               tripTripActivityResultContract.launch(Intent(this, TripCreationActivity::class.java))
         }
 
         // Photo Gallery Button

@@ -34,8 +34,6 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        // TODO Hides Map if no locations present in trip
     }
 
     //region Button Configurations

@@ -37,6 +37,10 @@ class TripGallery(
         tripRecyclerView.layoutManager = StaggeredGridLayoutManager(NUMBER_OF_COLUMNS, StaggeredGridLayoutManager.VERTICAL)
 
         tripPlannerViewModel.allTrips.observe(invokingActivity){
+            // If no trips exist, display a snackbar
+            if(it.isEmpty()){
+                invokingActivity.displaySnackbar(tripRecyclerView, R.string.no_trips_snackbar)
+            }
             it?.let{
                 tripAdapter.submitList(it)
             }

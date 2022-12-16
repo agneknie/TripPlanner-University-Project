@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import uk.ac.shef.oak.com4510.R
+import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 import uk.ac.shef.oak.com4510.views.TripTripActivity
 import java.time.LocalDateTime
@@ -104,8 +105,9 @@ class LocationService : Service {
                 SensorManager.SENSOR_DELAY_NORMAL)
         }
         else {
-            // TODO Make snackbar "Temperature Sensor not Available."
             temperature = ServicesUtilities.DEFAULT_SENSOR_VALUE
+            // Makes snackbar "Temperature Sensor not Available."
+            TripTripActivity.makeSnackbar(R.string.temperature_not_available_snackbar)
         }
     }
 
@@ -135,8 +137,9 @@ class LocationService : Service {
                 SensorManager.SENSOR_DELAY_NORMAL)
         }
         else {
-            // TODO Make snackbar "Pressure Sensor not Available."
             pressure = ServicesUtilities.DEFAULT_SENSOR_VALUE
+            // Makes snackbar "Pressure Sensor not Available."
+            TripTripActivity.makeSnackbar(R.string.pressure_not_available_snackbar)
         }
     }
     //endregion
@@ -174,7 +177,7 @@ class LocationService : Service {
         TripTripActivity.getMap().moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude),
-                ServicesUtilities.MAP_ZOOM))
+                MapHelper.MAP_ZOOM))
     }
 
     /**
@@ -209,8 +212,8 @@ class LocationService : Service {
                 .add(
                     LatLng(mLastLocation!!.latitude, mLastLocation!!.longitude),
                     LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude))
-                .width(ServicesUtilities.MAP_LINE_WIDTH)
-                .color(ServicesUtilities.MAP_LINE_COLOUR)
+                .width(MapHelper.MAP_LINE_WIDTH)
+                .color(MapHelper.MAP_LINE_COLOUR)
                 // Curved line
                 .geodesic(true))
     }
@@ -242,9 +245,9 @@ class LocationService : Service {
                             try {
                                 // Define message to display to user if necessary
                                 val message = getAndHandleLocation()
-                                // TODO Make a snackbar instead. Toast.makeText(applicationContext, msg, duration)
+                                TripTripActivity.makeSnackbar(message)
                             } catch (e: java.lang.Exception) {
-                                // TODO make a snackbar instead. Log.i(MapUtilities.LOCATION_SERVICE_TAG, R.string.cannot_write_map_snackbar + e.message)
+                                TripTripActivity.makeSnackbar(R.string.cannot_write_map_snackbar)
                             }
                         }
                 }

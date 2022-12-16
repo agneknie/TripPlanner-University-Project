@@ -39,6 +39,10 @@ class PhotoGallery(
         galleryPhotoRecyclerView.layoutManager = GridLayoutManager(invokingActivity, NUMBER_OF_COLUMNS)
 
         tripPlannerViewModel.allPhotos.observe(invokingActivity){
+            // If no photos exist, display a snackbar
+            if(it.isEmpty()){
+                invokingActivity.displaySnackbar(galleryPhotoRecyclerView, R.string.no_photos_snackbar)
+            }
             it?.let {
                 galleryPhotoAdapter.submitList(it)
             }

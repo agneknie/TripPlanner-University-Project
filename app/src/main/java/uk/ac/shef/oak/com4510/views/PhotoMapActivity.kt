@@ -22,6 +22,8 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.Marker
 import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
+import uk.ac.shef.oak.com4510.utilities.Permissions
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class PhotoMapActivity.
@@ -33,11 +35,12 @@ import uk.ac.shef.oak.com4510.services.PhotoMapLocationService
 class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityPhotoMapBinding
     private var locationFABState: Boolean = false
+
+    //region Location Service related variables
     // Necessary parameters for the location request
-    private var interval : Long = 20000
+    private var interval : Long = ServicesUtilities.TRACKING_INTERVAL
     private lateinit var mContext: Context
-    private val mapView: MapView? = null
-    private var markerLocationPairsList = mutableListOf<Pair<String, Location>>()
+
     // The location request
     private lateinit var mLocationRequest: LocationRequest
 
@@ -49,32 +52,28 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
     // The intent with which the service is called
     private lateinit var mLocationPendingIntent: PendingIntent
+    //endregion
+
+    //region Map Related Variables
+    // Map view variable
+    private val mapView: MapView? = null
+
+    // Markers and adjacent photo locations list to enable clicking
+    private var markerLocationPairsList = mutableListOf<Pair<String, Location>>()
+    //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPhotoMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setActivity(this)
-        setContext(this)
+        // Configures map and location related service
+        setupMapAndLocationService()
 
-        // Setting the location intent to the desired service
-        locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
-
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-
-        mLocationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY, interval
-        ).build()
-
+        // Configures current location button
         configureLocationButton()
 
         // TODO Fix floating button position
-        // TODO If no photo locations exist, display snackbar
     }
 
     //region Button Configurations
@@ -88,19 +87,28 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      * Sets click listener for the current location button.
      */
     private fun configureLocationButton(){
-        val locationButton = binding.activityPhotoMapFabLocation
-        locationButton.setOnClickListener{
-            if (!locationFABState){
-                locationFABState = true
-                locationButton.setImageResource(R.drawable.ic_location_on)
-                startLocationUpdates()
+            val locationButton = binding.activityPhotoMapFabLocation
+            locationButton.setOnClickListener{
+                // Checks if location permissions have been granted
+                if(!Permissions.canAccessLocation(this)){
+                    // Informs the user
+                    displaySnackbar(binding.root, R.string.location_missing_snackbar)
+                }
+
+                // If location permissions granted, enable the button
+                else{
+                    if (!locationFABState){
+                        locationFABState = true
+                        locationButton.setImageResource(R.drawable.ic_location_on)
+                        startLocationUpdates()
+                    }
+                    else {
+                        locationFABState = false
+                        locationButton.setImageResource(R.drawable.ic_location_off)
+                        stopLocationUpdates()
+                    }
+                }
             }
-            else {
-                locationFABState = false
-                locationButton.setImageResource(R.drawable.ic_location_off)
-                stopLocationUpdates()
-            }
-        }
     }
     //endregion
 
@@ -114,6 +122,10 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
 
         // Gets all locations
         tripPlannerViewModel.photoLocations.observe(this){
+            // If no photos exist, display a snackbar
+            if(it.isEmpty()){
+                displaySnackbar(binding.root, R.string.no_photos_snackbar)
+            }
             for (photoLocation in it){
                 // Puts a location marker on the map
                 putLocationMarkerOnMap(photoLocation)
@@ -192,6 +204,31 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
     //endregion
 
     //region Location Service related
+    /**
+     * Configures map element and location service related variables.
+     */
+    private fun setupMapAndLocationService(){
+        // Variables for location service functionality
+        setActivity(this)
+        setContext(this)
+
+        // Setting the location intent to the desired service
+        locationIntent = Intent(mContext, PhotoMapLocationService::class.java)
+
+        // Setting up the map
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        // Setting up the location provider
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Setting up the location request
+        mLocationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY, interval
+        ).build()
+    }
+
     /**
      * A function that initiates the location intent, checks if necessary permissions
      * have been granted and if so starts the location service.
