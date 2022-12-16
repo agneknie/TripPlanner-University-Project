@@ -85,14 +85,45 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         // Adds and configures all button listeners
         addAndConfigureButtonListeners()
 
+        // Populates the map view in the activity
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.activity_trip_trip_map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
         // Configures Map & related services
         configureMapAndLocationService()
 
-        // Starts updating the location
-        startLocationUpdates()
-
         // TODO Fix floating button positions
         // TODO Fix: when second trip is started in the same session, location updates don't work. Seems to launch two multiple activities. Could be related to finishing the activity properly
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Starts updating the location
+        startLocationUpdates()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mMap.clear()
+        Log.e("TripTripActivity", "Activity destroyed")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        // Setups current trip's id
+        setCurrentTripId()
+
+        // Configures camera & gallery button visibility based on permissions granted
+        configureButtonVisibility()
+
+        // Adds and configures all button listeners
+        addAndConfigureButtonListeners()
+
+        // Configures Map & related services
+        configureMapAndLocationService()
     }
 
     //region Navigation related methods
@@ -103,7 +134,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
         stopLocationUpdates()
-        finish()
+        activity?.finishAndRemoveTask()
     }
 
     /**
@@ -178,7 +209,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
             }
 
             // TODO look into this for multiple trips for same session: onBackPressedDispatcher.onBackPressed()
-            activity?.finish()
+            activity?.finishAndRemoveTask()
 //            val handler = Handler()
 //            handler.postDelayed(Runnable {
 //                finish()
@@ -234,11 +265,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
 
         // Setting the location intent to the desired service
         locationIntent = Intent(mapContext, LocationService::class.java)
-
-        // Populates the map view in the activity
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.activity_trip_trip_map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
 
         // Configures and starts location & related services
         mapFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)

@@ -216,6 +216,7 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
         if(this::mLocationPendingIntent.isInitialized)
             mFusedLocationProviderClient.removeLocationUpdates(mLocationPendingIntent)
         stopService(locationIntent)
+        mMap.clear()
     }
 
     /**
