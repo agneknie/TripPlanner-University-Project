@@ -16,9 +16,9 @@ import uk.ac.shef.oak.com4510.R
  * Deals with permissions for the application. To be used in the launch activity.
  * For each additional permission:
  *
- * TODO 1. Add to manifest;
- * TODO 2. Add to REQUIRED_PERMISSIONS;
- * TODO 3. Add canX method, to act accordingly in an activity, where permission is not granted.
+ * 1. Add to manifest;
+ * 2. Add to REQUIRED_PERMISSIONS;
+ * 3. Add canX method, to act accordingly in an activity, where permission is not granted.
  */
 class Permissions {
     companion object{

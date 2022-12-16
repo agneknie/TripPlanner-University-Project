@@ -11,6 +11,11 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 import uk.ac.shef.oak.com4510.views.PhotoDetailsActivity
 
+/**
+ * Class TripPhotoGallery.
+ *
+ * Handles the recycler view for Trip Photo Gallery.
+ */
 class TripPhotoGallery (
     private val invokingActivity: uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity,
     private val tripPlannerViewModel: TripPlannerViewModel,

@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
@@ -92,9 +91,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
 
         // Configures Map & related services
         configureMapAndLocationService()
-
-        // TODO Fix floating button positions
-        // TODO Fix: when second trip is started in the same session, location updates don't work. Seems to launch two multiple activities. Could be related to finishing the activity properly
     }
 
     override fun onResume() {
@@ -207,13 +203,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
                     setResult(RESULT_OK, intent)
                 }
             }
-
-            // TODO look into this for multiple trips for same session: onBackPressedDispatcher.onBackPressed()
             activity?.finishAndRemoveTask()
-//            val handler = Handler()
-//            handler.postDelayed(Runnable {
-//                finish()
-//            }, 100) // 5000ms delay
         }
     }
 
@@ -362,10 +352,28 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         }
 
         /**
-         * Gets current Trip's id in the dataabase.
+         * Gets current Trip's id in the database.
          */
         fun getCurrentTripId(): Int{
             return (activity!! as TripTripActivity).currentTripId
+        }
+
+        /**
+         * Make a snackbar on the current activity.
+         * Uses string resource id for message.
+         */
+        fun makeSnackbar(messageResourceId :Int){
+            val thisActivity = (activity!! as TripTripActivity)
+            return thisActivity.displaySnackbar(thisActivity.binding.root, messageResourceId)
+        }
+
+        /**
+         * Make a snackbar on the current activity.
+         * Uses string for message.
+         */
+        fun makeSnackbar(messageString :String){
+            val thisActivity = (activity!! as TripTripActivity)
+            return thisActivity.displaySnackbar(thisActivity.binding.root, messageString)
         }
 
     }

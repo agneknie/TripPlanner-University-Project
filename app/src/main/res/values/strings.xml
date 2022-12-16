@@ -52,8 +52,11 @@
     <string name="updated_location_snackbar">Updated Location!</string>
     <string name="location_handling_unsuccessful_snackbar">Uh oh. Something weird is happening with Your Location.</string>
     <string name="cannot_write_map_snackbar">Uh oh. Cannot display on the Map.</string>
+    <string name="temperature_not_available_snackbar">Temperature Sensor not Available.</string>
+    <string name="pressure_not_available_snackbar">Pressure Sensor not Available.</string>
+    <string name="location_missing_snackbar">Location sensor missing or permission not granted.</string>
+    <string name="no_photos_snackbar">No Photos Available :(</string>
+    <string name="no_trips_snackbar">No Trips Available :(</string>
 
-    <!-- Photo Gallery  -->
-    <string-array name="filter_spinner"><item>ID</item><item>Location</item><item>Tag</item></string-array>
     <string name="image_button">Sort button</string>
 </resources>

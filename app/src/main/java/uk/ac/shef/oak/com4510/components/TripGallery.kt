@@ -11,6 +11,11 @@ import uk.ac.shef.oak.com4510.utilities.IntentKeys
 import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 import uk.ac.shef.oak.com4510.views.TripOverviewActivity
 
+/**
+ * Class TripGallery.
+ *
+ * Handles the recycler view for Trip Gallery.
+ */
 class TripGallery(
     private val invokingActivity: uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity,
     private val tripPlannerViewModel: TripPlannerViewModel)
@@ -37,6 +42,10 @@ class TripGallery(
         tripRecyclerView.layoutManager = StaggeredGridLayoutManager(NUMBER_OF_COLUMNS, StaggeredGridLayoutManager.VERTICAL)
 
         tripPlannerViewModel.allTrips.observe(invokingActivity){
+            // If no trips exist, display a snackbar
+            if(it.isEmpty()){
+                invokingActivity.displaySnackbar(tripRecyclerView, R.string.no_trips_snackbar)
+            }
             it?.let{
                 tripAdapter.submitList(it)
             }

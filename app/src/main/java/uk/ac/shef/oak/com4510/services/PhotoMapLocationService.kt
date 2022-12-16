@@ -13,22 +13,24 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.IBinder
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import uk.ac.shef.oak.com4510.R
+import uk.ac.shef.oak.com4510.helpers.MapHelper
+import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 import java.text.DateFormat
 import java.util.*
 import uk.ac.shef.oak.com4510.views.PhotoMapActivity
 
+/**
+ * Class PhotoMapLocationService.
+ *
+ * Handles user's location tracking in the PhotoMap.
+ *
+ * Uses Google Maps API.
+ */
 class PhotoMapLocationService : Service {
-
-    // TODO Add method comments, class comments and regions as LocationService has
-    // TODO Refactor code as LocationService
-
-
     // Initialise variables for Sensor Access.
     private lateinit var sensorManager: SensorManager
     private var mPressureSensor: Sensor? = null
@@ -39,16 +41,6 @@ class PhotoMapLocationService : Service {
 
     private var temperature: String? = null
     private var pressure: String? = null
-
-    companion object {
-        var currentService: LocationService? = null
-
-        // it is static so to make sure that it is always initialised when the viewmodel live data is
-        // is created, otherwise you risk a disconnection
-        var counter: MutableLiveData<Int> = MutableLiveData(0)
-        private val TAG = PhotoMapLocationService::class.java.simpleName
-        private const val NOTIFICATION_ID = 9974
-    }
 
     private var mCurrentLocation : Location? = null
     private var mLastLocation : Location? = null
@@ -64,7 +56,6 @@ class PhotoMapLocationService : Service {
 
     override fun onCreate() {
         super.onCreate()
-        Log.i("Location Service", "onCreate finished")
 
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mPressureSensor = sensorManager.getDefaultSensor(TYPE_PRESSURE)
@@ -74,13 +65,10 @@ class PhotoMapLocationService : Service {
             // Functions for when sensor value changes
             override fun onSensorChanged(event: SensorEvent) {
                 pressure = event.values[0].toString()
-                Log.i(TAG,"Current Pressure: $pressure")
-//                val ls_min_delay = lightSensor?.minDelay.toString()
-//                Log.i(TAG, "Minimum Light Sensor Delay: $ls_min_delay")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                // Ignoring
+                // Not necessary in this implementation
             }
         }
 
@@ -88,32 +76,25 @@ class PhotoMapLocationService : Service {
             // Functions for when sensor value changes
             override fun onSensorChanged(event: SensorEvent) {
                 temperature = event.values[0].toString()
-
-//                val ls_min_delay = lightSensor?.minDelay.toString()
-//                Log.i(TAG, "Minimum Light Sensor Delay: $ls_min_delay")
             }
 
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                // Ignoring
+                // Not necessary in this implementation
             }
         }
 
         if (mTemperatureSensor != null) {
-            Log.i(TAG, "Successfully registered temperature listener...")
             sensorManager.registerListener(mTemperatureListener, mTemperatureSensor,
                 SensorManager.SENSOR_DELAY_NORMAL)
         } else {
-            Log.i(TAG, "This phone doesn't have a temperature sensor...")
-            temperature = "UNAVAILABLE"
+            temperature = ServicesUtilities.DEFAULT_SENSOR_VALUE
         }
 
         if (mPressureSensor != null) {
-            Log.i(TAG, "Successfully registered barometer listener...")
             sensorManager.registerListener(mPressureListener, mPressureSensor,
                 SensorManager.SENSOR_DELAY_NORMAL)
         } else {
-            Log.i(TAG, "This phone doesn't have a pressure sensor...")
-            pressure = "UNAVAILABLE"
+            pressure = ServicesUtilities.DEFAULT_SENSOR_VALUE
         }
 
     }
@@ -128,18 +109,14 @@ class PhotoMapLocationService : Service {
             if (locResults != null) {
                 for (location in locResults.locations) {
                     if (location == null) continue
-
-                    Log.i(TAG, "Current Location: $location")
                     mCurrentLocation = location
                     mLastUpdateTime = DateFormat.getTimeInstance().format(Date())
                     var msg = ""
-                    //Log.i("This is in service, MAP", "New Location:" + mCurrentLocation.toString())
 
                     if (PhotoMapActivity.getActivity() != null)
                         PhotoMapActivity.getActivity()?.runOnUiThread(Runnable {
                             try {
                                 if (mLastLocation == null) {
-                                    Log.i(TAG, "Location initialised: ${mCurrentLocation}.")
                                     msg = "Initialised Location"
                                     lastLocCircle = PhotoMapActivity.getMap().addCircle(
                                         CircleOptions().center(
@@ -162,39 +139,38 @@ class PhotoMapLocationService : Service {
                                     if (mCurrentLocation != mLastLocation) {
                                         var distance = mLastLocation!!.distanceTo(mCurrentLocation!!)
                                         if (distance > 20) {
-                                            Log.i(TAG, "Location has changed: ${mCurrentLocation}.")
                                             msg ="Updated Location"
                                             lastLocCircle?.remove()
                                             lastLocCircle = PhotoMapActivity.getMap().addCircle(
-                                                CircleOptions().center(
-                                                    LatLng(
-                                                        mCurrentLocation!!.latitude,
-                                                        mCurrentLocation!!.longitude
-                                                    )
-                                                ).radius(10.0).fillColor(Color.CYAN).strokeColor(Color.CYAN)
+                                                CircleOptions()
+                                                    .center(
+                                                        LatLng(
+                                                            mCurrentLocation!!.latitude,
+                                                            mCurrentLocation!!.longitude
+                                                        ))
+                                                    .radius(MapHelper.MAP_CURRENT_LOCATION_RADIUS)
+                                                    .fillColor(MapHelper.MAP_CURRENT_LOCATION_COLOUR)
+                                                    .strokeColor(MapHelper.MAP_CURRENT_LOCATION_COLOUR)
                                             )
                                             PhotoMapActivity.getMap().moveCamera(
                                                 CameraUpdateFactory.newLatLngZoom(
                                                     LatLng(
                                                         mCurrentLocation!!.latitude,
                                                         mCurrentLocation!!.longitude
-                                                    ), 14.0f
+                                                    ), MapHelper.MAP_ZOOM
                                                 )
                                             )
 
                                             mLastLocation = mCurrentLocation
                                         } else {
-                                            Log.i(TAG, "Location hasn't changed: ${mCurrentLocation}.")
                                             msg = "Location hasn't changed."
                                         }
                                     }
                                 }
-                                val duration = Toast.LENGTH_SHORT
-                                var toast = Toast.makeText(applicationContext, msg, duration)
-                                // to show the toast
-                                toast.show();
+                                // Informs the user
+                                PhotoMapActivity.makeSnackbar(msg)
                             } catch (e: java.lang.Exception) {
-                                Log.i(TAG, "Error, cannot write on map " + e.message)
+                                PhotoMapActivity.makeSnackbar(R.string.cannot_write_map_snackbar)
                             }
                         })
                 }
@@ -219,7 +195,6 @@ class PhotoMapLocationService : Service {
         super.onDestroy()
         sensorManager.unregisterListener(mPressureListener)
         sensorManager.unregisterListener(mTemperatureListener)
-        Log.i("Service", "Ending Service...")
     }
 
 }

@@ -9,20 +9,68 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import uk.ac.shef.oak.com4510.R
+import uk.ac.shef.oak.com4510.helpers.PhotoSortingOption
 import uk.ac.shef.oak.com4510.models.Photo
+import uk.ac.shef.oak.com4510.viewmodels.TripPlannerViewModel
 
+/**
+ * Class GalleryPhotoAdapter.
+ *
+ * Provides adapter(ListAdapter) functionality to the Photo RecyclerView.
+ */
 class GalleryPhotoAdapter (
-    val galleryPhotoItemSelectedListener: GalleryPhotoItemSelectedListener): ListAdapter<Photo, GalleryPhotoAdapter.GalleryPhotoViewHolder>(
+    val galleryPhotoItemSelectedListener: GalleryPhotoItemSelectedListener,
+    val tripPlannerViewModel: TripPlannerViewModel): ListAdapter<Photo, GalleryPhotoAdapter.GalleryPhotoViewHolder>(
     GalleryPhotoComparator())
 {
-    private val photos = mutableListOf<Photo>()
-    fun updateData(newPhoto: List<Photo>) {
-        photos.clear()
-        photos.addAll(newPhoto)
-        notifyDataSetChanged()
-    }
     lateinit var context: Context
 
+    //region Photo List Sorting
+    /**
+     * Updates the photo list in the adapter, sorting it with the
+     * provided sorting option.
+     */
+    fun updateData(photoSortingOption: PhotoSortingOption){
+        when (photoSortingOption) {
+            PhotoSortingOption.DEFAULT -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.photoId }
+                submitList(list)
+            }
+            PhotoSortingOption.LOCATION -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.locationId }
+                submitList(list)
+            }
+            PhotoSortingOption.TAG -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.tagId }
+                submitList(list)
+            }
+            PhotoSortingOption.TITLE -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.title }
+                submitList(list)
+            }
+            PhotoSortingOption.DESCRIPTION -> {
+                val currentListThis = currentList
+                val list = currentListThis.sortedBy { it.description }
+                submitList(list)
+            }
+        }
+    }
+
+    /**
+     * Reverses order of the current photo list.
+     */
+    fun reverseOrder(){
+        val currentListThis = currentList
+        val list = currentListThis.reversed()
+        submitList(list)
+    }
+    //endregion
+
+    //region Photo Clicking Implementation
     interface GalleryPhotoItemSelectedListener{
         fun onGalleryPhotoItemSelected(photo: Photo, photoView: View)
     }
@@ -41,17 +89,9 @@ class GalleryPhotoAdapter (
             }
         }
     }
+    //endregion
 
-    fun clear(){
-        photos.clear()
-        notifyDataSetChanged()
-    }
-
-    fun reverse(){
-        photos.reverse()
-        notifyDataSetChanged()
-    }
-
+    //region Comparator Class
     class GalleryPhotoComparator: DiffUtil.ItemCallback<Photo>(){
         override fun areItemsTheSame(oldPhoto: Photo, newPhoto: Photo): Boolean {
             return oldPhoto.photoId === newPhoto.photoId
@@ -75,4 +115,5 @@ class GalleryPhotoAdapter (
     override fun onBindViewHolder(holder: GalleryPhotoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+    //endregion
 }

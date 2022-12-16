@@ -1,5 +1,6 @@
 package uk.ac.shef.oak.com4510.helpers
 
+import android.graphics.Color
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -7,7 +8,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import uk.ac.shef.oak.com4510.models.Location
-import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class MapHelper.
@@ -17,11 +17,26 @@ import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
  */
 class MapHelper {
     companion object{
+        // Default map zoom
+        const val MAP_ZOOM = 17.0f
+
+        // Current location colour
+        const val MAP_CURRENT_LOCATION_RADIUS = 10.0
+
+        // Current location radius
+        const val MAP_CURRENT_LOCATION_COLOUR = Color.CYAN
+
+        // Map line between points default width
+        const val MAP_LINE_WIDTH = 5F
+
+        // Map line between points default colour
+        const val MAP_LINE_COLOUR = Color.RED
+
         /**
          * Adds location marker for the given location
          */
         fun addLocationMarker(map: GoogleMap, location: Location, defaultColour: Boolean){
-            var markerOptions = MarkerOptions()
+            val markerOptions = MarkerOptions()
                 .position(LatLng(location.xCoordinate, location.yCoordinate))
                 .title(location.getLocationMarkerTitle())
 
@@ -40,7 +55,7 @@ class MapHelper {
             map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(tripLocation.xCoordinate, tripLocation.yCoordinate),
-                    ServicesUtilities.MAP_ZOOM
+                    MAP_ZOOM
                 )
             )
         }
@@ -53,8 +68,8 @@ class MapHelper {
                 PolylineOptions()
                     .clickable(true)
                     .add(LatLng(locationOne.xCoordinate, locationOne.yCoordinate), LatLng(locationTwo.xCoordinate, locationTwo.yCoordinate))
-                    .width(ServicesUtilities.MAP_LINE_WIDTH)
-                    .color(ServicesUtilities.MAP_LINE_COLOUR)
+                    .width(MAP_LINE_WIDTH)
+                    .color(MAP_LINE_COLOUR)
                     .geodesic(true) // to make the line curve
             )
         }

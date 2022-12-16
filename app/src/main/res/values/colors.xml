@@ -9,6 +9,6 @@
     <color name="app_background">#FF303030</color>
     <color name="app_background_popup_tint">#B3000000</color>
     <color name="pane_border">#FF707070</color>
-    <!-- TODO Without this I get a resource linking error, even if it's not used anywhere -->
+    <!-- Without this I get a resource linking error, even if it's not used anywhere -->
     <color name="main_light_blue">@color/main_colour</color>
 </resources>
