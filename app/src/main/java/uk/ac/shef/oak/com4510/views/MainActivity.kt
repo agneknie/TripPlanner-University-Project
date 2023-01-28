@@ -23,6 +23,8 @@ import java.time.LocalDateTime
  * the application's features.
  */
 // TODO Check IDE errors and warnings
+// TODO Refactor README
+// TODO Add app screenshots and flows to README
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
