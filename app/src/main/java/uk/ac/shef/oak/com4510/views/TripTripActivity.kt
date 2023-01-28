@@ -123,10 +123,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     }
 
     //region Navigation related methods
-//    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
-//    override fun onBackPressed() {
-//        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
-//    }
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
         stopLocationUpdates()

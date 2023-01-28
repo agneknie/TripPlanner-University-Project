@@ -16,12 +16,10 @@ import uk.ac.shef.oak.com4510.models.Tag
  *
  * Provides adapter(ListAdapter) functionality to the Tags RecyclerView.
  */
-class TagAdapter(
-    val tagItemClickListener: TagItemClickListener
-): ListAdapter<Tag, TagAdapter.TagViewHolder>(
-    TagComparator()
-)
+class TagAdapter(val tagItemClickListener: TagItemClickListener)
+    : ListAdapter<Tag, TagAdapter.TagViewHolder>(TagComparator())
 {
+
     lateinit var context: Context
 
     /**

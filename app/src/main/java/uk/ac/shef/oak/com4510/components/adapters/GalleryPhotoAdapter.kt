@@ -31,33 +31,27 @@ class GalleryPhotoAdapter (
      * provided sorting option.
      */
     fun updateData(photoSortingOption: PhotoSortingOption){
+        val currentListThis = currentList
+        val list: List<Photo>
+
         when (photoSortingOption) {
             PhotoSortingOption.DEFAULT -> {
-                val currentListThis = currentList
-                val list = currentListThis.sortedBy { it.photoId }
-                submitList(list)
+                list = currentListThis.sortedBy { it.photoId }
             }
             PhotoSortingOption.LOCATION -> {
-                val currentListThis = currentList
-                val list = currentListThis.sortedBy { it.locationId }
-                submitList(list)
+                list = currentListThis.sortedBy { it.locationId }
             }
             PhotoSortingOption.TAG -> {
-                val currentListThis = currentList
-                val list = currentListThis.sortedBy { it.tagId }
-                submitList(list)
+                list = currentListThis.sortedBy { it.tagId }
             }
             PhotoSortingOption.TITLE -> {
-                val currentListThis = currentList
-                val list = currentListThis.sortedBy { it.title }
-                submitList(list)
+                list = currentListThis.sortedBy { it.title }
             }
             PhotoSortingOption.DESCRIPTION -> {
-                val currentListThis = currentList
-                val list = currentListThis.sortedBy { it.description }
-                submitList(list)
+                list = currentListThis.sortedBy { it.description }
             }
         }
+        submitList(list)
     }
 
     /**

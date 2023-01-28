@@ -16,6 +16,7 @@ import java.lang.IllegalArgumentException
  * ViewModel of the application. Handles database querying through room.
  * Accesses TripRepository, LocationRepository, PhotoRepository & TagRepository.
  */
+// TODO Add regions
 class TripPlannerViewModel (
     private val tripRepository: TripRepository,
     private val locationRepository: LocationRepository,

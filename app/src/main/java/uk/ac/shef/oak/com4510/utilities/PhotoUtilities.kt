@@ -35,28 +35,6 @@ class PhotoUtilities {
         private const val THUMBNAIL_SUFFIX = ".jpg"
 
         /**
-         * Retrieves or makes a thumbnail and returns its path as a string.
-         *
-         * Used when thumbnail exists.
-         */
-        fun getOrMakeThumbnail(context: Context, photo: Photo): String {
-            val thumbnailStringPath = photo.thumbnailPath?.toString() ?: String()
-            return getOrMakeThumbNail(context, thumbnailStringPath, photo.photoPath.toString())
-        }
-
-        /**
-         * Returns String, which is an URI, which points to a thumbnail file if it exits.
-         * Otherwise, creates it before returning the URI as String object.
-         *
-         * Used when it is not sure if the thumbnail exists or not.
-         */
-        fun getOrMakeThumbNail(context: Context, thumbnailPath: String, photoPath: String): String {
-            return if(thumbnailPath.isBlank() || !File(context.cacheDir, thumbnailPath).exists()){
-                getOrMakeThumbNail(context, photoPath)
-            } else thumbnailPath
-        }
-
-        /**
          * Returns String, which is an URI, which points to a thumbnail file if it exits.
          * Otherwise, creates it before returning the URI as String object.
          *

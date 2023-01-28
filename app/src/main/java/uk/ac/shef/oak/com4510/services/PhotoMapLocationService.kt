@@ -30,6 +30,7 @@ import uk.ac.shef.oak.com4510.views.PhotoMapActivity
  *
  * Uses Google Maps API.
  */
+// TODO Refactor as LocationService.
 class PhotoMapLocationService : Service {
     // Initialise variables for Sensor Access.
     private lateinit var sensorManager: SensorManager

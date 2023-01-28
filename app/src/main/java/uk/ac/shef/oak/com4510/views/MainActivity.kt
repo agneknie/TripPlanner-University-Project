@@ -22,6 +22,7 @@ import java.time.LocalDateTime
  * Starting point of the application, which handles navigation to
  * the application's features.
  */
+// TODO Check IDE errors and warnings
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
@@ -48,7 +49,7 @@ class MainActivity : TripPlannerAppCompatActivity() {
         //If database is empty, adds example trip
         tripPlannerViewModel.allTrips.observe(this){
             if(it.isEmpty())
-                DatabaseSeed.seedExampleTrip(tripPlannerViewModel)
+                DatabaseSeed.seedWithExamples(tripPlannerViewModel)
         }
     }
 
