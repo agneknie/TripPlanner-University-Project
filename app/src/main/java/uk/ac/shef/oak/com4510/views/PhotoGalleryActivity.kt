@@ -28,10 +28,6 @@ class PhotoGalleryActivity: TripPlannerAppCompatActivity() {
 
         initialiseItemSelectListener()
         initialiseSortingDirectionClickListener()
-
-        // TODO Sorting doesn't work
-        // TODO Reverse button doesn't work
-        // TODO Change reverse button to image
     }
 
     private fun initialiseItemSelectListener() {

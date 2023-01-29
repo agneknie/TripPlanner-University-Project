@@ -1,6 +1,5 @@
 package uk.ac.shef.oak.com4510.services
 
-import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
 import android.location.Location
@@ -91,7 +90,6 @@ class PhotoMapLocationService : Service {
     //endregion
 
     //region Location Tracking & Handling
-    @SuppressLint("LongLogTag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 

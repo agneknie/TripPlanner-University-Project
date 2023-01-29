@@ -15,10 +15,8 @@ import uk.ac.shef.oak.com4510.utilities.Permissions
  * Starting point of the application, which handles navigation to
  * the application's features.
  */
-// TODO Check IDE errors and warnings
 // TODO Refactor README
 // TODO Add app screenshots and flows to README
-// TODO Remove Log statements
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
