@@ -16,12 +16,6 @@ As per assignment requirements, the application requires > Android 11.0 (API Lev
 The application should compile and install on both physical and virtual device when the root folder is
 opened as a project in Android Studio or IntelliJ IDEA.
 
-**Important:** Because the application uses the Google Maps API key provided by the module,
-you might get a warning when installing it. If you do, **do not click 'OK', instead expand the
-dialog and select 'Install anyway (unsafe)'** as depicted in the picture bellow:
-
-![Unsafe App Popup](readme_related/Unsafe%20Popup.png)
-
 For full functionality, the device needs to have:
 - GPS Sensor;
 - Barometric Sensor;
@@ -47,7 +41,7 @@ during the trip on the map. Further inspection allows to view original photo in 
 ## Photo Map
 Allows the user to observe all photos, which were taken or added during their trips as locations
 on the map. Similarly, as in the Photo Gallery, photo location selection and further photo inspection
-is possible.
+is possible. As well as that, the user can see their current location upon request.
 
 ## Past Trips (Extra Feature)
 Allows user to view a list of all past trips. Furthermore, allows trip inspection, where the trip
@@ -57,5 +51,20 @@ Same as before, further photo details can be inspected
 # Application Structure
 ## Activity Diagram
 ![Activity Diagram](readme_related/Activity%20Diagram.png)
-## Database Diagram
-![Database Diagram](readme_related/Database%20Diagram.png)
+
+# Copyright & Disclaimer
+
+## Copyright
+The source code of the application is licensed under the GNU General Public License 3.0, which 
+can be found [here](LICENSE).
+
+This program is distributed in the hope that it will be useful, but without any warranty; without even the 
+implied warranty of merchantability or fitness for a particular purpose. See the GNU General Public License for 
+more details.
+
+## Disclaimer for Installation
+**Important:** Because the application uses the Google Maps API key provided by the module,
+you might get a warning when installing it. If you do, **do not click 'OK', instead expand the
+dialog and select 'Install anyway (unsafe)'** as depicted in the picture bellow:
+
+![Unsafe App Popup](readme_related/Unsafe%20Popup.png)
