@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import uk.ac.shef.oak.com4510.data.access.daos.TripDao
 import uk.ac.shef.oak.com4510.data.access.entities.TripEntity
-import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.models.Trip
 import java.time.LocalDateTime
 
@@ -28,11 +27,6 @@ class TripRepository(private val tripDao: TripDao) {
      * Get Trip by its tripId.
      */
     fun getTrip(tripId: Int) = tripDao.getTrip(tripId).asLiveData()
-
-    /**
-     * Get a List of Trips by Tag.
-     */
-    fun getTripsByTag(tag: Tag) = tripDao.getTripsByTag(tag.tagId).asLiveData()
 
     /**
      * Insert a Trip in the database.
@@ -82,14 +76,5 @@ fun Trip.asDatabaseEntity(): TripEntity {
         title = title,
         tagId = tagId
     )
-}
-
-/**
- * Maps List of Trip to List of TripEntity.
- */
-fun List<Trip>.asDatabaseEntitites(): List<TripEntity>{
-    return map{
-        it.asDatabaseEntity()
-    }
 }
 //endregion

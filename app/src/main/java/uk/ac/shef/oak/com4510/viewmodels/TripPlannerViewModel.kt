@@ -8,7 +8,6 @@ import uk.ac.shef.oak.com4510.models.Tag
 import uk.ac.shef.oak.com4510.models.Trip
 import kotlinx.coroutines.launch
 import uk.ac.shef.oak.com4510.models.Photo
-import java.lang.IllegalArgumentException
 
 /**
  * Class TripPlannerViewModel.
@@ -21,7 +20,7 @@ class TripPlannerViewModel (
     private val locationRepository: LocationRepository,
     private val photoRepository: PhotoRepository,
     private val tagRepository: TagRepository,
-    private val applicationContext: Application): AndroidViewModel(applicationContext){
+    applicationContext: Application): AndroidViewModel(applicationContext){
 
     //region Trip Related
     // All trips in the repository

@@ -11,7 +11,6 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.IBinder
-import android.util.Log
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -61,8 +60,8 @@ class LocationService : Service {
 
     //region Constructors
     // Necessary for Service Implementation
-    constructor(name: String?) : super() {}
-    constructor() : super() {}
+    constructor(name: String?) : super()
+    constructor() : super()
     //endregion
 
     override fun onCreate() {
@@ -262,24 +261,21 @@ class LocationService : Service {
      * and saves it in the service for later access and in the database.
      */
     private fun getAndHandleLocation(): String{
-        val message: String
 
         // Initialises location if it is the first one
-        if (mLastLocation == null)
-            message = handleFirstLocation()
+        val message: String = if (mLastLocation == null)
+            handleFirstLocation()
 
         // Updates current location with the new location if it isn't the previous one
         else if (mCurrentLocation != mLastLocation) {
 
             // If location change is significant, proceeds to update current location
             if (locationChangeSignificant())
-                message = handleNewLocation()
+                handleNewLocation()
 
             // If location change is insignificant, informs the user
-            else message = getString(R.string.location_has_not_changed_snackbar)
-        }
-
-        else message = getString(R.string.location_handling_unsuccessful_snackbar)
+            else getString(R.string.location_has_not_changed_snackbar)
+        } else getString(R.string.location_handling_unsuccessful_snackbar)
 
         return message
     }

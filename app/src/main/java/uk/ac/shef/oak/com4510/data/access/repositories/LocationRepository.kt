@@ -15,9 +15,6 @@ import java.time.LocalDateTime
  */
 class LocationRepository(private val locationDao: LocationDao) {
 
-    // All locations
-    val allLocations: LiveData<List<LocationEntity>> = locationDao.getAllLocations().asLiveData()
-
     // All locations with photos
     val photoLocations: LiveData<List<LocationEntity>> = locationDao.getLocationsContainingPhotos().asLiveData()
 
@@ -88,14 +85,5 @@ fun Location.asDatabaseEntity(): LocationEntity {
         dateTime = dateTime.toString(),
         tripId = tripId
     )
-}
-
-/**
- * Maps List of Location to List of LocationEntity.
- */
-fun List<Location>.asDatabaseEntities(): List<LocationEntity>{
-    return map{
-        it.asDatabaseEntity()
-    }
 }
 //endregion

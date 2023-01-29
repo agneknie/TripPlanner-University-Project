@@ -30,7 +30,7 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun tagDao(): TagDao
 
     companion object{
-        private val DATABASE_NAME = "TripPlannerDatabase"
+        private const val DATABASE_NAME = "TripPlannerDatabase"
 
         @Volatile
         private var database_instance: AppDatabase? = null

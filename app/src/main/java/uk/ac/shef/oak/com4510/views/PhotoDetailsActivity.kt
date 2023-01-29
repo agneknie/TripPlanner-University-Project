@@ -2,14 +2,9 @@ package uk.ac.shef.oak.com4510.views
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.photo_details_panel.view.*
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
@@ -19,7 +14,6 @@ import uk.ac.shef.oak.com4510.helpers.MapHelper
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
 import uk.ac.shef.oak.com4510.utilities.IntentKeys
-import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
 
 /**
  * Class PhotoDetailsActivity.
@@ -164,10 +158,10 @@ class PhotoDetailsActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
                 configureMapDisplay(it)
 
                 // Configure temperature field
-                binding.activityPhotoDetailsEdTemperature.setText(it.temperature.toString())
+                binding.activityPhotoDetailsEdTemperature.setText(it.temperature)
 
                 // Configure pressure field
-                binding.activityPhotoDetailsEdPressure.setText(it.pressure.toString())
+                binding.activityPhotoDetailsEdPressure.setText(it.pressure)
             }
         }
     }

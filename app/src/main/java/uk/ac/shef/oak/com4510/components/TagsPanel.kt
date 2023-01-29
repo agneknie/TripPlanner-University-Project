@@ -53,7 +53,7 @@ class TagsPanel(
      * Returns true if a tag is currently selected & false
      * if no tag is selected.
      */
-    fun tagIsSelected(): Boolean{
+    private fun tagIsSelected(): Boolean{
         return selectedTag!= null && selectedTagView != null
     }
 
@@ -133,7 +133,7 @@ class TagsPanel(
      */
     override fun onTagItemClick(tag: Tag, tagView: View) {
         // If already selected tag was clicked
-        if(tag.equals(selectedTag)){
+        if(tag == selectedTag){
             resetTagColour(tagView)
 
             selectedTagView = null

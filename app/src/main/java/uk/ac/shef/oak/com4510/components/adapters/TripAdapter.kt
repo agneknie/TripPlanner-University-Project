@@ -61,7 +61,7 @@ class TripAdapter (
         }
 
         override fun areContentsTheSame(oldTrip: Trip, newTrip: Trip): Boolean {
-            return oldTrip.equals(newTrip)
+            return oldTrip == newTrip
         }
 
     }

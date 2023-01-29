@@ -14,7 +14,6 @@ import com.google.android.gms.location.LocationRequest
 import uk.ac.shef.oak.com4510.R
 
 import android.annotation.SuppressLint
-import android.util.Log
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.*
@@ -233,8 +232,6 @@ class PhotoMapActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
      */
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates() {
-        Log.e("LOCATION:", "Starting service...")
-
         mLocationPendingIntent =
             PendingIntent.getService(mContext,
                 1,

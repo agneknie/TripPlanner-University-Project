@@ -1,6 +1,5 @@
 package uk.ac.shef.oak.com4510.views
 
-import android.R
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -36,16 +35,16 @@ class PhotoGalleryActivity: TripPlannerAppCompatActivity() {
     }
 
     private fun initialiseItemSelectListener() {
-        var sortDropdown = binding.activityPhotoGallerySpSorting
+        val sortDropdown = binding.activityPhotoGallerySpSorting
 
         // Creates array adapter with photo sorting options objects to display
         val arrayAdapter: ArrayAdapter<PhotoSortingOption> = ArrayAdapter<PhotoSortingOption>(
             this,
-            R.layout.simple_spinner_item, PhotoSortingOption.values()
+            android.R.layout.simple_spinner_item, PhotoSortingOption.values()
         )
 
         // Specifies default layout to view dropdown
-        arrayAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         // Saves list of choices to the dropdown
         sortDropdown.adapter = arrayAdapter

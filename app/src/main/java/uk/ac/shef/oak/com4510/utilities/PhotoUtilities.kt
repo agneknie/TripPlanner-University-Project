@@ -6,7 +6,6 @@ import android.net.Uri
 import android.util.Size
 import androidx.core.net.toUri
 import uk.ac.shef.oak.com4510.R
-import uk.ac.shef.oak.com4510.models.Photo
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

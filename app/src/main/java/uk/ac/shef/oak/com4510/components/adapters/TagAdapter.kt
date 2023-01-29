@@ -61,7 +61,7 @@ class TagAdapter(val tagItemClickListener: TagItemClickListener)
         }
 
         override fun areContentsTheSame(oldTag: Tag, newTag: Tag): Boolean {
-            return oldTag.equals(newTag)
+            return oldTag == newTag
         }
 
     }
