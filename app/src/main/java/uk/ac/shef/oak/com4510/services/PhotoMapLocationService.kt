@@ -2,15 +2,7 @@ package uk.ac.shef.oak.com4510.services
 
 import android.annotation.SuppressLint
 import android.app.Service
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.hardware.Sensor
-import android.hardware.Sensor.TYPE_PRESSURE
-import android.hardware.Sensor.TYPE_AMBIENT_TEMPERATURE
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.location.Location
 import android.os.IBinder
 import com.google.android.gms.location.LocationResult
@@ -18,10 +10,11 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.helpers.MapHelper
+import uk.ac.shef.oak.com4510.helpers.MapHelper.Companion.MAP_CURRENT_LOCATION_COLOUR
+import uk.ac.shef.oak.com4510.helpers.MapHelper.Companion.MAP_CURRENT_LOCATION_RADIUS
 import uk.ac.shef.oak.com4510.utilities.ServicesUtilities
-import java.text.DateFormat
-import java.util.*
 import uk.ac.shef.oak.com4510.views.PhotoMapActivity
+import java.time.LocalDateTime
 
 /**
  * Class PhotoMapLocationService.
@@ -30,156 +23,176 @@ import uk.ac.shef.oak.com4510.views.PhotoMapActivity
  *
  * Uses Google Maps API.
  */
-// TODO Refactor as LocationService.
 class PhotoMapLocationService : Service {
-    // Initialise variables for Sensor Access.
-    private lateinit var sensorManager: SensorManager
-    private var mPressureSensor: Sensor? = null
-    private var mTemperatureSensor: Sensor? = null
 
-    private var mPressureListener: SensorEventListener? = null
-    private var mTemperatureListener: SensorEventListener? = null
-
-    private var temperature: String? = null
-    private var pressure: String? = null
-
+    //region Location related variables
+    // Location sensor variables
     private var mCurrentLocation : Location? = null
     private var mLastLocation : Location? = null
     private var mLastUpdateTime : String? = null
-    private var lastLocCircle: Circle? = null
+    private var lastLocationCircle: Circle? = null
+    //endregion
 
+    //region Binder Related Variables
     private var startMode : Int = 0
     private var binder : IBinder? = null
     private var allowRebind : Boolean = false
+    //endregion
 
+    //region Constructors
+    // Necessary for Service Implementation
     constructor(name: String?) : super() {}
     constructor() : super() {}
+    //endregion
 
-    override fun onCreate() {
-        super.onCreate()
+    //region Location Marker Display & Drawing on Map
+    /**
+     * Adds a location marker for the current location (mCurrentLocation),
+     * zooms camera to the newly added marker.
+     */
+    private fun addLocationMarkerAndZoomCamera(){
+        // Adds a new location marker
+        addCurrentLocationMarker()
 
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        mPressureSensor = sensorManager.getDefaultSensor(TYPE_PRESSURE)
-        mTemperatureSensor = sensorManager.getDefaultSensor(TYPE_AMBIENT_TEMPERATURE)
-
-        mPressureListener = object : SensorEventListener {
-            // Functions for when sensor value changes
-            override fun onSensorChanged(event: SensorEvent) {
-                pressure = event.values[0].toString()
-            }
-
-            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                // Not necessary in this implementation
-            }
-        }
-
-        mTemperatureListener = object : SensorEventListener {
-            // Functions for when sensor value changes
-            override fun onSensorChanged(event: SensorEvent) {
-                temperature = event.values[0].toString()
-            }
-
-            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-                // Not necessary in this implementation
-            }
-        }
-
-        if (mTemperatureSensor != null) {
-            sensorManager.registerListener(mTemperatureListener, mTemperatureSensor,
-                SensorManager.SENSOR_DELAY_NORMAL)
-        } else {
-            temperature = ServicesUtilities.DEFAULT_SENSOR_VALUE
-        }
-
-        if (mPressureSensor != null) {
-            sensorManager.registerListener(mPressureListener, mPressureSensor,
-                SensorManager.SENSOR_DELAY_NORMAL)
-        } else {
-            pressure = ServicesUtilities.DEFAULT_SENSOR_VALUE
-        }
-
+        // Moves the camera to new location
+        moveCameraToCurrentLocation()
     }
 
+    /**
+     * Removes the last location marker (if present) and adds a new location marker using
+     * the mCurrentLocation variable.
+     */
+    private fun addCurrentLocationMarker(){
+        // Remove previous marker if present
+        lastLocationCircle?.remove()
+
+        // Add current marker
+        lastLocationCircle = PhotoMapActivity.getMap().addCircle(
+            CircleOptions()
+                .center(LatLng(
+                    mCurrentLocation!!.latitude,
+                    mCurrentLocation!!.longitude
+                ))
+                .radius(MAP_CURRENT_LOCATION_RADIUS)
+                .fillColor(MAP_CURRENT_LOCATION_COLOUR)
+                .strokeColor(MAP_CURRENT_LOCATION_COLOUR)
+        )
+    }
+
+    /**
+     * Moves camera and zooms to the location, defined by mCurrentLocation.
+     */
+    private fun moveCameraToCurrentLocation(){
+        PhotoMapActivity.getMap().moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                LatLng(mCurrentLocation!!.latitude, mCurrentLocation!!.longitude),
+                MapHelper.MAP_ZOOM))
+    }
+    //endregion
+
+    //region Location Tracking & Handling
     @SuppressLint("LongLogTag")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-//        Log.d(TAG, "Starting the foreground service...")
-        //The service is starting
+
+        // The service is starting
         if (LocationResult.hasResult(intent!!)) {
-            val locResults = LocationResult.extractResult(intent)
-            if (locResults != null) {
-                for (location in locResults.locations) {
+            val locationResults = LocationResult.extractResult(intent)
+            if (locationResults != null) {
+
+                // For each location
+                for (location in locationResults.locations) {
                     if (location == null) continue
+
+                    // Get current location and its time
                     mCurrentLocation = location
-                    mLastUpdateTime = DateFormat.getTimeInstance().format(Date())
-                    var msg = ""
+                    mLastUpdateTime = LocalDateTime.now().toString()
 
+                    // If activity exists and its map is writable performs location plotting
                     if (PhotoMapActivity.getActivity() != null)
-                        PhotoMapActivity.getActivity()?.runOnUiThread(Runnable {
+                        PhotoMapActivity.getActivity()?.runOnUiThread {
                             try {
-                                if (mLastLocation == null) {
-                                    msg = "Initialised Location"
-                                    lastLocCircle = PhotoMapActivity.getMap().addCircle(
-                                        CircleOptions().center(
-                                            LatLng(
-                                                mCurrentLocation!!.latitude,
-                                                mCurrentLocation!!.longitude
-                                            )
-                                        ).radius(10.0).fillColor(Color.CYAN).strokeColor(Color.CYAN)
-                                    )
-                                    PhotoMapActivity.getMap().moveCamera(
-                                        CameraUpdateFactory.newLatLngZoom(
-                                            LatLng(
-                                                mCurrentLocation!!.latitude,
-                                                mCurrentLocation!!.longitude
-                                            ), 14.0f
-                                        )
-                                    )
-                                    mLastLocation = mCurrentLocation
-                                } else {
-                                    if (mCurrentLocation != mLastLocation) {
-                                        var distance = mLastLocation!!.distanceTo(mCurrentLocation!!)
-                                        if (distance > 20) {
-                                            msg ="Updated Location"
-                                            lastLocCircle?.remove()
-                                            lastLocCircle = PhotoMapActivity.getMap().addCircle(
-                                                CircleOptions()
-                                                    .center(
-                                                        LatLng(
-                                                            mCurrentLocation!!.latitude,
-                                                            mCurrentLocation!!.longitude
-                                                        ))
-                                                    .radius(MapHelper.MAP_CURRENT_LOCATION_RADIUS)
-                                                    .fillColor(MapHelper.MAP_CURRENT_LOCATION_COLOUR)
-                                                    .strokeColor(MapHelper.MAP_CURRENT_LOCATION_COLOUR)
-                                            )
-                                            PhotoMapActivity.getMap().moveCamera(
-                                                CameraUpdateFactory.newLatLngZoom(
-                                                    LatLng(
-                                                        mCurrentLocation!!.latitude,
-                                                        mCurrentLocation!!.longitude
-                                                    ), MapHelper.MAP_ZOOM
-                                                )
-                                            )
-
-                                            mLastLocation = mCurrentLocation
-                                        } else {
-                                            msg = "Location hasn't changed."
-                                        }
-                                    }
-                                }
-                                // Informs the user
-                                PhotoMapActivity.makeSnackbar(msg)
+                                // Define message to display to user if necessary
+                                val message = getAndHandleLocation()
+                                PhotoMapActivity.makeSnackbar(message)
                             } catch (e: java.lang.Exception) {
+                                System.err.println(e.message)
                                 PhotoMapActivity.makeSnackbar(R.string.cannot_write_map_snackbar)
                             }
-                        })
+                        }
                 }
             }
         }
         return startMode
     }
 
+    /**
+     * Handles the location by deciding whether it's a first location,
+     * new location or a significant change in location. Plots it on the map
+     * as user's current location.
+     */
+    private fun getAndHandleLocation(): String{
+        val message: String
+
+        // Initialises location if it is the first one
+        if (mLastLocation == null)
+            message = handleFirstLocation()
+
+        // Updates current location with the new location if it isn't the previous one
+        else if (mCurrentLocation != mLastLocation) {
+
+            // If location change is significant, proceeds to update current location
+            if (locationChangeSignificant())
+                message = handleNewLocation()
+
+            // If location change is insignificant, informs the user
+            else message = getString(R.string.location_has_not_changed_snackbar)
+        }
+
+        else message = getString(R.string.location_handling_unsuccessful_snackbar)
+
+        return message
+    }
+
+    /**
+     * Returns true, if the location change from the previous location
+     * is significant according to the LocationAndMapUtilities.LOCATION_CHANGE_THRESHOLD.
+     */
+    private fun locationChangeSignificant(): Boolean{
+        // Calculates if the location change is significant
+        val distance = mLastLocation!!.distanceTo(mCurrentLocation!!)
+
+        return distance > ServicesUtilities.LOCATION_CHANGE_THRESHOLD
+    }
+
+    /**
+     * When first location is tracked, takes care of its display.
+     */
+    private fun handleFirstLocation(): String{
+        // Adds first location marker and zooms camera to it
+        addLocationMarkerAndZoomCamera()
+
+        // Updates location
+        mLastLocation = mCurrentLocation
+
+        return getString(R.string.initialised_location_snackbar)
+    }
+
+    /**
+     * When a new but not a first location is tracked, takes care of its
+     * display.
+     */
+    private fun handleNewLocation(): String{
+        // Adds new location marker, zooms camera to it and draws line between points
+        addLocationMarkerAndZoomCamera()
+
+        mLastLocation = mCurrentLocation
+
+        return getString(R.string.updated_location_snackbar)
+    }
+    //endregion
+
+    // region Override Methods
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
@@ -191,11 +204,5 @@ class PhotoMapLocationService : Service {
     override fun onRebind(intent: Intent) {
         super.onRebind(intent)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        sensorManager.unregisterListener(mPressureListener)
-        sensorManager.unregisterListener(mTemperatureListener)
-    }
-
+    //endregion
 }

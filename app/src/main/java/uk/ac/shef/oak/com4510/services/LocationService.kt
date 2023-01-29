@@ -350,7 +350,6 @@ class LocationService : Service {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e("LocationService", "Destroying Service...")
         // Releases pressure and temperature listeners
         sensorManager.unregisterListener(mPressureListener)
         sensorManager.unregisterListener(mTemperatureListener)
