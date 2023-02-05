@@ -6,7 +6,7 @@ functionality. The main app features are outlined in the remainder of this secti
 
 Utilises Google Maps API functionality.
 
-Completed as an assessment on the COM4510 'Mobile Software Development' module at the University
+Completed as an assessment on the COM4510 'Software Development for Mobile Devices' module at the University
 of Sheffield. Achieved Grade: 75% (First Class).
 
 # Installation
