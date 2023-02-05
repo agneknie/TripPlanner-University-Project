@@ -7,14 +7,7 @@ import uk.ac.shef.oak.com4510.R
 import uk.ac.shef.oak.com4510.TripPlannerAppCompatActivity
 import uk.ac.shef.oak.com4510.data.access.database.DatabaseSeed
 import uk.ac.shef.oak.com4510.databinding.ActivityMainBinding
-import uk.ac.shef.oak.com4510.models.Location
-import uk.ac.shef.oak.com4510.models.Photo
-import uk.ac.shef.oak.com4510.models.Tag
-import uk.ac.shef.oak.com4510.models.Trip
 import uk.ac.shef.oak.com4510.utilities.Permissions
-import uk.ac.shef.oak.com4510.utilities.PhotoUtilities
-import java.io.File
-import java.time.LocalDateTime
 
 /**
  * Class MainActivity.
@@ -48,7 +41,7 @@ class MainActivity : TripPlannerAppCompatActivity() {
         //If database is empty, adds example trip
         tripPlannerViewModel.allTrips.observe(this){
             if(it.isEmpty())
-                DatabaseSeed.seedExampleTrip(tripPlannerViewModel)
+                DatabaseSeed.seedWithExamples(tripPlannerViewModel)
         }
     }
 

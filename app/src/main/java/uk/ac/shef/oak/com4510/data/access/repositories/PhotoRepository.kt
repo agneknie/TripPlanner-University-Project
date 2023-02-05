@@ -7,7 +7,6 @@ import uk.ac.shef.oak.com4510.data.access.daos.PhotoDao
 import uk.ac.shef.oak.com4510.data.access.entities.PhotoEntity
 import uk.ac.shef.oak.com4510.models.Location
 import uk.ac.shef.oak.com4510.models.Photo
-import uk.ac.shef.oak.com4510.models.Tag
 
 /**
  * Class PhotoRepository.
@@ -20,9 +19,6 @@ class PhotoRepository(private val photoDao: PhotoDao) {
     // Observable for all photos
     val photos: LiveData<List<PhotoEntity>> = photoDao.getAllPhotos().asLiveData()
 
-    val getAllPhotosByTag: LiveData<List<PhotoEntity>> = photoDao.getAllPhotosByTag().asLiveData()
-    val getAllPhotosByLocation: LiveData<List<PhotoEntity>> = photoDao.getAllPhotosByLocation().asLiveData()
-
     /**
      * Get Photo by its photoId.
      */
@@ -32,11 +28,6 @@ class PhotoRepository(private val photoDao: PhotoDao) {
      * Get Photo by its Location.
      */
     fun getPhotoByLocation(location: Location) = photoDao.getPhotoByLocation(location.locationId).asLiveData()
-
-    /**
-     * Get List of Photos by Tag.
-     */
-    fun getPhotosByTag(tag: Tag) = photoDao.getPhotosByTag(tag.tagId).asLiveData()
 
     /**
      * Get List of Photos belonging to a Trip.
@@ -101,14 +92,4 @@ fun Photo.asDatabaseEntity(): PhotoEntity {
         thumbnailPath = thumbnailPath.toString()
     )
 }
-
-/**
- * Maps List of Photo to List of PhotoEntity.
- */
-fun List<Photo>.asDatabaseEntities(): List<PhotoEntity>{
-    return map{
-        it.asDatabaseEntity()
-    }
-}
-
 //endregion

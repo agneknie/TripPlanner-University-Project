@@ -6,7 +6,6 @@ import android.net.Uri
 import android.util.Size
 import androidx.core.net.toUri
 import uk.ac.shef.oak.com4510.R
-import uk.ac.shef.oak.com4510.models.Photo
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -33,28 +32,6 @@ class PhotoUtilities {
 
         private const val THUMBNAIL_PREFIX = "TripPlanner_"
         private const val THUMBNAIL_SUFFIX = ".jpg"
-
-        /**
-         * Retrieves or makes a thumbnail and returns its path as a string.
-         *
-         * Used when thumbnail exists.
-         */
-        fun getOrMakeThumbnail(context: Context, photo: Photo): String {
-            val thumbnailStringPath = photo.thumbnailPath?.toString() ?: String()
-            return getOrMakeThumbNail(context, thumbnailStringPath, photo.photoPath.toString())
-        }
-
-        /**
-         * Returns String, which is an URI, which points to a thumbnail file if it exits.
-         * Otherwise, creates it before returning the URI as String object.
-         *
-         * Used when it is not sure if the thumbnail exists or not.
-         */
-        fun getOrMakeThumbNail(context: Context, thumbnailPath: String, photoPath: String): String {
-            return if(thumbnailPath.isBlank() || !File(context.cacheDir, thumbnailPath).exists()){
-                getOrMakeThumbNail(context, photoPath)
-            } else thumbnailPath
-        }
 
         /**
          * Returns String, which is an URI, which points to a thumbnail file if it exits.

@@ -192,7 +192,7 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             var photoSuffix = "photo"
             if (it != 1) photoSuffix += "s"
 
-            binding.activityTripOverviewEtPhotosTaken.setText("${it} ${photoSuffix}")
+            binding.activityTripOverviewEtPhotosTaken.setText("$it $photoSuffix")
         }
     }
 
@@ -204,7 +204,7 @@ class TripOverviewActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback {
             var locationSuffix = "location"
             if (it != 1) locationSuffix += "s"
 
-            binding.activityTripOverviewEtLocationsVisited.setText("${it} ${locationSuffix}")
+            binding.activityTripOverviewEtLocationsVisited.setText("$it $locationSuffix")
         }
     }
     //endregion

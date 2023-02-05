@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -70,6 +69,7 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     }
     //endregion
 
+    //region Override Methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTripTripBinding.inflate(layoutInflater)
@@ -103,7 +103,6 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
     override fun onDestroy() {
         super.onDestroy()
         mMap.clear()
-        Log.e("TripTripActivity", "Activity destroyed")
     }
 
     override fun onRestart() {
@@ -121,12 +120,9 @@ class TripTripActivity: TripPlannerAppCompatActivity(), OnMapReadyCallback  {
         // Configures Map & related services
         configureMapAndLocationService()
     }
+    //endregion
 
     //region Navigation related methods
-//    @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
-//    override fun onBackPressed() {
-//        this.displaySnackbar(binding.root, R.string.finish_trip_before_exiting_snackbar)
-//    }
     @Deprecated("Declaration overrides deprecated member but not marked as deprecated itself")
     override fun onBackPressed() {
         stopLocationUpdates()

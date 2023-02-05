@@ -62,7 +62,7 @@ class TripPhotoAdapter (
         }
 
         override fun areContentsTheSame(oldPhoto: Photo, newPhoto: Photo): Boolean {
-            return oldPhoto.equals(newPhoto)
+            return oldPhoto == newPhoto
         }
 
     }

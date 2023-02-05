@@ -34,6 +34,9 @@ data class Location(
         return true
     }
 
+    /**
+     * Creates a Location marker in the pattern of Time: yyyy-MM-dd HH:mm:ss.
+     */
     fun getLocationMarkerTitle(): String{
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         return "Time: " + dateTime.format(formatter)

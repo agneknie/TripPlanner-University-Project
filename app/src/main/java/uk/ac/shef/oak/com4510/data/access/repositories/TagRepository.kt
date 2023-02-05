@@ -60,13 +60,4 @@ fun Tag.asDatabaseEntity(): TagEntity {
         tagName = tagName
     )
 }
-
-/**
- * Maps List of Tag to List of TagEntity.
- */
-fun List<Tag>.asDatabaseEntities(): List<TagEntity>{
-    return map{
-        it.asDatabaseEntity()
-    }
-}
 //endregion

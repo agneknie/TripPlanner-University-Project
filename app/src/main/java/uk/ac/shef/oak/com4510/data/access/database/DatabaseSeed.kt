@@ -13,48 +13,76 @@ import java.time.LocalDateTime
  */
 class DatabaseSeed {
     companion object{
-        fun seedExampleTrip(tripPlannerViewModel: TripPlannerViewModel){
-            var exampleTag = Tag(0, "Sheffield")
-            var exampleTag2 = Tag(0, "University")
-            var exampleTag3 = Tag(0, "Europe")
-            var exampleTrip = Trip(0, LocalDateTime.now(), LocalDateTime.now().plusHours(2), "Example Trip: Diamond to Home", 1)
-            var exampleLocation1 =
-                Location(0,
-                    53.3811722,
-                    -1.4812385,
-                    "", "", LocalDateTime.now(), 1)
-            var exampleLocation2 =
-                Location(0,
-                    53.3816988,
-                    -1.4816326,
-                    "", "", LocalDateTime.now(), 1)
-            var exampleLocation3 =
-                Location(0,
-                    53.3819698,
-                    -1.4816712,
-                    "", "", LocalDateTime.now(), 1)
-            var exampleLocation4 =
-                Location(0,
-                    53.3822195,
-                    -1.4816491,
-                    "", "", LocalDateTime.now(), 1)
-            var exampleLocation5 =
-                Location(0,
-                    53.382506,
-                    -1.4818619,
-                    "", "", LocalDateTime.now(), 1)
-            var exampleLocation6 =
-                Location(0,
-                    53.3830355,
-                    -1.4818304,
-                    "", "", LocalDateTime.now(), 1)
+        // Example Tags
+        private val exampleTag = Tag(0, "Sheffield")
+        private val exampleTag2 = Tag(0, "University")
+        private val exampleTag3 = Tag(0, "Europe")
 
+        // Example Trip
+        private val exampleTrip = Trip(0, LocalDateTime.now(), LocalDateTime.now().plusHours(2), "Example Trip: Diamond to Home", 1)
+
+        // Example Locations
+        private val exampleLocation1 =
+            Location(0,
+                53.3811722,
+                -1.4812385,
+                "", "", LocalDateTime.now(), 1)
+        private val exampleLocation2 =
+            Location(0,
+                53.3816988,
+                -1.4816326,
+                "", "", LocalDateTime.now(), 1)
+        private val exampleLocation3 =
+            Location(0,
+                53.3819698,
+                -1.4816712,
+                "", "", LocalDateTime.now(), 1)
+        private val exampleLocation4 =
+            Location(0,
+                53.3822195,
+                -1.4816491,
+                "", "", LocalDateTime.now(), 1)
+        private val exampleLocation5 =
+            Location(0,
+                53.382506,
+                -1.4818619,
+                "", "", LocalDateTime.now(), 1)
+        private val exampleLocation6 =
+            Location(0,
+                53.3830355,
+                -1.4818304,
+                "", "", LocalDateTime.now(), 1)
+
+        /**
+         * Seed the database with an example Trip from the Diamond, together
+         * with example Tags.
+         */
+        fun seedWithExamples(tripPlannerViewModel: TripPlannerViewModel){
+            seedExampleTags(tripPlannerViewModel)
+            seedExampleTrip(tripPlannerViewModel)
+        }
+
+        /**
+         * Seed database with example Trip with Locations.
+         */
+        private fun seedExampleTrip(tripPlannerViewModel: TripPlannerViewModel){
+            tripPlannerViewModel.insertTrip(exampleTrip)
+            seedExampleTripLocations(tripPlannerViewModel)
+        }
+
+        /**
+         * Seeds the database with example Tags.
+         */
+        private fun seedExampleTags(tripPlannerViewModel: TripPlannerViewModel){
             tripPlannerViewModel.insertTag(exampleTag)
             tripPlannerViewModel.insertTag(exampleTag2)
             tripPlannerViewModel.insertTag(exampleTag3)
+        }
 
-            tripPlannerViewModel.insertTrip(exampleTrip)
-
+        /**
+         * Seeds the database with Locations of an example Trip.
+         */
+        private fun seedExampleTripLocations(tripPlannerViewModel: TripPlannerViewModel){
             tripPlannerViewModel.insertLocation(exampleLocation1)
             tripPlannerViewModel.insertLocation(exampleLocation2)
             tripPlannerViewModel.insertLocation(exampleLocation3)
