@@ -15,7 +15,6 @@ import uk.ac.shef.oak.com4510.utilities.Permissions
  * Starting point of the application, which handles navigation to
  * the application's features.
  */
-// TODO Add app screenshots and flows to README
 class MainActivity : TripPlannerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
